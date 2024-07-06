@@ -1,6 +1,15 @@
 import axios from "axios";
+import config from "../config";
+
 //import { actSpinner } from "../";
 import validatedResponse, { messageHttpError } from './axios-validator';
+
+const setCount=(count)=>{
+  let currentCount=sessionStorage.getItem("httpRequestCount",count) || 0;
+  currentCount=currentCount+ count;
+  if (currentCount<0) currentCount=0;
+  sessionStorage.setItem("httpRequestCount",currentCount)
+}
 
 // import httpAdapter from 'axios/lib/adapters/http';
 // axios.defaults.adapter = httpAdapter;
@@ -13,7 +22,8 @@ axios.defaults.headers.common = {
 // Add a request interceptor
 axios.interceptors.request.use(
   function (config) {
-//    actSpinner(true);
+    // Do something before request is sent
+    setCount(1);
     return config;
   } /*, function (error) { 
     // Do something with request error
@@ -24,13 +34,17 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
   function (res) {
-    //actSpinner(false);
+    setCount(-1);
     return validatedResponse(res); //return response or Promise.reject
   }, function (error) {
-    actSpinner(false);
+    setCount(-1);    
     messageHttpError(error);
     return Promise.reject(error);
   }
 );
 
-export default axios;
+export const api=axios.create({
+  baseURL: config.api,
+})
+
+export default api;

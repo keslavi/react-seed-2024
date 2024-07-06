@@ -1,8 +1,17 @@
 import { useEffect } from "react";
 import { isEmpty } from "lodash";
-import { NavLink, useParams } from "react-router-dom";
-//import { errorNotification,resolver } from "./validation/formvalidation";
+import { toast } from "react-toastify";
+import { /*useNavigate, NavLink,*/ useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+
+import { 
+  Col,
+  Input,
+  Row,
+  TextareaDebug,
+} from "components";
+
 //prettier-ignore
 import { 
   listOptions,
@@ -12,10 +21,7 @@ import {
   selectTask, 
 } from "../taskSlice";
 
-import { useForm } from "react-hook-form";
-import { Row, Col, Input } from "@/components";
-
-import { TextareaDebug } from "components";
+import { resolver, errorNotification } from "./validation";
 
 export const Task = () => {
   const item = useSelector(selectTask);
@@ -25,16 +31,18 @@ export const Task = () => {
 
   // React hook form and validation***********************
   const {
-    handleSubmit,
     control,
-    //watch,
-    reset,
-    getValues,
     formState: { errors },
+    //getValues,
+    handleSubmit,
+    reset,
+    //setValue,
+    //watch,
   } = useForm({
-    //resolver,
+    resolver,
     //mode:"onChange"
   });
+  errorNotification(errors);
   // end React hook form and validation***********************
 
   useEffect(() => {

@@ -1,19 +1,17 @@
 
-import config from "@/config";
+//import config from "@/config";
 import { toast } from "react-toastify";
-import axios from "@/store/axios";
+import api from "@/store/api";
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 
 //const mockTasks=[{"id":1,"subject":"subject a","body":"body a","status":0,"result":0},{"id":2,"subject":"subject b","body":"body b","status":2,"result":2},{"id":3,"subject":"subject c","body":"body c","status":2,"result":2}];
 const mockTask={"id":1,"subject":"subject a","body":"body a","status":0,"result":0};
 const mockOptions={"task":{"status":[{"value":0,"text":"pending"},{"value":1,"text":"in progress"},{"value":2,"text":"completed"},{"value":3,"text":"cancelled"}],"result":[{"value":0,"text":""},{"value":1,"text":"good"},{"value":2,"text":"not good"},{"value":3,"text":"who knows"}]},"contact":{"type":[{"value":1,"text":"Business"},{"value":2,"text":"Personal"}]}};
 
-const api = `${config.api}/task`;
-
 export const listTasks = createAsyncThunk(
   'tasks/listTasks',
   async (critera) => {
-    const res = await axios.get(`${api}`);
+    const res = await api.get('task');
     return res.data;
     // const res = await fetch(`${api}`);
     // return await res.json();
@@ -24,7 +22,7 @@ export const listTasks = createAsyncThunk(
 export const listOptions = createAsyncThunk(
   'tasks/listOptions',
   async () => {
-    const res = await axios.get(`${config.api}/option/task`);
+    const res = await api.get(`option/task`);
     return res.data; 
   }
 );
@@ -32,7 +30,7 @@ export const listOptions = createAsyncThunk(
 export const retrieveTask = createAsyncThunk(
   'tasks/listTask',
   async (id) => {
-    const res = await axios.get(`${api}/${id}`);
+    const res = await api.get(`task/${id}`);
     return res.data; 
   }
 );
@@ -40,7 +38,7 @@ export const retrieveTask = createAsyncThunk(
 export const upsertTask = createAsyncThunk(
   'tasks/upsertTask',
   async (values) => {
-    const res = await axios.post(`${url}`, values); 
+    const res = await api.post('task', values); 
     return res.data; 
   }
 );
