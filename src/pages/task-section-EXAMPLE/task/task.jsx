@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { 
   Col,
   Input,
+  //AutoComplete, //ALTERNATE to singe Input
+  //TextField,    //ALTERNATE to singe Input
   Row,
   TextareaDebug,
 } from "components";
@@ -103,10 +105,12 @@ export const Task = () => {
         <Row>
           <div className="hidden"> Col is INSIDE Input</div>
           <Input name="subject" control={control} />
+          {/* <TextField name="subject" control={control} /> ALTERNATE*/}         
           <Input name="body" control={control} />
         </Row>
         <Row>
-          <Input name="status" options={option.status} control={control} />
+          <Input name="status"  control={control} />
+          {/* <AutoComplete name="status"  control={control} /> ALTERNATE*/}
           <Input name="result" options={option.result} control={control} />
         </Row>
         <Row>

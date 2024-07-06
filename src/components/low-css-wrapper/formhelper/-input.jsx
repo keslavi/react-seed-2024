@@ -1,8 +1,34 @@
 import { forwardRef} from "react";
 import { Controller } from "react-hook-form";
-import _ from "lodash";
+import {isEmpty} from "lodash";
+import { cleanParentProps } from "./helper/clean-parent-props";
+
 import { Col } from "@/components";
 
+/**
+ * @property {react-hook Form Input} multitype Input control (default TextField)
+ * 
+ * - label="text for label" (optional)
+ * 
+ * add properties for different controls:
+ * - datepicker 
+ * - options={ [{value:"",text:""}] } autocomplete
+ * - select options={} select
+ * - optionsMulti={} multi-select
+ * - allowFreeText options={} autocomplete that allows free text
+ *  * - xs={4} number of columns (optional, default 4)
+ *  @param control required for react-hook-form
+ *  @param name required
+ *  @param value default filled from form defaultValues
+ *  @param options
+ *  @param multioptions
+ *  @param select changes autocomplete to select
+ *  @param checkbox
+ *  @param onValueChange callback function
+ *  @param datepicker
+ *  @param xs={4} number of columns (optional, default 4)
+ *  @returns {wrapped Form Input}
+ */
 export const Input = (props) => {
   const {
     //label,
@@ -23,15 +49,16 @@ export const Input = (props) => {
 
   const childProps = cleanParentProps(props);
 
+  //ternary is most performant; this is hit a LOT.
   const Ctl = datepicker
     ? CtlDate
     : checkbox
     ? CtlCheckbox
     : select
     ? CtlSelect
-    : !_.isEmpty(options)
+    : !isEmpty(options)
     ? CtlAutocomplete
-    : !_.isEmpty(multioptions)
+    : !isEmpty(multioptions)
     ? CtlAutocompleteMulti
     : CtlTextField;
 
@@ -62,30 +89,7 @@ export const Input = (props) => {
   );
 };
 
-export default Input;
-
-const cleanParentProps = (props) => {
-  const check =
-    "value,control,useController,tooltipId,checkbox,datepicker,viewMode,readOnly,maxLength";
-
-  //const ret = { Inputprops: {}, inputProps: {} };
-  const ret = {inputprops:{}};
-  const propKeys = Object.keys(props);
-
-  propKeys.forEach((key) => {
-    if (!check.includes(key)) {
-      ret[key] = props[key];
-    }
-  });
-
-  if (propKeys.includes("maxLength")) {
-    ret.inputprops["maxLength"] = props.maxLength;
-  }
-
-  ret["disabled"] = props.viewMode || props.readOnly;
-
-  return ret;
-};
+//export default Input;
 
 const CtlTextField =forwardRef((props,ref) => {
   const label = props.label || props.name;
@@ -129,6 +133,7 @@ const CtlAutocomplete =  forwardRef((props,ref) => {
     </>
   );
 });
+
 const CtlAutocompleteMulti = forwardRef((props,ref) => {
   return <span>not implemented</span>;
 });
