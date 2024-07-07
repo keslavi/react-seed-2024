@@ -5,16 +5,14 @@ import api from "@/store/api";
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 
 //const mockTasks=[{"id":1,"subject":"subject a","body":"body a","status":0,"result":0},{"id":2,"subject":"subject b","body":"body b","status":2,"result":2},{"id":3,"subject":"subject c","body":"body c","status":2,"result":2}];
-const mockTask={"id":1,"subject":"subject a","body":"body a","status":0,"result":0};
-const mockOptions={"task":{"status":[{"value":0,"text":"pending"},{"value":1,"text":"in progress"},{"value":2,"text":"completed"},{"value":3,"text":"cancelled"}],"result":[{"value":0,"text":""},{"value":1,"text":"good"},{"value":2,"text":"not good"},{"value":3,"text":"who knows"}]},"contact":{"type":[{"value":1,"text":"Business"},{"value":2,"text":"Personal"}]}};
+//const mockTask={"id":1,"subject":"subject a","body":"body a","status":0,"result":0};
+//const mockOptions={"task":{"status":[{"value":0,"text":"pending"},{"value":1,"text":"in progress"},{"value":2,"text":"completed"},{"value":3,"text":"cancelled"}],"result":[{"value":0,"text":""},{"value":1,"text":"good"},{"value":2,"text":"not good"},{"value":3,"text":"who knows"}]},"contact":{"type":[{"value":1,"text":"Business"},{"value":2,"text":"Personal"}]}};
 
 export const listTasks = createAsyncThunk(
   'tasks/listTasks',
-  async (critera) => {
+  async () => {
     const res = await api.get('task');
     return res.data;
-    // const res = await fetch(`${api}`);
-    // return await res.json();
   }
 );
 

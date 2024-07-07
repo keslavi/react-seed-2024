@@ -21,7 +21,7 @@ import {
   upsertTask,
   selectOptions, 
   selectTask, 
-} from "../taskSlice";
+} from "../slice/taskSlice";
 
 import { resolver, errorNotification } from "./validation";
 

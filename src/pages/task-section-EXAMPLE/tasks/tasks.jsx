@@ -7,7 +7,7 @@ import {
   selectOptions,
   listTasks,
   listOptions,
-} from '../taskSlice';
+} from '../slice/taskSlice';
 
 import { TextareaDebug } from "components";
 
