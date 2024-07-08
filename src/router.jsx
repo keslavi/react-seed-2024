@@ -16,8 +16,11 @@ import {
 
   tasks, scratchpad aren't usually needed.
 */
-const Tasks = lazy(() => import("./pages/task-section-EXAMPLE/tasks/tasks"));
-const Task = lazy(() => import("./pages/task-section-EXAMPLE/task/task"));
+const Tasks = lazy(() => import("./pages/-example-task-section/tasks/tasks"));
+const Task = lazy(() => import("./pages/-example-task-section/task/task"));
+// prettier-ignore
+const Contacts = lazy(() => import("./pages/-example-contact/contacts/contacts"));
+const Contact = lazy(() => import("./pages/-example-contact/contact/contact"));
 const Scratchpad = lazy(() => import("./pages/dev-section/scratchpad"));
 
 //not introducing jwt and private routes yet
@@ -29,6 +32,7 @@ const menu = [
     items: [
       //example of creating submenu (low css doesn't support it)
       { text: "Tasks", link: "/dev/tasks" },
+      { text: "Contacts", link: "/dev/contacts" },
       { text: "Scratchpad", link: "/dev/scratchpad" },
     ],
   },
@@ -55,6 +59,22 @@ const Router = () => {
               element={
                 <Suspense fallback={<div>Loading...</div>}>
                   <Task />
+                </Suspense>
+              }
+            />
+            <Route
+              path="contacts"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Contacts />
+                </Suspense>
+              }
+            />
+            <Route
+              path="contacts/:id"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Contact />
                 </Suspense>
               }
             />

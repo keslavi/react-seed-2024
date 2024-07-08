@@ -11,8 +11,8 @@ import {
 
 import { TextareaDebug } from "components";
 
-const optionText=(option,value)=>{
-  const ret =option.find(x=>x.value===value).text;
+const optionText=(option,key)=>{
+  const ret =option.find(x=>x.key===key).text;
   return ret;
 }
 

@@ -13,6 +13,16 @@
     "nameFirst": "Will",
     "phone": "2234567890",
     "type": "2",
-    "comments": "lorem ipsum orum"
+    "comments": "lorem ipsum orum",
+    "typeContact": "2"
+  },
+  {
+    "nameFirst": "Steve",
+    "nameLast": "Bailey",
+    "id": 3,
+    "phone": "",
+    "type": "1",
+    "comments": "",
+    "success": true
   }
 ]

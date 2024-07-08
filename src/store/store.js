@@ -1,12 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from "redux";
 
-import task from 'pages/task-section-EXAMPLE/slice/taskSlice';
-//'pages/task-section-EXAMPLE/task-reducer';
-
-// const reducer = combineReducers({
-//   task,
-// });
+import task from 'pages/-example-task-section/slice/taskSlice';
 
 export const store = configureStore({
   reducer: {

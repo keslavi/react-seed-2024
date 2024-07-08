@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
-import { /*useNavigate, NavLink,*/ useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, /* NavLink,*/ useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useStore } from "../slice/store-zustand";
 
-import { 
+import {
   Col,
   Input,
   //AutoComplete, //ALTERNATE to singe Input
@@ -14,22 +14,23 @@ import {
   TextareaDebug,
 } from "components";
 
-//prettier-ignore
-import { 
-  listOptions,
-  retrieveTask, 
-  upsertTask,
-  selectOptions, 
-  selectTask, 
-} from "../slice/taskSlice";
-
 import { resolver, errorNotification } from "./validation";
 
-export const Task = () => {
-  const item = useSelector(selectTask);
-  const option = useSelector(selectOptions);
-  const dispatch = useDispatch();
+export const Contact = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  const {
+    contact,
+    option,
+    contactRetrieve,
+    contactUpsert,
+    contactClear,
+    loading,
+    error,
+    errorMsg,
+  } = useStore();
+  const item = contact;
 
   // React hook form and validation***********************
   const {
@@ -48,9 +49,7 @@ export const Task = () => {
   // end React hook form and validation***********************
 
   useEffect(() => {
-    dispatch(retrieveTask(id));
-    if (isEmpty(option)) dispatch(listOptions());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    contactRetrieve(id);
   }, []); //[dispatch]);
 
   useEffect(() => {
@@ -72,23 +71,24 @@ export const Task = () => {
         ></textarea>
       </div>
     );
-
-    dispatch(upsertTask(values));
+    contactUpsert(values);
   };
 
   const onDelete = () => {
-    const values = { ...item };
-    actTask_D(values);
-    navigate("/tasks");
+    const deleteValues={id:item.id,delete:"delete"};
+    contactUpsert(deleteValues);
+    navigate("/dev/contacts");
   };
 
   const onCancel = () => {
-    actTask_Clear();
-    navigate("/tasks");
+    contactClear();
+    navigate("/dev/contacts");
   };
 
-  if (isEmpty(item) || isEmpty(option)) return <div>Loading...</div>;
-
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {errorMsg}</div>;
+  if (isEmpty(item)) return <div>loading...</div>;
+  
   return (
     <>
       <div>
@@ -103,15 +103,12 @@ export const Task = () => {
           </Row>
         </div>
         <Row>
-          <div className="hidden"> Col is INSIDE Input</div>
-          <Input name="subject" control={control} />
-          {/* <TextField name="subject" control={control} /> ALTERNATE*/}         
-          <Input name="body" control={control} />
+          <Input name="nameLast" control={control} />
+          <Input name="nameFirst" control={control} /> 
+          <Input name="phone" control={control} /> 
         </Row>
         <Row>
-          <Input name="status"  control={control} />
-          {/* <AutoComplete name="status"  control={control} /> ALTERNATE*/}
-          <Input name="result" options={option.result} control={control} />
+          <Input name="TypeContact" options={option.type} control={control} />
         </Row>
         <Row>
           <Col>
@@ -127,4 +124,4 @@ export const Task = () => {
     </>
   );
 };
-export default Task;
+export default Contact;

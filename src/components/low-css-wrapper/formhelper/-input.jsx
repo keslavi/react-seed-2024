@@ -62,7 +62,6 @@ export const Input = (props) => {
     ? CtlAutocompleteMulti
     : CtlTextField;
 
-  //InputRef={InputRef}
   return (
     <>
       <Col xs={xs || 4}>
@@ -97,7 +96,7 @@ const CtlTextField =forwardRef((props,ref) => {
     <>
       <label>{label}</label>
       <br />
-      <input {...props} />
+      <input {...props} ref={ref}/>
     </>
   );
 });
@@ -123,8 +122,8 @@ const CtlAutocomplete =  forwardRef((props,ref) => {
       <select {...props}>
         {options.map((o) => (
           <option 
-            key={o.value} 
-            value={o.value}
+            key={o.key} 
+            value={o.key}
           >
             {o.text}
           </option>
