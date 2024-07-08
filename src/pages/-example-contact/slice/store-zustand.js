@@ -55,5 +55,4 @@ export const useStore = create((set,get) => ({
   contactClear: async () => {
     set({ contact:{}});
   },
-
 }));

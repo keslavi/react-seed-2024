@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
-import { /*useNavigate, NavLink,*/ useParams } from "react-router-dom";
+import { useNavigate, /*NavLink,*/ useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
@@ -30,7 +30,7 @@ export const Task = () => {
   const option = useSelector(selectOptions);
   const dispatch = useDispatch();
   const { id } = useParams();
-
+  const navigate = useNavigate();
   // React hook form and validation***********************
   const {
     control,
@@ -79,12 +79,12 @@ export const Task = () => {
   const onDelete = () => {
     const values = { ...item };
     //actTask_D(values);
-    navigate("/tasks");
+    navigate("/dev/tasks");
   };
 
   const onCancel = () => {
     //actTask_Clear();
-    navigate("/tasks");
+    navigate("/dev/tasks");
   };
 
   if (isEmpty(item) || isEmpty(option)) return <div>Loading...</div>;
