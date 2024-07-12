@@ -45,7 +45,12 @@ export const Contact = () => {
     resolver,
     //mode:"onChange"
   });
-  errorNotification(errors);
+  const attributes = { control, errors };
+  useEffect(() => {
+    if (errors) {
+      errorNotification(errors);
+    }
+  }, [errors]);
   // end React hook form and validation***********************
 
   useEffect(() => {
@@ -75,7 +80,7 @@ export const Contact = () => {
   };
 
   const onDelete = () => {
-    const deleteValues={id:item.id,delete:"delete"};
+    const deleteValues = { id: item.id, delete: "delete" };
     contactUpsert(deleteValues);
     navigate("/dev/contacts");
   };
@@ -88,7 +93,7 @@ export const Contact = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {errorMsg}</div>;
   if (isEmpty(item)) return <div>loading...</div>;
-  
+
   return (
     <>
       <div>
@@ -99,16 +104,17 @@ export const Contact = () => {
         <div className="hidden">
           <Row>
             <div className="hidden"> Col is INSIDE Input</div>
-            <Input name="id" control={control} />
+            <Input name="id" {...attributes} />
+            <Input name="name" {...attributes} />
           </Row>
         </div>
         <Row>
-          <Input name="nameLast" control={control} />
-          <Input name="nameFirst" control={control} /> 
-          <Input name="phone" control={control} /> 
+          <Input name="nameLast" label="Last Name" {...attributes} />
+          <Input name="nameFirst" label="First Name" {...attributes} />
+          <Input name="phone" label="Phone" {...attributes} />
         </Row>
         <Row>
-          <Input name="TypeContact" options={option.type} control={control} />
+          <Input name="TypeContact" label="Type of Contact" options={option.type} {...attributes}/>
         </Row>
         <Row>
           <Col>
