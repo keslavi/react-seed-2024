@@ -1,17 +1,18 @@
-import { forwardRef} from "react";
-import { Controller } from "react-hook-form";
-import {isEmpty} from "lodash";
-import { cleanParentProps } from "./helper/clean-parent-props";
+import { isEmpty } from "lodash";
 
-import { Col } from "@/components";
+import { DateField } from "./date-field";
+import { Multiselect } from "./multiselect";
+import { Select } from "./select";
+import { Textarea } from "./textarea";
+import { TextField } from "./text-field";
 
 /**
  * @property {react-hook Form Input} multitype Input control (default TextField)
- * 
+ *
  * - label="text for label" (optional)
- * 
+ *
  * add properties for different controls:
- * - datepicker 
+ * - datepicker
  * - options={ [{value:"",text:""}] } autocomplete
  * - select options={} select
  * - optionsMulti={} multi-select
@@ -20,119 +21,37 @@ import { Col } from "@/components";
  *  @param control required for react-hook-form
  *  @param name required
  *  @param value default filled from form defaultValues
- *  @param options
- *  @param multioptions
- *  @param select changes autocomplete to select
- *  @param checkbox
- *  @param onValueChange callback function
- *  @param datepicker
+ *  @param options returns autocomplete 
+ *  @param multioptions returns multiselect
+ *  @param datepicker returns date control
+ *  @param textarea returns textarea
  *  @param xs={4} number of columns (optional, default 4)
  *  @returns {wrapped Form Input}
  */
+/*eslint react/prop-types: 0 */
 export const Input = (props) => {
   const {
     //label,
-    //tooltipId,
-    checkbox,
-    control,
+    // checkbox,
     datepicker,
-    defaultValue,
     multioptions,
-    name,
-    onValueChange,
     options,
-    select,
-    value,
+    textarea,
   } = props;
-
-  const xs = props.xs || 4;
-
-  const childProps = cleanParentProps(props);
 
   //ternary is most performant; this is hit a LOT.
   const Ctl = datepicker
-    ? CtlDate
-    : checkbox
-    ? CtlCheckbox
-    : select
-    ? CtlSelect
-    : !isEmpty(options)
-    ? CtlAutocomplete
+    ? DateField
+    : // : checkbox
+    // ? CtlCheckbox
+    // : select
+    // ? Autocomplete
+    !isEmpty(options)
+    ? Select
     : !isEmpty(multioptions)
-    ? CtlAutocompleteMulti
-    : CtlTextField;
-
-  return (
-    <>
-      <Col xs={xs || 4}>
-        <Controller
-          name={name}
-          defaultValue={value}
-          value={value}
-          control={control}
-          render={({ field }) => (
-            <Ctl
-              {...field}
-              {...childProps}
-              onChange={(value2) => {
-                field.onChange(value2);
-                if (typeof onValueChange === "function") {
-                  onValueChange(name);
-                }
-              }}
-            />
-          )}
-        />
-      </Col>
-    </>
-  );
+    ? Multiselect
+    : textarea
+    ? Textarea
+    : TextField;
+  return <Ctl {...props} />;
 };
-
-//export default Input;
-
-const CtlTextField =forwardRef((props,ref) => {
-  const label = props.label || props.name;
-  return (
-    <>
-      <label>{label}</label>
-      <br />
-      <input {...props} ref={ref}/>
-    </>
-  );
-});
-
-const CtlDate = forwardRef((props,ref) => {
-  return <span>not implemented</span>;
-});
-const CtlCheckbox = forwardRef((props,ref) => {
-  return <span>not implemented</span>;
-});
-const CtlSelect = forwardRef((props,ref) => {
-  return <span>not implemented</span>;
-});
-
-const CtlAutocomplete =  forwardRef((props,ref) => {
-  const label = props.label || props.name;
-  const options = props.options;
-
-  return (
-    <>
-      <label>{label}</label>
-      <br />
-      <select {...props}>
-        {options.map((o) => (
-          <option 
-            key={o.key} 
-            value={o.key}
-          >
-            {o.text}
-          </option>
-        ))}
-      </select>
-    </>
-  );
-});
-
-const CtlAutocompleteMulti = forwardRef((props,ref) => {
-  return <span>not implemented</span>;
-});

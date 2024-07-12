@@ -8,8 +8,8 @@ import { useForm } from "react-hook-form";
 import { 
   Col,
   Input,
-  //AutoComplete, //ALTERNATE to singe Input
-  //TextField,    //ALTERNATE to singe Input
+  Select, //ALTERNATE to singe Input
+  TextField,    //ALTERNATE to singe Input
   Row,
   TextareaDebug,
 } from "components";
@@ -44,7 +44,12 @@ export const Task = () => {
     resolver,
     //mode:"onChange"
   });
-  errorNotification(errors);
+  const attributes={control,errors};
+  useEffect(() => {
+    if (errors) {
+      errorNotification(errors);
+    }
+  }, [errors]);
   // end React hook form and validation***********************
 
   useEffect(() => {
@@ -99,17 +104,19 @@ export const Task = () => {
         <div className="hidden">
           <Row>
             <div className="hidden"> Col is INSIDE Input</div>
-            <Input name="id" control={control} />
+            <Input name="id" {...attributes} />
           </Row>
         </div>
         <Row>
           <div className="hidden"> Col is INSIDE Input</div>
-          <Input name="subject" control={control} />
-          <Input name="body" control={control} />
+          <Input name="subject" label="Subject" {...attributes} />
+          {/* <TextField name="subject" label="Name" {...attributes} /> */}
+          <Input name="body" label="Body"{...attributes} />
         </Row>
         <Row>
-          <Input name="status"  control={control} />
-          <Input name="result" options={option.result} control={control} />
+          <Input name="status" label="Status" options={option.status}  {...attributes} />
+          {/* <Select name="status" label="Status" options={option.status}  {...attributes} /> */}
+          <Input name="result" label="Result"options={option.result} {...attributes} />
         </Row>
         <Row>
           <Col>
