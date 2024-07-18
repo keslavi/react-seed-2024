@@ -5,6 +5,9 @@ import { useNavigate, /* NavLink,*/ useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useStore } from "../slice/store-zustand";
 
+import { ProfileMl } from "./profile-ml/profile-ml";
+import { ProfilePb } from "./profile-pb/profile-pb";
+
 import {
   Col,
   Input,
@@ -97,7 +100,9 @@ export const Contact = () => {
   return (
     <>
       <div>
-        <h4>Task</h4>
+        <h4>
+          Contact: {item.nameFirst} {item.nameLast} ({item.profile})
+        </h4>
       </div>
       <br />
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -105,7 +110,6 @@ export const Contact = () => {
           <Row>
             <div className="hidden"> Col is INSIDE Input</div>
             <Input name="id" {...attributes} />
-            <Input name="name" {...attributes} />
           </Row>
         </div>
         <Row>
@@ -114,8 +118,18 @@ export const Contact = () => {
           <Input name="phone" label="Phone" {...attributes} />
         </Row>
         <Row>
-          <Input name="TypeContact" label="Type of Contact" options={option.type} {...attributes}/>
+          <Input
+            name="TypeContact"
+            label="Type of Contact"
+            options={option.type}
+            {...attributes}
+          />
         </Row>
+        <fieldset>
+          <legend>Profile section:</legend>
+          <ProfileMl attributes={attributes} item={item} option={option} />
+          <ProfilePb attributes={attributes} item={item} option={option} />
+        </fieldset>
         <Row>
           <Col>
             <input type="submit" value="Submit" />

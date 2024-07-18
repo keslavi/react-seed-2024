@@ -26,7 +26,7 @@ r.get("/:id", async (ctx, next) => {
 
   let data = null;
 
-  if (id !=="new") {
+  if (id !== "new") {
     data = data0.filter(function (data) {
       return data.id == id;
     })[0];
@@ -62,15 +62,14 @@ r.post("/", async (ctx, next) => {
     req.delete = true;
   } else if (req.id != 0) {
     console.log("update");
-    data.map(function (item) {
-      if (item.id == req.id) {
-        item.nameLast = req.nameLast;
-        item.nameFirst = req.nameFirst;
-        item.phone = req.phone;
-        item.typeContact = req.type;
-        item.comments = req.comments;
-      }
-    });
+
+    const item = data.find(x=>x.id == req.id);
+    if (item) {
+      Object.keys(req).forEach((key) => {
+        item[key] = req[key] || "";
+      });
+    }
+
   } else {
     const idNew =
       Math.max.apply(
@@ -82,7 +81,7 @@ r.post("/", async (ctx, next) => {
     console.log("adding", idNew);
 
     req.id = idNew;
-    if (req.type==="") req.type="1";
+    if (req.type === "") req.type = "1";
     data.push(req);
   }
 

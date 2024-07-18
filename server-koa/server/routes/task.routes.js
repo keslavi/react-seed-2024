@@ -49,15 +49,12 @@ r.post('/', async (ctx, next) => {
     }
     else if ((req.id || '0') !== '0') {
         console.log('update',req);
-        data
-            .map(function (item) {
-                if (item.id == req.id) {
-                    item.subject = req.subject;
-                    item.body = req.body;
-                    item.status = Number(req.status ||0);
-                    item.result = Number(req.result ||0);
-                }
-            });
+        const item = data.find(x=>x.id == req.id);
+        if (item) {
+          Object.keys(req).forEach((key) => {
+            item[key] = req[key] || "";
+          });
+        }
     }
     else {
         const idNew = Math.max.apply(Math, data.map(function (o) { return o.id; })) + 1;

@@ -12,7 +12,7 @@ import {
 import { TextareaDebug } from "components";
 
 const optionText=(option,key)=>{
-  const ret =option.find(x=>x.key===key).text;
+  const ret =option.find(x=>x.key==key).text;
   return ret;
 }
 

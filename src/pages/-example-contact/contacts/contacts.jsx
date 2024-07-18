@@ -23,7 +23,6 @@ export const Contacts = () => {
   if(loading) return (<div>Loading...</div>);
   if (error) return (<div>Error: {errorMsg}</div>)
 
-
   const optionText=(option,key)=>{
     const ret =option.find(x=>x.key==key).text;
     return ret;
@@ -35,6 +34,7 @@ export const Contacts = () => {
         <td><NavLink to={`/dev/contacts/${item.id}`}>{item.id}</NavLink></td>
         <td>{item.nameLast}, {item.nameFirst}</td>
         <td>{optionText(option.type,item.type)}</td>
+        <td>{item.profile}</td> 
       </tr>
     ));
   }; 
@@ -49,6 +49,7 @@ export const Contacts = () => {
             <th>ID</th>
             <th>Name</th>
             <th>Type</th>
+            <th>profile</th>
           </tr>
         </thead>
         <tbody>{renderItems(items)}</tbody>

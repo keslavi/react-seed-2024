@@ -47,6 +47,26 @@
                 "key": 2,
                 "text": "Personal"
             }
+        ],
+        "profileKeyMl": [
+            {
+                "key": 1,
+                "text": "ml value1"
+            },
+            {
+                "key": 2,
+                "text": "ml value2"
+            }
+        ],
+        "profileKeyPb": [
+            {
+                "key": 1,
+                "text": "pb value1"
+            },
+            {
+                "key": 2,
+                "text": "pb value2"
+            }
         ]
     }
 }

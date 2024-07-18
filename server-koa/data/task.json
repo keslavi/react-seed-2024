@@ -14,10 +14,10 @@
     "result": 0
   },
   {
-    "id": 2,
+    "id": "2",
     "subject": "subject b",
     "body": "body b",
-    "status": 0,
+    "status": "1",
     "result": 2
   },
   {
