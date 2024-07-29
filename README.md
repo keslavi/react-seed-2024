@@ -1,6 +1,6 @@
 
-# react-seed-es6+ 
-straight javascript seed starter project with redux, notifications, middleware in place
+# react seed 2024
+straight javascript seed starter project with zustand, notifications, form validation
 
 ## quickstart !important  
 
