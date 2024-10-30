@@ -119,6 +119,15 @@ export const Task = () => {
           <Input name="result" label="Result"options={option.result} {...attributes} />
         </Row>
         <Row>
+          <Input name="address.line1" label="address" {...attributes}/>
+        </Row>
+        <Row>
+          <Input name="address.line2" {...attributes}/>
+        </Row>
+        <Row>
+          <Input name="address.line3" {...attributes}/>
+        </Row>
+        <Row>
           <Col>
             <input type="submit" value="Submit" />
             &nbsp;&nbsp;
