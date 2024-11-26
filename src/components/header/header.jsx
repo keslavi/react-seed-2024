@@ -38,8 +38,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-
+import CoPresentIcon from '@mui/icons-material/CoPresent';
 import { NavLink } from "react-router-dom";
 import { color } from "@/theme-material";
 // export const Header=(props)=>{
@@ -129,7 +128,7 @@ export const Header = (props) => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters variant="dense">
-          <AdbIcon
+          <CoPresentIcon
             sx={{
               display: { xs: "none", md: "flex" },
               mr: 1,
@@ -150,7 +149,7 @@ export const Header = (props) => {
               textDecoration: "none",
             }}
           >
-            LOGO11
+            Seed2024
           </Typography>
 
           <Box sx={{flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -183,7 +182,7 @@ export const Header = (props) => {
               {renderMenuXs(menu)}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <CoPresentIcon  sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -200,7 +199,7 @@ export const Header = (props) => {
               textDecoration: "none",
             }}
           >
-            LOGO22
+            Seed2024
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {renderMenu(menu)}
