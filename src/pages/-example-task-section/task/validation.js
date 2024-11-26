@@ -17,4 +17,16 @@ const schema= yup.object().shape({
   })
 })
 
+// const schema= yup.object().shape({
+//   // id:yup.string().required2("id is required"),
+//   subject: yup.string().required2("please provide a subject"),
+//   body: yup.string().required2("please provide a body"),
+//   address: yup.object().shape({
+//     line1:yup.string().required2("address line 1 required"),
+//     line2:yup.string().required2("address line 2 required"),
+//     line3:yup.string().required2("address line 3 required"),
+//   })
+// })
+
+
 export const resolver=yupResolver(schema);

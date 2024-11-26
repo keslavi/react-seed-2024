@@ -25,15 +25,17 @@
   },
   {
     "id": "2",
-    "subject": "subject b",
-    "body": "body b",
+    "subject": "",
+    "body": "",
     "status": "1",
     "result": 2,
     "address": {
-      "line1": "A2L1",
+      "line1": "",
       "line2": "A2L2",
       "line3": "A2L3"
-    }
+    },
+    "success": true,
+    "isDraft": true
   },
   {
     "id": 3,

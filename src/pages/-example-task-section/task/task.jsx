@@ -4,12 +4,13 @@ import { toast } from "react-toastify";
 import { useNavigate, /*NavLink,*/ useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+import { Button } from "@mui/material";
 
-import { 
+import {
   Col,
   Input,
   Select, //ALTERNATE to singe Input
-  TextField,    //ALTERNATE to singe Input
+  TextField, //ALTERNATE to singe Input
   Row,
   TextareaDebug,
 } from "components";
@@ -38,13 +39,13 @@ export const Task = () => {
     //getValues,
     handleSubmit,
     reset,
-    //setValue,
+    setValue,
     //watch,
   } = useForm({
     resolver,
     //mode:"onChange"
   });
-  const attributes={control,errors};
+  const attributes = { control, errors };
   useEffect(() => {
     if (errors) {
       errorNotification(errors);
@@ -81,6 +82,24 @@ export const Task = () => {
     dispatch(upsertTask(values));
   };
 
+  const onContinueSave = (event) => {
+    const id = event.currentTarget.id;
+    switch (id) {
+      case "btnContinue":
+//        setValue("isDraft", false); 
+        window.isDraft=false;
+        break;
+      case "btnSave":
+//        setValue("isDraft", true);
+        window.isDraft=true;
+        break;
+      default:
+        toast.error(`onContinueSave ${id} not found`);
+        return;
+    }
+    event.currentTarget.form.requestSubmit();
+  };
+
   const onDelete = () => {
     const values = { ...item };
     //actTask_D(values);
@@ -101,6 +120,13 @@ export const Task = () => {
       </div>
       <br />
       <form onSubmit={handleSubmit(onSubmit)}>
+        <Button id="btnContinue" onClick={onContinueSave}>
+          Continue
+        </Button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <Button id="btnSave" onClick={onContinueSave}>
+          Save
+        </Button>
         <div className="hidden">
           <Row>
             <div className="hidden"> Col is INSIDE Input</div>
@@ -111,21 +137,31 @@ export const Task = () => {
           <div className="hidden"> Col is INSIDE Input</div>
           <Input name="subject" label="Subject" {...attributes} />
           {/* <TextField name="subject" label="Name" {...attributes} /> */}
-          <Input name="body" label="Body"{...attributes} />
+          <Input name="body" label="Body" {...attributes} />
         </Row>
         <Row>
-          <Input name="status" label="Status" options={option.status}  {...attributes} />
+          <Input
+            name="status"
+            label="Status"
+            options={option.status}
+            {...attributes}
+          />
           {/* <Select name="status" label="Status" options={option.status}  {...attributes} /> */}
-          <Input name="result" label="Result"options={option.result} {...attributes} />
+          <Input
+            name="result"
+            label="Result"
+            options={option.result}
+            {...attributes}
+          />
         </Row>
         <Row>
-          <Input name="address.line1" label="address" {...attributes}/>
+          <Input name="address.line1" label="address" {...attributes} />
         </Row>
         <Row>
-          <Input name="address.line2" {...attributes}/>
+          <Input name="address.line2" {...attributes} />
         </Row>
         <Row>
-          <Input name="address.line3" {...attributes}/>
+          <Input name="address.line3" {...attributes} />
         </Row>
         <Row>
           <Col>

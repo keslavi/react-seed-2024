@@ -5,27 +5,29 @@ import Router from "./router";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import {Spinner} from "@/components/spinner";
+import { Spinner } from "@/components/spinner";
 import "./scss/index.scss";
-
+import { ThemeProvider } from "./theme-material";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
-  {/* <React.StrictMode> */}
+    {/* <React.StrictMode> */}
     <Spinner />
     <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover    
-     />    
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
     <Provider store={store}>
-      <Router />
+      <ThemeProvider>
+        <Router />
+      </ThemeProvider>
     </Provider>
-  {/* </React.StrictMode> */}
+    {/* </React.StrictMode> */}
   </>
 );
