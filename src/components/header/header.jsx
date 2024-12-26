@@ -1,5 +1,3 @@
-
-
 /*
 export const Header=(props) => {
   const {menu} =props;
@@ -38,20 +36,15 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import CoPresentIcon from '@mui/icons-material/CoPresent';
+import CoPresentIcon from "@mui/icons-material/CoPresent";
 import { NavLink } from "react-router-dom";
 import { color } from "@/theme-material";
-// export const Header=(props)=>{
-//   return (<>HEADER</>)
-// }
-
-// export default Header;
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export const Header = (props) => {
-  const {menu}=props;
+  const { menu } = props;
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -103,15 +96,11 @@ export const Header = (props) => {
       }
       return (
         <NavLink to={x.link} key={x.link}>
-          {({ isActive }) => 
-            <MenuItem 
-              onClick={onCloseNavMenu}
-              selected={isActive}
-            >
-              <Typography textAlign="center">
-                {x.text}
-              </Typography>
-            </MenuItem>}
+          {({ isActive }) => (
+            <MenuItem onClick={onCloseNavMenu} selected={isActive}>
+              <Typography textAlign="center">{x.text}</Typography>
+            </MenuItem>
+          )}
         </NavLink>
       );
     });
@@ -152,7 +141,7 @@ export const Header = (props) => {
             Seed2024
           </Typography>
 
-          <Box sx={{flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -182,7 +171,7 @@ export const Header = (props) => {
               {renderMenuXs(menu)}
             </Menu>
           </Box>
-          <CoPresentIcon  sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <CoPresentIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap

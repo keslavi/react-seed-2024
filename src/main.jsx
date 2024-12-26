@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 //import App from "./app"; //loaded in router
 import Router from "./router";
-import { store } from "./store";
+//import { useStore } from "./store";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { Spinner } from "@/components/spinner";
@@ -23,11 +23,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       draggable
       pauseOnHover
     />
-    <Provider store={store}>
+    {/* <Provider store={useStore}> */}
       <ThemeProvider>
         <Router />
       </ThemeProvider>
-    </Provider>
+    {/* </Provider> */}
     {/* </React.StrictMode> */}
   </>
 );

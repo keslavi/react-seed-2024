@@ -37,15 +37,17 @@ r.get('/', async (ctx, next) => {
 
 })
 
+//NOTE: in the environments i frequently work in, PUT and DELETE aren't available
+//UPSERT/DELETE
 r.post('/', async (ctx, next) => {
     let data = readData();
     const req = ctx.request.body;
 
-    if (req.delete || '' === 'delete') {
+    if (req.delete) {
         console.log('delete')
         //data = data.filter(function (data) { return data.id !== req.id });
         data = data.filter(x=>x.id !== req.id );
-        req.delete = true;
+        req.deleted = true;
     }
     else if ((req.id || '0') !== '0') {
         console.log('update',req);

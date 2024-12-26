@@ -1,4 +1,5 @@
 
+//DEPRECATED IN FAVOR OF ZUSTAND
 //import config from "@/config";
 import { toast } from "react-toastify";
 import api from "@/store/api";
