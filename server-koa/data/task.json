@@ -25,12 +25,12 @@
   },
   {
     "id": "2",
-    "subject": "",
-    "body": "",
+    "subject": "Subject b",
+    "body": "Body b",
     "status": "1",
     "result": 2,
     "address": {
-      "line1": "",
+      "line1": "ddd",
       "line2": "A2L2",
       "line3": "A2L3"
     },

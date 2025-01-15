@@ -1,6 +1,6 @@
 //import './app.css';
 import { Outlet as RouterOutlet } from "react-router-dom";
-import { ContainerFullWidth as Container } from "@/components";
+import { Container } from "@/components";
 import { Header } from "./components/header";
 
 export const App = (props) => {

@@ -1,12 +1,12 @@
 import { TextField as MuiTextField } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
-import { Infoicon } from "./info";
+import { InfoIcon } from "./info-icon";
 import {
   useController,
   //useForm
 } from "react-hook-form";
 import { ColPadded } from "@/components/grid";
-import { BootstrapTooltip } from "./infotooltip";
+//import { BootstrapTooltip } from "./infotooltip";
 import { Help /*HelpOutline*/ as IconMui } from "@mui/icons-material";
 /*
 to switch to bootstrap style:
@@ -23,7 +23,7 @@ export const TextField = (props) => {
   const unbound = props.unbound === "true" ? true : false;
   const {
     field,
-    fieldstate: { error /* invalid, isTouched, isDirty, */ },
+    fieldState: { error /* invalid, isTouched, isDirty, */ },
     //formState: { touchedFields, dirtyFields }
   } = useController({
     ...props,
@@ -37,18 +37,50 @@ export const TextField = (props) => {
     }
   }
 
-  const helpIconStyle = { 
-    marginRight: '-7px', 
-    marginTop: '3.5px', 
-    fontSize: 'larger', 
-    color: '#2b72b9'
-  }
+  // const helpIconStyle = {
+  //   marginRight: "-7px",
+  //   marginTop: "3.5px",
+  //   fontSize: "larger",
+  //   color: "#2b72b9",
+  // };
 
-  return()
-
-
- 
-}
-
-  
-    
+  return (
+    <ColPadded {...colProps(props)}>
+      <MuiTextField
+        id={field.name}
+        name={field.name}
+        label={props.label || ""}
+        inputRef={field.ref}
+        onBlur={(e) => {
+          field.onBlur(e.target.value);
+          onBlur(e);
+        }}
+        onChange={(e) => {
+          field.onChange(e.target.value);
+          onChange(e);
+        }}
+        onKeyDown={(e) => {
+          field.onKeyDown(e.target.value);
+          onKeyDown(e);
+        }}
+        {...valueProp}
+        fullWidth
+        // InputProps={{
+        //   endAdornment: props.helpInfo ? (
+        //     <IconMui
+        //       fontSize="small"
+        //       onClick={props.handleHelpToggle}
+        //       sx={helpIconStyle}
+        //       className="help-icon"
+        //     />
+        //   ) : (
+        //     <></>
+        //   ),
+        //}}
+        {...{error: !!error || undefined,helperText:error?.message}}
+        {...cleanParentProps(props)}
+      />
+      {props.info && InfoIcon(`${field.id}Info`,props.info)}
+    </ColPadded>
+  );
+};

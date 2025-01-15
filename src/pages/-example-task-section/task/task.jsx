@@ -2,36 +2,38 @@ import { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
 import { useNavigate, /*NavLink,*/ useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Button } from "@mui/material";
+import { store } from "store";
 
-import {
-  Col,
-  Input,
-  Select, //ALTERNATE to singe Input
-  TextField, //ALTERNATE to singe Input
-  Row,
-  TextareaDebug,
+//prettier-ignore
+import { 
+  BottomSticky,
+  Col, 
+  Input, 
+  Row, 
+  TextareaDebug 
 } from "components";
 
 //prettier-ignore
 import { 
-  listOptions,
-  retrieveTask, 
-  upsertTask,
-  selectOptions, 
-  selectTask, 
-} from "../slice/ztaskSlice-redux";
-
-import { resolver, errorNotification } from "./validation";
+  resolver, 
+  errorNotification 
+} from "./validation";
 
 export const Task = () => {
-  const item = useSelector(selectTask);
-  const option = useSelector(selectOptions);
-  const dispatch = useDispatch();
+  const item = store.use.task();
+  const taskRetrieve = store.use.taskRetrieve();
+  const taskUpsert = store.use.taskUpsert();
+  const option = store.use.option();
   const { id } = useParams();
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    taskRetrieve(id);
+  }, []);
+
   // React hook form and validation***********************
   const {
     control,
@@ -54,12 +56,6 @@ export const Task = () => {
   // end React hook form and validation***********************
 
   useEffect(() => {
-    dispatch(retrieveTask(id));
-    if (isEmpty(option)) dispatch(listOptions());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); //[dispatch]);
-
-  useEffect(() => {
     if (!isEmpty(item)) {
       reset(item);
     }
@@ -79,25 +75,7 @@ export const Task = () => {
       </div>
     );
 
-    dispatch(upsertTask(values));
-  };
-
-  const onContinueSave = (event) => {
-    const id = event.currentTarget.id;
-    switch (id) {
-      case "btnContinue":
-//        setValue("isDraft", false); 
-        window.isDraft=false;
-        break;
-      case "btnSave":
-//        setValue("isDraft", true);
-        window.isDraft=true;
-        break;
-      default:
-        toast.error(`onContinueSave ${id} not found`);
-        return;
-    }
-    event.currentTarget.form.requestSubmit();
+    taskUpsert(values);
   };
 
   const onDelete = () => {
@@ -111,31 +89,31 @@ export const Task = () => {
     navigate("/dev/tasks");
   };
 
-  if (isEmpty(item) || isEmpty(option)) return <div>Loading...</div>;
-
+  if (isEmpty(item) || isEmpty(option)) return <div>loading...</div>;
   return (
     <>
-      <div>
-        <h4>Task</h4>
-      </div>
-      <br />
+      <Row>
+        <Col xs={12}>
+          <h4>Task</h4>
+        </Col>
+      </Row>
+
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Button id="btnContinue" onClick={onContinueSave}>
-          Continue
-        </Button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <Button id="btnSave" onClick={onContinueSave}>
-          Save
-        </Button>
         <div className="hidden">
           <Row>
             <div className="hidden"> Col is INSIDE Input</div>
             <Input name="id" {...attributes} />
           </Row>
         </div>
+
         <Row>
           <div className="hidden"> Col is INSIDE Input</div>
-          <Input name="subject" label="Subject" {...attributes} />
+          <Input
+            name="subject"
+            label="Subject"
+            info="header|body"
+            {...attributes}
+          />
           {/* <TextField name="subject" label="Name" {...attributes} /> */}
           <Input name="body" label="Body" {...attributes} />
         </Row>
@@ -172,6 +150,11 @@ export const Task = () => {
             <input type="button" onClick={() => onDelete()} value="Delete" />
           </Col>
         </Row>
+        <BottomSticky>
+          <Button id="btnSave" type="submit" variant="contained">
+            Save
+          </Button>
+        </BottomSticky>
       </form>
       <TextareaDebug value={{ item, option }} />
     </>

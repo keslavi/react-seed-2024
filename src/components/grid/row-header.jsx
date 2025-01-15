@@ -1,4 +1,4 @@
-import { color } from "@theme-material";
+import { color } from "@/theme-material";
 import { Grid2 as Grid } from "@mui/material";
 import { isEmpty } from "lodash";
 

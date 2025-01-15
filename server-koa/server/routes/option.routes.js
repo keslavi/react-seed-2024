@@ -20,9 +20,10 @@ r.get('/', async (ctx, next) => {
 })
 
 r.get('/:key', async (ctx, next) => {
+    const key=ctx.params.key;
     const data = readData();
     
-    ctx.body = data[ctx.params.key]
+    ctx.body = {[key]:data[ctx.params.key]};
 })
 
 export default r;

@@ -3,7 +3,8 @@ import spinner from "./spinner.gif";
 import { useStore } from "@/store";
 
 export const Spinner = () => {
-  const { apiRequestCount } = useStore();
+//  const { apiRequestCount } = useStore();
+const apiRequestCount=0;
 
   return (
     <div className={apiRequestCount < 1 ? "hidden" : "spinner"}>
