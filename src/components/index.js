@@ -4,6 +4,6 @@
 export * from './textarea-debug/textarea-debug';
 export * from './grid';
 export * from './formhelper';
-export * from './bottom-sticky.jsx/bottom-sticky';
+export * from './nav-sticky/nav-sticky';
 
 

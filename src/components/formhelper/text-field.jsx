@@ -20,7 +20,6 @@ export const TextField = (props) => {
   };
   const onBlur = props.onBlur || placeholder;
   const onChange = props.onChange || placeholder;
-  const onKeyDown = props.onKeyDown || placeholder;
   const unbound = props.unbound === "true" ? true : false;
   const {
     field,
@@ -53,15 +52,12 @@ export const TextField = (props) => {
           field.onChange(e.target.value);
           onChange(e);
         }}
-        onKeyDown={(e) => {
-          field.onKeyDown(e.target.value);
-          onKeyDown(e);
-        }}
         {...valueProp}
         {...{ error: !!error || undefined, helperText: error?.message }}
         {...cleanParentProps(props)}
       />
       {props.info &&  <Info id={`${field.id}Info`} info={props.info} />}      
+      {/* {props.info &&  Info(`${field.id}Info`, props.info)}       */}
     </ColPadded>
   );
 };

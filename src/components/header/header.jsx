@@ -108,7 +108,7 @@ export const Header = (props) => {
 
   return (
     <AppBar
-      position="static"
+      position="fixed"
       sx={{
         bgcolor: color.primary.blue,
         color: color.white,

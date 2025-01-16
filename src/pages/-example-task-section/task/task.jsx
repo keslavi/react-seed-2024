@@ -8,7 +8,7 @@ import { store } from "store";
 
 //prettier-ignore
 import { 
-  BottomSticky,
+  NavSticky,
   Col, 
   Input, 
   Row, 
@@ -92,6 +92,8 @@ export const Task = () => {
   if (isEmpty(item) || isEmpty(option)) return <div>loading...</div>;
   return (
     <>
+      <br /> {/* account for navSticky */}
+      <br /> {/* account for navSticky */}
       <Row>
         <Col xs={12}>
           <h4>Task</h4>
@@ -110,17 +112,13 @@ export const Task = () => {
           <Input
             //size={{xs:4,xm:7}} //size={4} muiv6 Grid2 uses size
             name="subject"
-            //info="header|body"
+            //info="header|body" //ToDo: get info icon working
             {...attributes}
           />
         </Row>
         <Row>
-          <Input 
-            name="body" 
-            label="Body" 
-            {...attributes} 
-          />
-          </Row>
+          <Input name="body" label="Body" {...attributes} />
+        </Row>
 
         <Row>
           <Input
@@ -136,7 +134,7 @@ export const Task = () => {
             options={option.task.result}
             {...attributes}
           />
-          <Input datepicker name="dfrom" label="From" {...attributes}/>
+          <Input datepicker name="dfrom" label="From" {...attributes} />
         </Row>
         <Row>
           <Input name="address.line1" label="address" {...attributes} />
@@ -156,11 +154,11 @@ export const Task = () => {
             <input type="button" onClick={() => onDelete()} value="Delete" />
           </Col>
         </Row>
-        <BottomSticky>
+        <NavSticky>
           <Button id="btnSave" type="submit" variant="contained">
             Save
           </Button>
-        </BottomSticky>
+        </NavSticky>
       </form>
       <TextareaDebug value={{ item, option }} />
     </>
