@@ -21,6 +21,7 @@ export const cleanParentProps=(props)=>{
     "onBlur",
     "min",
     "max",
+    "size",
   ];
 
   exclude.forEach(key=>{

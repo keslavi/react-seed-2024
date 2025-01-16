@@ -3,7 +3,7 @@ import { ThemeProvider as MUIThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 
 import { AccordionSummary } from "@mui/material";
-import { fontSize, fontWeight, styled } from "@mui/system";
+import { bgcolor, fontSize, fontWeight, styled } from "@mui/system";
 import { Padding } from "@mui/icons-material";
 
 /************************************ 
@@ -106,10 +106,10 @@ export const theme = createTheme({
         },
       },
     },
-    Muigrid2:{
+    MuiGrid2:{
       styleOverrides:{
         root:{
-          boxShadow:"none"
+          boxShadow:"none",
         }
       }
     },
@@ -336,11 +336,11 @@ export const theme = createTheme({
       // },
     },
     MuiInputAdornment: {
-      // styleOverrides: {
-      //   root: {
-      //     margin:"5px"
-      //   },
-      // },
+      styleOverrides: {
+        root: {
+          margin:"5px"
+        },
+      },
     },
     MuiFormLabel: {
       // styleOverrides: {

@@ -1,14 +1,13 @@
 import { isEmpty } from "lodash";
 
-//import { Checkbox } from "./checkbox";
-//import {Datepicker} from './datepicker';
-//import { Multiselect } from "./multiselect";
-//import {Select} from './select';
-//import {Radio} from './radio';
-//import {SelectAutocomplete} from './select-autocomplete';
-//import {TextArea} from './textarea';
+import { Checkbox } from "./checkbox";
+import { Datepicker } from "./datepicker";
+import { Multiselect } from "./multiselect";
+import { Select } from "./select";
+import { Radio } from "./radio";
+import { SelectAutocomplete } from "./select-autocomplete";
+import { Textarea } from "./textarea";
 import { TextField } from "./text-field";
-
 
 /**
  * @property {react-hook Form Input} multitype Input control (default TextField)
@@ -42,24 +41,27 @@ export const Input = (props) => {
     options,
     optionsMulti,
     optionsRadio,
+    select,
     textarea,
   } = props;
 
-  // const Ctl = datepicker
-  //   ? DatePicker
-  //   : checkbox
-  //   ? CheckBox
-  //   : !isEmpty(options)
-  //   ? SelectAutocomplete
-  //   : !isEmpty(optionsMulti)
-  //   ? Multiselect
-  //   : !isEmpty(optionsRadio)
-  //   ? Radio
-  //   : textarea
-  //   ? Textarea
-  //   : TextField;
+  const Ctl = datepicker
+    ? Datepicker
+    : checkbox
+    ? Checkbox
+    : !isEmpty(options)
+    ? select
+      ? Select
+      : SelectAutocomplete
+    : !isEmpty(optionsMulti)
+    ? Multiselect
+    : !isEmpty(optionsRadio)
+    ? Radio
+    : textarea
+    ? Textarea
+    : TextField;
 
-    const Ctl = TextField;    
+  //const Ctl = TextField;
 
   return <Ctl {...props} />;
 };

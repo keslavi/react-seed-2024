@@ -1,12 +1,12 @@
 import { Grid2 as Grid } from "@mui/material";
 import { Item, ItemNoPadding } from "./item";
 
-const defaultXs = 3;
+const defaultSize=3;
 
 export const Col = (props) => {
-  const { children, ...rest } = props;
+  const { children,size, ...rest } = props;
   return (
-    <Grid xs={props.xs || defaultXs} {...rest}>
+    <Grid size={size || defaultSize} {...rest}>
       <ItemNoPadding>{children}</ItemNoPadding>
     </Grid>
   );
@@ -15,7 +15,7 @@ export const Col = (props) => {
 export const ColPadded = (props) => {
   const { children, ...rest } = props;
   return (
-    <Grid xs={props.xs || defaultXs} {...rest}>
+    <Grid size={{xs:props.xs || defaultSize}} {...rest}>
       <Item>{children}</Item>
     </Grid>
   );

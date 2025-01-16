@@ -7,7 +7,7 @@ export const Row = (props) => {
     <Grid
       container
       spacing={2}
-      columns={columns || { xs: 2, sm: 4, md: 12 }}
+      //columns={columns || { xs: 2, sm: 4, md: 12 }}
       {...rest}
     >
       {children}

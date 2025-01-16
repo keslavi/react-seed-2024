@@ -12,7 +12,7 @@ import {
   Col, 
   Input, 
   Row, 
-  TextareaDebug 
+  TextareaDebug, 
 } from "components";
 
 //prettier-ignore
@@ -105,32 +105,38 @@ export const Task = () => {
             <Input name="id" {...attributes} />
           </Row>
         </div>
-
         <Row>
           <div className="hidden"> Col is INSIDE Input</div>
           <Input
+            //size={{xs:4,xm:7}} //size={4} muiv6 Grid2 uses size
             name="subject"
-            label="Subject"
-            info="header|body"
+            //info="header|body"
             {...attributes}
           />
-          {/* <TextField name="subject" label="Name" {...attributes} /> */}
-          <Input name="body" label="Body" {...attributes} />
         </Row>
+        <Row>
+          <Input 
+            name="body" 
+            label="Body" 
+            {...attributes} 
+          />
+          </Row>
+
         <Row>
           <Input
             name="status"
             label="Status"
-            options={option.status}
+            options={option.task.status}
             {...attributes}
           />
           {/* <Select name="status" label="Status" options={option.status}  {...attributes} /> */}
           <Input
             name="result"
             label="Result"
-            options={option.result}
+            options={option.task.result}
             {...attributes}
           />
+          <Input datepicker name="dfrom" label="From" {...attributes}/>
         </Row>
         <Row>
           <Input name="address.line1" label="address" {...attributes} />

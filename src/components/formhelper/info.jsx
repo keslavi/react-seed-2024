@@ -6,7 +6,8 @@ import { Help /*helpOutline*/ as IconMui } from "@mui/icons-material";
 import { color } from "@/theme-material";
 import { InsertCommentOutlined } from "@mui/icons-material";
 
-export const InfoIcon = (id, info) => {
+export const Info = (props) => {
+  const { id, info } = props;
   const [anchor, setAnchor] = useState(null);
   const open = Boolean(anchor);
 
@@ -27,48 +28,42 @@ export const InfoIcon = (id, info) => {
   const onClosePopover = (e) => {
     setAnchor(null);
   };
-
-  const ret = (
-    <div style={{ position: "absolute", top: 12, right: 0 }}>
-      <InputAdornment
-        position="end"
-        style={{
-          position: "relative",
-        }}
-      >
+  const ret=
+  // return (
+    // <div style={{ position: "absolute"}}>
+    // <div style={{transform: 'translate(-15px,-70px)'}}>
+      <div >
+        {/* <HelpRoundedIcon
+        sx={{ color: color.primary.blue }}
+        onClick={onTogglePopover}
+      /> */}
         <IconMui
           color="primary"
           fontSize="small"
           onClick={onTogglePopover}
-          sx={{
-            color: color.primary.blue,
-            cursor: "pointer",
-          }}
+          sx={{ color: color.primary.blue }}
+          //style={{transform:'translate(-12px,-10px)'}}
         />
-      </InputAdornment>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchor}
-        onClose={onTogglePopover}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        PaperProps={{
-          style: {
-            width: "400px",
-          },
-        }}
-      >
-        {infoHeader && (
-          <Typography variant="h5" gutterBottom>
-            {infoHeader}
-          </Typography>
-        )}
-        {infoSubject}
-      </Popover>
-    </div>
-  );
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchor}
+          onClose={onClosePopover}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          slotProps={{ style: { width: "400px" } }}
+        >
+          {infoHeader && (
+            <Typography variant="h5" gutterBottom>
+              {infoHeader}
+            </Typography>
+          )}
+          {infoSubject}
+        </Popover>
+      </div>
+    // </div>
+  // );
   return ret;
 };
