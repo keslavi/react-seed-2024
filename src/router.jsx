@@ -22,7 +22,9 @@ const Task = lazy(() => import("./pages/-example-task-section/task/task"));
 const Contacts = lazy(() => import("./pages/-example-contact/contacts/contacts"));
 const Contact = lazy(() => import("./pages/-example-contact/contact/contact"));
 const Scratchpad = lazy(() => import("./pages/dev-section/scratchpad"));
-
+const FormHelperTester = lazy(() =>
+  import("./components/formhelper/test/formhelpertest")
+);
 //not introducing jwt and private routes yet
 const menu = [
   { text: "Home", link: "/" },
@@ -34,6 +36,7 @@ const menu = [
       { text: "Tasks", link: "/dev/tasks" },
       { text: "Contacts", link: "/dev/contacts" },
       { text: "Scratchpad", link: "/dev/scratchpad" },
+      { text: "FormHelper", link: "/dev/formhelper" },
     ],
   },
 ];
@@ -46,6 +49,14 @@ const Router = () => {
           <Route path="home" element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="/dev">
+            <Route
+              path="formhelper"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <FormHelperTester />
+                </Suspense>
+              }
+            />
             <Route
               path="tasks"
               element={

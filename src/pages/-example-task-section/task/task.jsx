@@ -119,6 +119,9 @@ export const Task = () => {
         <Row>
           <Input name="body" label="Body" {...attributes} />
         </Row>
+        <Row>
+          <Input name='names' label="Names" optionscheckbox={option.task.status/*["steve","cindy", "riley", "whatever"]*/} {...attributes} />
+        </Row>
 
         <Row>
           <Input

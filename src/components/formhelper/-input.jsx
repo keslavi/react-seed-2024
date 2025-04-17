@@ -6,6 +6,7 @@ import { Multiselect } from "./multiselect";
 import { Select } from "./select";
 import { Radio } from "./radio";
 import { SelectAutocomplete } from "./select-autocomplete";
+import { SelectCheckbox } from "./select-checkbox";
 import { Textarea } from "./textarea";
 import { TextField } from "./text-field";
 
@@ -27,6 +28,7 @@ import { TextField } from "./text-field";
  *  @param options returns autocomplete
  *  @param optionsMulti returns multiselect
  *  @param optionsRadio returns as radio buttons
+ *  @param optionsCheckbox string[] returns as radio buttons
  *  @param datepicker returns date control
  *  @param checkbox returns checkbox control
  *  @param textarea returns textarea
@@ -41,6 +43,7 @@ export const Input = (props) => {
     options,
     optionsMulti,
     optionsRadio,
+    optionscheckbox,
     select,
     textarea,
   } = props;
@@ -56,7 +59,9 @@ export const Input = (props) => {
     : !isEmpty(optionsMulti)
     ? Multiselect
     : !isEmpty(optionsRadio)
-    ? Radio
+    ? Radio 
+    : optionscheckbox
+    ? SelectCheckbox
     : textarea
     ? Textarea
     : TextField;
