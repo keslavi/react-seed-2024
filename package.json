@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "npm run dev",
+    "startdev": "npm run dev",
+    "start": "concurrently \"npm run dev\" \"npm run test\"",
+    "startTest": "concurrently \"npm run dev\" \"npm run test\"",
     "dev": "vite --port 3000 --host",
     "devWithConsoleDebug": "vite port 3000 --host --inspect --debug",
     "test": "vitest --ui --watch",
@@ -12,9 +14,8 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "installDependencies": "npm install  lodash moment axios react-router-dom react-redux @reduxjs/toolkit sass yup @hookform/resolvers react-toastify",
-    "installDevDependencies": "npm install --save-dev @testing-library/jest-dom @testing-library/react @testing-library/user-event",
-    "installTesting": "npm install -D vitest vitest/ui jsdom @testing-library/jest-dom @testing-library/react @testing-library/user-event"
+    "installDependencies": "npm install lodash moment axios react-router-dom react-redux @reduxjs/toolkit sass yup @hookform/resolvers react-toastify",
+    "installTesting": "npm install -D concurrency vitest vitest/ui jsdom @testing-library/jest-dom @testing-library/react @testing-library/user-event"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -48,6 +49,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "@vitest/ui": "^3.1.1",
+    "concurrently": "^9.1.2",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",

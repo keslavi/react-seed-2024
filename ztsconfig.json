@@ -1,5 +1,13 @@
 {
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,    
+    "noEmit": true, 
+    "jsx":"preserve",
+    "jsxImportSource": "react",
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "target": "ESNext",
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./src/*"],

@@ -40,7 +40,6 @@ export const Datepicker = (props) => {
         value={field.value || ''} //avoid uncontrolled ref error
         {...attributes} //note.. NOT <Input {...attributes} /> :)
         fullWidth
-        placeholder=""
         {...{error: !!error || undefined, helperText: error?.message}}
       />
     </ColPadded>

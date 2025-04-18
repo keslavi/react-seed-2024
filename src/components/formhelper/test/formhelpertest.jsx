@@ -21,7 +21,7 @@ import {
   errorNotification 
 } from "./formhelpertestValidation";
 
-const option = {
+const option0 = {
   task: {
     // names: [
     //   "steve",
@@ -87,7 +87,7 @@ const option = {
   },
 };
 
-const item = {
+const item0 = {
   id: "2",
   subject: "Subject b",
   names: ["steve", "cindy"],
@@ -104,7 +104,9 @@ const item = {
 };
 
 export const FormHelperTester = (props) => {
-  const { submitValues, setSubmitValues } = useState({});
+  const [submitValues, setSubmitValues] = useState({});
+  const item = props.item || item0;
+  const option = props.option || option0;
 
   // React hook form and validation***********************
   const {
@@ -117,6 +119,7 @@ export const FormHelperTester = (props) => {
     //watch,
   } = useForm({
     resolver,
+    defaultValues: item,
     //mode:"onChange"
   });
   const attributes = { control, errors };
@@ -127,9 +130,22 @@ export const FormHelperTester = (props) => {
   }, [errors]);
   // end React hook form and validation***********************
 
-  const onSubmit = (values) => {
+  const onSubmitSuccess = (values) => {
     //note:  values can't get here prior to form & business validation
     setSubmitValues(values);
+    // toast.success(
+    //   <div>
+    //     <br />
+    //     submit values:
+    //     <br />
+    //     <textarea
+    //       rows={5}
+    //       cols={50}
+    //       value={JSON.stringify(values, null, 2)}
+    //       readOnly
+    //     />
+    //   </div>
+    // );
   };
 
   //not needed for test
@@ -138,10 +154,13 @@ export const FormHelperTester = (props) => {
     <>
       <br />
       <br />
-      <div>
-        <h1>formhelper tester</h1>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <h1>formhelper tester</h1>
+      <ul>
+        <li>this is a test <b>staging area</b> for the formhelper components</li>
+        <li>allows for developer to look at tests visually</li>
+        <li>tests are in formhelper/*.test.jsx</li>
+      </ul>
+      <form onSubmit={handleSubmit(onSubmitSuccess)}>
         <Row>
           <div className="hidden"> Col is INSIDE Input</div>
           <Input name="subject" label="Subject" {...attributes} />
@@ -195,7 +214,15 @@ export const FormHelperTester = (props) => {
           </Col>
         </Row>
       </form>
-      <TextareaDebug value={{ item, option }} />
+      <label>submitValues</label>
+      <br />
+      <textarea
+        rows={20}
+        cols={50}
+        data-testid="elSubmitValues"
+        value={JSON.stringify(submitValues, null, 2)}
+        readOnly
+      />
     </>
   );
 };
