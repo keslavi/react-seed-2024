@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "startdev": "npm run dev",
-    "start": "concurrently \"npm run dev\" \"npm run test\"",
-    "startTest": "concurrently \"npm run dev\" \"npm run test\"",
+    "start": "npm run dev",
+    "zstartTest": "change to run dev & koa, test in it's own window concurrently \"npm run dev\" \"npm run test\"",
     "dev": "vite --port 3000 --host",
     "devWithConsoleDebug": "vite port 3000 --host --inspect --debug",
     "test": "vitest --ui --watch",

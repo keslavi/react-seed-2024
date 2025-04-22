@@ -1,74 +1,89 @@
+import { TextField, Autocomplete, Checkbox } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
+import { Info } from "./info";
 import { useController } from "react-hook-form";
-import {
-  Checkbox,
-  ListItemText,
-  MenuItem,
-  Select as MuiSelect,
-  InputLabel,
-  FormControl,
-  FormHelperText,
-  OutlinedInput
-} from "@mui/material";
-
 import { ColPadded } from "@/components/grid";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { useMemo } from "react";
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export const SelectCheckbox = (props) => {
   const {
+    optionscheckbox: options,
+    onBlur = () => {},
+    onChange = () => {},
+    unbound = props.unbound === "true",
+    label,
+    info,
+    defaultvalue,
+    ...restProps
+  } = props;
+
+  const {
     field,
     fieldState: { error },
-  } = useController({ ...props });
+  } = useController({
+    ...props,
+  });
 
-  const options = props.optionscheckbox || [];
-
-  const placeholder = () => {};
-  const onBlur = props.onBlur || placeholder;
-  const onChange = props.onChange || placeholder;
-
-  const onChangeLocal = (event) => {
-    const {
-      target: { value },
-    } = event;
-    const newValue = typeof value === 'string' ? value.split(',') : value;
-    field.onChange(newValue);
-    onChange(event);
-  };
-
-  const getSelectedLabels = (selected) => {
-    return selected.map((val) => {
-      const option = options.find((opt) => opt.key === val);
-      return option ? option.text : val;
-    });
-  };
+  const selectedOptions = useMemo(() => {
+    return Array.isArray(field.value) 
+      ? options.filter((opt) => field.value.includes(opt.key))
+      : [];
+  }, [field.value, options]);
 
   return (
     <ColPadded {...colProps(props)}>
-      <FormControl fullWidth error={!!error}>
-        <InputLabel id={`${field.name}-label`}>{props.label}</InputLabel>
-        <MuiSelect
-          labelId={`${field.name}-label`}
-          id={field.name}
-          name={field.name}
-          multiple
-          value={field.value || []}
-          input={<OutlinedInput label={props.label} />}
-          renderValue={(selected) => getSelectedLabels(selected).join(", ")}
-          onBlur={(e) => {
-            field.onBlur(e);
-            onBlur(e);
-          }}
-          onChange={onChangeLocal}
-          {...cleanParentProps(props)}
-        >
-          {options.map((option) => (
-            <MenuItem key={option.key} value={option.key}>
-              <Checkbox checked={(field.value || []).includes(option.key)} />
-              <ListItemText sx={{ ml: 1 }} primary={option.text} />
-            </MenuItem>
-          ))}
-        </MuiSelect>
-        {error && <FormHelperText>{error.message}</FormHelperText>}
-      </FormControl>
+      <Autocomplete
+        id={field.name}
+        multiple
+        onBlur={(e) => {
+          field.onBlur();
+          onBlur(e);
+        }}
+        onChange={(e, newValue) => {
+          const selectedValues = Array.isArray(newValue)
+            ? newValue.map((item) => item.key)
+            : [];
+          field.onChange(selectedValues);
+          onChange(selectedValues);
+        }}
+        options={options}
+        disableCloseOnSelect
+        getOptionLabel={(option) => option?.text || ""}
+        isOptionEqualToValue={(option, value) => option?.key == value?.key}
+        renderOption={(props, option, { selected }) => {
+          // Destructure the key from props to use it separately
+          const { key, ...rest } = props;
+          return (
+            <li key={key} {...rest}>
+              <Checkbox
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 8 }}
+                checked={selected}
+              />
+              {option.text}
+            </li>
+          );
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            inputRef={field.ref}
+            label={label}
+            variant="outlined"
+            error={Boolean(error)}
+            helperText={error?.message || ""}
+          />
+        )}
+        value={selectedOptions}
+        {...cleanParentProps(restProps)}
+      />
+      {info && <Info id={`${field.id}Info`} info={info} />}
     </ColPadded>
   );
 };

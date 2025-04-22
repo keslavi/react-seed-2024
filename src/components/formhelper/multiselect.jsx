@@ -1,28 +1,78 @@
-import { useEffect } from "react";
-import { useController } from "react-hook-form";
-//import { TextField as MuiTextField } from "@mui/material";
+import { TextField, Autocomplete } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
-import { Col } from "components/grid";
-import { isEmpty } from "lodash";
-import { toast } from "react-toastify";
+import { Info } from "./info";
+import { useController } from "react-hook-form";
+import { ColPadded } from "@/components/grid";
+import { Help } from "@mui/icons-material";
+import { color } from "@/theme-material";
+import { useMemo } from "react";
 
 export const Multiselect = (props) => {
-  const { optionsMulti, name, label } = props;
+  const {
+    optionsMulti: options,
+    onBlur = () => {},
+    onChange = () => {},
+    unbound = props.unbound === "true",
+    label,
+    info,
+    defaultvalue,
+    ...restProps
+  } = props;
 
-  useEffect(() => {
-    if (isEmpty(optionsMulti)) {
-      toast.error(
-        `!Dev: ${name}-${label} field: Autocomplete expects optionsMulti:[{key,text}]`
-      );
-    }
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
+    ...props,
   });
 
-  const {field,fieldState}=useController(props);
+  //Memoize the selected values to optimize performance
+  const selectedOptions = useMemo(() => {
+    return Array.isArray(field.value)
+      ? options.filter((opt) => field.value.includes(opt.key))
+      : [];
+  }, [field.value, options]);
+
+  //  Filter out already selected options from dropdown
+  const filteredOptions = useMemo(() => {
+    return options.filter(option => 
+      !field.value || !field.value.includes(option.key)
+    );
+  }, [field.value, options ]);
 
   return (
-    <Col {...colProps(props)}>
-      {name}-{label} multiselect not implemented
-    </Col>
-  )
-
+    <ColPadded {...colProps(props)}>
+      <Autocomplete
+        id={field.name}
+        multiple
+        onBlur={() => {
+          field.onBlur();
+          onBlur();
+        }}
+        onChange={(e, newValue) => {
+          const selectedValues = Array.isArray(newValue)
+            ? newValue.map((item) => item.key)
+            : [];
+          field.onChange(selectedValues);
+          onChange(selectedValues);
+        }}
+        options={filteredOptions}
+        getOptionLabel={(option) => option?.text || ""}
+        isOptionEqualToValue={(option, value) => option?.key == value?.key}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            inputRef={field.ref}  // Moved inputRef here
+            label={label}
+            variant="outlined"
+            error={Boolean(error)}
+            helperText={error?.message || ""}
+          />
+        )}
+        value={selectedOptions}
+        {...cleanParentProps(restProps)}
+      />
+      {info && <Info id={`${field.id}Info`} info={info} />}
+    </ColPadded>
+  );
 };

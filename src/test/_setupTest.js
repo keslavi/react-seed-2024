@@ -35,8 +35,8 @@ export default defineConfig({
 
 
 import { afterEach } from "vitest";
-import { cleanup } from "@testing-library/react";
+//import { cleanup } from "@testing-library/react";
 
 afterEach(()=>{
-    cleanup();
+    //cleanup(); //it's called automaticaly since v9
 })

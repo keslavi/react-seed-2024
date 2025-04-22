@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import {
   TextField as MuiTextField,
   Autocomplete as MuiAutocomplete,
@@ -17,8 +19,7 @@ export const SelectAutocomplete = (props) => {
 
   const onChange = props.onChange || placeholder;
   // const textPleaseSelect=props.textPleaseSelect || "Please Select";
-  // const options= [{key:"",text:textPleaseSelect},...props.options];
-  const options = props.options;
+  const options = useMemo(() => props.options || [], [props.options]);
 
   const {
     field,
