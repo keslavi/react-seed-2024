@@ -9,20 +9,32 @@ import { describe } from "vitest";
 // also allows user to directly bench test.
 
 
+
 describe("Formhelper-Multiselect", () => {
+  const testData = () => {
+    return {
+      item: {
+        names2: [1, 2],
+      },
+      options: {
+        task: {
+          names: [
+            { key: 1, text: "asaa1" },
+            { key: 2, text: "bbb2" },
+            { key: 3, text: "ccc3" },
+          ],
+        },
+      },
+    };
+  };
+    
   it("loads correctly", () => {
-    console.log ("Formhelper-Multiselect test started", (new Date()).toLocaleTimeString() );
+    const data=testData();
+    console.log("Formhelper-Multiselect test started", (new Date()).toLocaleTimeString() );
     render(
       <FormHelperTester
-        item={{ names2: [1, 2] }}
-        option={{
-          task: {
-            names: [
-              { key: 1, text: "ssss" },
-              { key: 2, text: "tttt" },
-            ],
-          },
-        }}
+        item={data.item}
+        option={data.options}
       >
         <Multiselect
           name="names2"

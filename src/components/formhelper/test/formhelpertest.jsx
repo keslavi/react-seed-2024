@@ -143,7 +143,7 @@ export const FormHelperTester = (props) => {
     return (
       <>
         <h1>formhelper tester (single component) </h1>
-        <h2>testing single component from unit test. this updated</h2>
+        <h2>testing single component</h2>
         <h3>
         {JSON.stringify({item,option}, null, 2)}
         </h3>
