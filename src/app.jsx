@@ -1,6 +1,6 @@
 //import './app.css';
 import { Outlet as RouterOutlet } from "react-router-dom";
-import { Container } from "@/components";
+import { ContainerFullWidth } from "@/components";
 import { Header } from "./components/header";
 
 export const App = (props) => {
@@ -9,9 +9,11 @@ export const App = (props) => {
   return (
     <>
       <Header menu={menu} />
-      <Container>
+      {/* <ContainerFullWidth> */}
+      <div style={{ width: "100%" }}>
         <RouterOutlet />
-      </Container>
+      </div>
+      {/* </ContainerFullWidth> */}
     </>
   );
 };

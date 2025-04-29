@@ -111,7 +111,6 @@ export const FormHelperTester = (props) => {
 
   const option = props.option || option0;
   const TestComponent = props.TestComponent || null;
-//console.log ("data: ", JSON.stringify({item,option}) );
 
   // React hook form and validation***********************
   const {
@@ -145,7 +144,7 @@ export const FormHelperTester = (props) => {
         <h1>formhelper tester (single component) </h1>
         <h2>testing single component</h2>
         <h3>
-        {JSON.stringify({item,option}, null, 2)}
+        {/* {JSON.stringify({item,option}, null, 2)} */}
         </h3>
         {/* <textarea id="hmm" rows={20} cols={50} value={JSON.stringify({item,options}, null, 2)} readOnly /> */}
         <form onSubmit={handleSubmit(onSubmitSuccess)}>
@@ -177,7 +176,6 @@ export const FormHelperTester = (props) => {
   }
 
   //not needed for test
-  console.log("cccccc");
   return (
     <>
       <br />
@@ -192,7 +190,6 @@ export const FormHelperTester = (props) => {
       </ul>
       <form onSubmit={handleSubmit(onSubmitSuccess)}>
         <Row>
-          <div className="hidden"> Col is INSIDE Input</div>
           <Input name="subject" label="Subject" {...attributes} />
         </Row>
         <Row>

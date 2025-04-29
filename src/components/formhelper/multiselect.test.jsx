@@ -19,7 +19,7 @@ describe("Formhelper-Multiselect", () => {
       options: {
         task: {
           names: [
-            { key: 1, text: "asaa1" },
+            { key: 1, text: "aaa1" },
             { key: 2, text: "bbb2" },
             { key: 3, text: "ccc3" },
           ],

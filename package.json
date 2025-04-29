@@ -6,16 +6,15 @@
   "scripts": {
     "startdev": "npm run dev",
     "start": "npm run dev",
-    "zstartTest": "change to run dev & koa, test in it's own window concurrently \"npm run dev\" \"npm run test\"",
     "dev": "vite --port 3000 --host",
     "devWithConsoleDebug": "vite port 3000 --host --inspect --debug",
     "test": "vitest --ui --watch",
-    "testgit": "vitest ADD STUFF HERE FOR CHECKIN TESTING",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "installDependencies": "npm install lodash moment axios react-router-dom react-redux @reduxjs/toolkit sass yup @hookform/resolvers react-toastify",
-    "installTesting": "npm install -D concurrency vitest vitest/ui jsdom @testing-library/jest-dom @testing-library/react @testing-library/user-event"
+    "installPackages": "npm install lodash moment axios react-router-dom react-redux @reduxjs/toolkit sass yup @hookform/resolvers react-toastify",
+    "installTesting": "npm install -D concurrency vitest jsdom @testing-library/jest-dom @testing-library/react @testing-library/user-event",
+    "inputallTesting2": "echo \"potential firewall issues also requires access to github\" && npm i -D vitest/ui"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",

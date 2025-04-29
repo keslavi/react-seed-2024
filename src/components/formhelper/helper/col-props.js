@@ -1,8 +1,11 @@
 
 export const colProps= (props)=>{
-  const {size, sx}=props;
   const ret={};
-  if (size) ret.size=size;
-  if (sx) ret.sx=sx;
+  if (props.xs) ret.xs = props.xs;
+  if (props.sm) ret.sm = props.sm;
+  if (props.md) ret.md = props.md;
+  if (props.lg) ret.lg = props.lg;
+  if (props.xl) ret.xl = props.xl;
+
   return ret;
 }
