@@ -1,14 +1,9 @@
-import { render, screen } from "@testing-library/react";
 import { Formhelper } from "./test/formhelper";
 import { Multiselect } from "./select-multiselect";
-import { describe } from "vitest";
-//import { expect } from "vitest";
 
 //note, not using mock here, but rather a formhelpertest component that uses the multiselect component.
 // this is a good way to test the component in a more realistic scenario.
 // also allows user to directly bench test.
-
-
 
 describe("Formhelper-Multiselect", () => {
   const testData = () => {

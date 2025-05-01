@@ -12,9 +12,9 @@
       "test": ["test/*"],
     },
     "types":[
-      "vitest"
+      "vitest","vitest/globals"
     ]
   }, 
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+  "include": ["_setupTest.js","src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
   "exclude": ["node_modules", "dist", "build", "out", "coverage", "**/*.spec.ts", "**/*.test.ts"]
 }

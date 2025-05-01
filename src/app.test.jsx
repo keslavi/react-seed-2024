@@ -1,6 +1,6 @@
-import {render, screen} from '@testing-library/react';
+//import {render, screen} from '@testing-library/react';
 import {App} from './app';
-import { expect } from 'vitest';
+//import { expect } from 'vitest';
 
 it ('renders without crashing', () => {
 expect(true).toBe(true);

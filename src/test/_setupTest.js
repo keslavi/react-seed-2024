@@ -1,5 +1,13 @@
-import "@testing-library/react";
+import {render,screen,userEvent,waitFor,act,within} from "@testing-library/react";
 import "@testing-library/jest-dom";
+
+global.render = render;
+global.screen = screen;
+global.userEvent = userEvent;
+global.waitFor = waitFor;
+global.act = act;
+global.within = within;
+
 //import "@testing-library/user-event"; //maybe add here? 
 
 /*
