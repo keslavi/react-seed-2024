@@ -7,7 +7,7 @@ import { Help } from "@mui/icons-material";
 import { color } from "@/theme-material";
 import { useMemo } from "react";
 
-export const Multiselect = (props) => {
+export const SelectMulti = (props) => {
   const {
     optionsMulti: options,
     onBlur = () => {},

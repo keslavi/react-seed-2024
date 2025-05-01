@@ -2,7 +2,7 @@ import { isEmpty } from "lodash";
 
 import { Checkbox } from "./checkbox";
 import { Datepicker } from "./datepicker";
-import { Multiselect } from "./select-multiselect";
+import { SelectMulti } from "./select-multi";
 import { Select } from "./select";
 import { Radio } from "./radio";
 import { SelectAutocomplete } from "./select-autocomplete";
@@ -57,7 +57,7 @@ export const Input = (props) => {
       ? Select
       : SelectAutocomplete
     : !isEmpty(optionsMulti)
-    ? Multiselect
+    ? SelectMulti
     : !isEmpty(optionsRadio)
     ? Radio 
     : optionscheckbox
