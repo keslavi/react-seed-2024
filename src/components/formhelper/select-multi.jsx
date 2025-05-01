@@ -29,10 +29,13 @@ export const SelectMulti = (props) => {
 
   //  Filter out already selected options from dropdown
   const filteredOptions = useMemo(() => {
+    // Handle cases where field.value might be undefined or null
+    const keys = field.value ? field.value.map(val => val.key) : [];
+    
     return options.filter(option => 
-      !field.value || !field.value.includes(option.key)
+      !keys.includes(option.key)
     );
-  }, [field.value, options ]);
+  }, [field.value, options]);
 
   return (
     <ColPadded {...colProps(props)}>

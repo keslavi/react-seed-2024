@@ -174,7 +174,8 @@ export const Formhelper = (props) => {
     <>
       <br />
       <br />
-      <h1>formhelper tester (single component) </h1>
+      <br/>
+      <h1>formhelper tester</h1>
       <ul>
         <li>
           this is a test <b>staging area</b> for the formhelper components
@@ -183,6 +184,7 @@ export const Formhelper = (props) => {
         <li>tests are in formhelper/*.test.jsx</li>
       </ul>
       <form onSubmit={handleSubmit(onSubmitSuccess)}>
+        {/* don't install components in here, use childrenDefault() */}
         {processChildren(children, attributes)}
         <Row>
           <Col>
