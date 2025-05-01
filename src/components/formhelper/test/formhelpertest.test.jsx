@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { FormHelperTester } from "./formhelpertest";
+import { Formhelper } from "./formhelper";
 
 it("renders without crashing", () => {
-  render(<FormHelperTester />);
+  render(<Formhelper />);
   expect(screen.getByText(/formhelper tester/i)).toBeVisible(); 
 });

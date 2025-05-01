@@ -1,7 +1,7 @@
 import { TextField, Autocomplete } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
-import { useController } from "react-hook-form";
+import { useController } from "./form-provider";
 import { ColPadded } from "@/components/grid";
 import { Help } from "@mui/icons-material";
 import { color } from "@/theme-material";
@@ -19,14 +19,8 @@ export const Multiselect = (props) => {
     ...restProps
   } = props;
 
-  const {
-    field,
-    fieldState: { error },
-  } = useController({
-    ...props,
-  });
+  const {field,fieldState:{error}}=useController(props);
 
-  //Memoize the selected values to optimize performance
   const selectedOptions = useMemo(() => {
     return Array.isArray(field.value)
       ? options.filter((opt) => field.value.includes(opt.key))

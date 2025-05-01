@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { useController } from "./form-provider";
+
 
 import {
   TextField as MuiTextField,
@@ -8,7 +10,6 @@ import {
 import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
 
-import { useController } from "react-hook-form";
 import { ColPadded } from "@/components/grid";
 import { KeyboardArrowDown } from "@mui/icons-material";
 
@@ -21,13 +22,8 @@ export const SelectAutocomplete = (props) => {
   // const textPleaseSelect=props.textPleaseSelect || "Please Select";
   const options = useMemo(() => props.options || [], [props.options]);
 
-  const {
-    field,
-    fieldState: { error /* invalid, isTouched, isDirty, */ },
-    //formState: { touchedFields, dirtyFields }
-  } = useController({
-    ...props,
-  });
+
+  const {field,fieldState:{error}}=useController(props);
 
   return (
     <ColPadded {...colProps(props)}>

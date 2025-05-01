@@ -1,35 +1,57 @@
-/************************************** 
- 
-!!IMPORTANT: TODO Rewrite with https://mui.com/base-ui/react-textarea-autosize/
+import { useController } from "./form-provider";
+//const {field,fieldState:{error}}=useController(props);
 
-***************************************/
-
+import { 
+  TextareaAutosize,
+  InputLabel,
+  FormHelperText, 
+  Link,
+} from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
-import { useController } from "react-hook-form";
-import { Col } from "components/grid";
+import { Info } from "./info";
+import { ColPadded } from "components/grid";
 
 export const Textarea = (props) => {
-  const rows = props.rows || 10;
-  const cols = props.cols || 100;
+  const placeholder = (e) => {return};
+  const onBluer = props.onBlur || placeholder;
+  const onChange = props.onChange || placeholder;
+  const unbound = props.unbound === "true" ? true : false;
+  const { field, fieldState: { error } } = useController(props);
 
-  const { field, fieldState } = useController(props);
+  let valueProp = {};
+  if (!props.defaultvalue) {
+    if (!unbound) {
+      valueProp = {
+        value: field.value || "",
+      };
+    }
+  }
 
   return (
-    <Col {...colProps(props)}>
-      {props.label && <label>{props.label}</label>}
-      <br />
-      <textarea
+    <ColPadded {...colProps(props)}>
+      <InputLabel htmlFor={field.name}>{props.label}</InputLabel>
+      <TextareaAutosize
+        style={{width: "100%"}}
+        id={field.name}
+        name={field.name}
+        // minRows={3}
+        // maxRows={6}
+        ref={field.ref}
+        onBlur={(e) => {
+          field.onBlur(e.target.value);
+          onBlur(e);
+        }}
+        onChange={(e) => {
+          field.onChange(e.target.value);
+          onChange(e);
+        }}
+        {...valueProp}
+        {...{ error: !!error || undefined, helperText: error?.message }}
         {...cleanParentProps(props)}
-        {...field}
-        rows={rows}
-        cols={cols}
       />
-      {fieldState.error && (
-        <label className={"validation-error-message"}>
-          <br />
-          {fieldState.error.message}
-        </label>
-      )}
-    </Col>
+      {props.info && <Info id={`${field.id}Info`} info={props.info} />}
+      {props.helperText && <FormHelperText error>{error?.message}</FormHelperText>}
+    </ColPadded>
   );
-};
+
+}

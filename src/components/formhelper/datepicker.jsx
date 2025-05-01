@@ -1,7 +1,7 @@
 import { TextField as MuiTextField } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 
-import { useController } from "react-hook-form";
+import { useController } from "./form-provider";
 
 import { ColPadded } from "components/grid";
 import dayjs from "dayjs";
@@ -13,11 +13,7 @@ export const Datepicker = (props) => {
   };
   const onChange = props.onChange || placeholder;
 
-  const {
-    field,
-    fieldState: { error },
-    //formState:{touchedFields, dirtyFields},
-  } = useController({ ...props });
+  const {field,fieldState:{error}}=useController(props);
 
   const attributes = { inputProps: {} };
   if (!isEmpty(props.min)){

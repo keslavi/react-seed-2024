@@ -3,7 +3,8 @@ import { isEmpty } from "lodash";
 //import { toast } from "react-toastify";
 //import { useNavigate, /*NavLink,*/ useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Button } from "@mui/material";
+//import { Button } from "@mui/material";
+import { processChildren } from "./formhelper.utility";
 //import { store } from "store";
 
 //prettier-ignore
@@ -103,14 +104,45 @@ const item0 = {
   isDraft: true,
 };
 
+const chidrenDefault = () => {
+  return (
+    <>
+      <Row>
+        <Input name="subject" label="Subject" />
+      </Row>
+      <Row>
+        <Input name="body" label="Body" />
+      </Row>
+      <Row>
+        <Input
+          name="names"
+          label="Names (checkbox)"
+          optionscheckbox={option0.task.names}
+        />
+        <Input
+          size={{xs:6}}        
+          name="names2"
+          label="Names2 (multiselect)"
+          optionsMulti={option0.task.names}
+        />
+      </Row>
+      <Row>
+        <Input name="status" label="Status" options={option0.task.status} />
+        {/* <Select name="status" label="Status" options={option.status}  {...attributes} /> */}
+        <Input name="result" label="Result" options={option0.task.result} />
+        {/* <Input datepicker name="dfrom" label="From" {...attributes} /> */}
+      </Row>
+    </>
+  );
+};
 
-export const FormHelperTester = (props) => {
+export const Formhelper = (props) => {
   const [submitValues, setSubmitValues] = useState({});
 
-  let item =  props.item || item0;
-
+  let item = props.item || item0;
   const option = props.option || option0;
   const TestComponent = props.TestComponent || null;
+  const children = props.children || chidrenDefault();
 
   // React hook form and validation***********************
   const {
@@ -126,7 +158,7 @@ export const FormHelperTester = (props) => {
     defaultValues: item,
     //mode:"onChange"
   });
-  const attributes = { control, errors }; 
+  const attributes = { control, errors };
   useEffect(() => {
     if (errors) {
       errorNotification(errors);
@@ -138,93 +170,20 @@ export const FormHelperTester = (props) => {
     setSubmitValues(values);
   };
 
-  if (!isEmpty(props.children)) {
-    return (
-      <>
-        <h1>formhelper tester (single component) </h1>
-        <h2>testing single component</h2>
-        <h3>
-        {/* {JSON.stringify({item,option}, null, 2)} */}
-        </h3>
-        {/* <textarea id="hmm" rows={20} cols={50} value={JSON.stringify({item,options}, null, 2)} readOnly /> */}
-        <form onSubmit={handleSubmit(onSubmitSuccess)}>
-          <Row>
-            {React.Children.map(props.children, (child) => {
-              if (React.isValidElement(child)) {
-                return React.cloneElement(child, attributes);
-              }
-              return child;
-            })}
-          </Row>
-          <Row>
-            <Col>
-              <input name="btnSubmit" type="submit" value="Submit" />
-            </Col>
-          </Row>
-        </form>
-        <label>submitValues</label>
-        <br />
-        <textarea
-          data-testid="elSubmitValues"
-          rows={20}
-          cols={50}
-          value={JSON.stringify(submitValues, null, 2)}
-          readOnly 
-        />
-      </>
-    );
-  }
-
-  //not needed for test
   return (
     <>
       <br />
       <br />
-      <h1>formhelper tester</h1>
+      <h1>formhelper tester (single component) </h1>
       <ul>
         <li>
           this is a test <b>staging area</b> for the formhelper components
         </li>
-        <li>allows for developer to look at tests visually</li>
+        <li>allow for developer to look at tests visually</li>
         <li>tests are in formhelper/*.test.jsx</li>
       </ul>
       <form onSubmit={handleSubmit(onSubmitSuccess)}>
-        <Row>
-          <Input name="subject" label="Subject" {...attributes} />
-        </Row>
-        <Row>
-          <Input name="body" label="Body" {...attributes} />
-        </Row>
-        <Row>
-          <Input
-            name="names"
-            label="Names (checkbox)"
-            optionscheckbox={option.task.names}
-            {...attributes}
-          />
-          <Input
-            name="names2"
-            label="Names2 (multiselect)"
-            optionsMulti={option.task.names}
-            {...attributes}
-          />
-        </Row>
-        <Row>
-          <Input
-            name="status"
-            label="Status"
-            options={option.task.status}
-            {...attributes}
-          />
-          {/* <Select name="status" label="Status" options={option.status}  {...attributes} /> */}
-          <Input
-            name="result"
-            label="Result"
-            options={option.task.result}
-            {...attributes}
-          />
-          {/* <Input datepicker name="dfrom" label="From" {...attributes} /> */}
-        </Row>
+        {processChildren(children, attributes)}
         <Row>
           <Col>
             <input name="btnSubmit" type="submit" value="Submit" />
@@ -234,9 +193,9 @@ export const FormHelperTester = (props) => {
       <label>submitValues</label>
       <br />
       <textarea
+        data-testid="elSubmitValues"
         rows={20}
         cols={50}
-        data-testid="elSubmitValues"
         value={JSON.stringify(submitValues, null, 2)}
         readOnly
       />
@@ -244,5 +203,4 @@ export const FormHelperTester = (props) => {
   );
 };
 
-export default FormHelperTester;
-
+export default Formhelper;

@@ -5,7 +5,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 
-import { useController } from "react-hook-form";
+import { useController } from "./form-provider";
 
 import { color } from "@/theme-material";
 import { cleanParentProps, colProps } from "./helper";
@@ -22,11 +22,7 @@ export const Checkbox = (props) => {
   const onBlur = props.onBlur || placeholder;
   const variant = props.variant || "";
 
-  const {
-    field,
-    fieldState: { error },
-    //formState:{touchedFields, dirtyFields},
-  } = useController({ ...props });
+  const {field,fieldState:{error}}=useController(props);
 
   const isChecked = () => {
     const v = field.value;

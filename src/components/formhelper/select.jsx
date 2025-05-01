@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cleanParentProps, colProps } from "./helper";
-import { useController } from "react-hook-form";
+import { useController } from "./form-provider";
 import { TextField as MuiTextField, Select as MuiSelect } from "@mui/material";
 
 import { ColPadded } from "@/components/grid";
@@ -14,13 +14,7 @@ export const Select = (props) => {
   const options = props.options;
   //const onKeyDown = props.onKeyDown || placeholder;
 
-  const {
-    field,
-    fieldState: { error /* invalid, isTouched, isDirty, */ },
-    //formState: { touchedFields, dirtyFields }
-  } = useController({
-    ...props,
-  });
+  const {field,fieldState:{error}}=useController(props);
 
   return (
     <ColPadded {...colProps(props)}>

@@ -1,11 +1,12 @@
 import { TextField, Autocomplete, Checkbox } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
-import { useController } from "react-hook-form";
+import { useController } from "./form-provider";
 import { ColPadded } from "@/components/grid";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useMemo } from "react";
+import { useFormContext } from "./form-provider";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -22,12 +23,7 @@ export const SelectCheckbox = (props) => {
     ...restProps
   } = props;
 
-  const {
-    field,
-    fieldState: { error },
-  } = useController({
-    ...props,
-  });
+  const {field,fieldState:{error}}=useController(props);
 
   const selectedOptions = useMemo(() => {
     return Array.isArray(field.value) 

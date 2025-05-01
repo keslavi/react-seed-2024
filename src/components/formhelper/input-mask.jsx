@@ -1,11 +1,15 @@
 //import { TextField as MuiTextField } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
-import { useController } from "react-hook-form";
+import { useController } from "./form-provider";
 
 import { Col } from "components";
 
 export const InputMask = (props) => {
-  const { field, fieldState } = useController(props);
+
+
+
+
+  const {field,fieldState:{error}}=useController(props);
   return (
     <Col {...colProps(props)}>
       {label && <label>{label}</label>}

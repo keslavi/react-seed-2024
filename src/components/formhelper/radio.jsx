@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 
-import { useController } from "react-hook-form";
+import { useController } from "./form-provider";
 
 import { ColPadded } from "components/grid";
 
@@ -18,13 +18,7 @@ export const Radio = (props) => {
   };
   const onChange = props.onChange || placeholder;
 
-  const {
-    field,
-    fieldState: { error /* invalid, isTouched, isDirty, */ },
-    //formState: { touchedFields, dirtyFields }
-  } = useController({
-    ...props,
-  });
+  const {field,fieldState:{error}}=useController(props);
 
   return (
     <ColPadded {...colProps(props)}>

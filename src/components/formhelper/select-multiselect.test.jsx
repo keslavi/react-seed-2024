@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { FormHelperTester } from "./test/formhelpertest";
-import { Multiselect } from "./multiselect";
+import { Formhelper } from "./test/formhelper";
+import { Multiselect } from "./select-multiselect";
 import { describe } from "vitest";
 //import { expect } from "vitest";
 
@@ -32,7 +32,7 @@ describe("Formhelper-Multiselect", () => {
     const data=testData();
     console.log("Formhelper-Multiselect test started", (new Date()).toLocaleTimeString() );
     render(
-      <FormHelperTester
+      <Formhelper
         item={data.item}
         option={data.options}
       >
@@ -42,7 +42,7 @@ describe("Formhelper-Multiselect", () => {
           optionsMulti={data.options.task.names}
           data-testid="multiselect"
         />
-      </FormHelperTester>
+      </Formhelper>
     );
     expect(screen.getByText(/formhelper tester/i)).toBeVisible();
     //gmagig gigexpect(screen.getByText(/Names2 \(multiselect\)/i)).toBeVisible();

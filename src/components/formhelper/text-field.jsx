@@ -1,19 +1,13 @@
-import {/* InputAdornment, */TextField as MuiTextField } from "@mui/material";
+import { /* InputAdornment, */ TextField as MuiTextField } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
+import { useController } from "./form-provider";
 import { Info } from "./info";
-import {
-  useController,
-  //useForm
-} from "react-hook-form";
 import { ColPadded } from "@/components/grid";
 //import { BootstrapTooltip } from "./infotooltip";
 import { Help /*HelpOutline*/ as Help } from "@mui/icons-material";
 import { color } from "@/theme-material";
-/*
-to switch to bootstrap style:
-https ://mui.com/material-ui/react-text-field/
-“using the styled API react-bootstrap"
-*/
+import { use } from "react";
+
 export const TextField = (props) => {
   const placeholder = (e) => {
     return;
@@ -21,13 +15,10 @@ export const TextField = (props) => {
   const onBlur = props.onBlur || placeholder;
   const onChange = props.onChange || placeholder;
   const unbound = props.unbound === "true" ? true : false;
-  const {
-    field,
-    fieldState: { error /* invalid, isTouched, isDirty, */ },
-    //formState: { touchedFields, dirtyFields }
-  } = useController({
-    ...props,
-  });
+
+  const {field,fieldState:{error}}=useController(props);
+  //fieldstate{error, invalid, isTouched, isDirty, }
+
   let valueProp = {};
   if (!props.defaultvalue) {
     if (!unbound) {
@@ -40,6 +31,7 @@ export const TextField = (props) => {
   return (
     <ColPadded {...colProps(props)}>
       <MuiTextField
+        fullWidth
         id={field.name}
         name={field.name}
         label={props.label}
@@ -56,7 +48,7 @@ export const TextField = (props) => {
         {...{ error: !!error || undefined, helperText: error?.message }}
         {...cleanParentProps(props)}
       />
-      {props.info &&  <Info id={`${field.id}Info`} info={props.info} />}      
+      {props.info && <Info id={`${field.id}Info`} info={props.info} />}
       {/* {props.info &&  Info(`${field.id}Info`, props.info)}       */}
     </ColPadded>
   );

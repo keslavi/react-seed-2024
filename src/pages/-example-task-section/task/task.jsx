@@ -8,9 +8,11 @@ import { store } from "store";
 
 //prettier-ignore
 import { 
-  NavSticky,
   Col, 
+  FormProvider,
+  useFormProvider,
   Input, 
+  NavSticky,
   Row, 
   TextareaDebug, 
 } from "components";
@@ -35,19 +37,24 @@ export const Task = () => {
   }, []);
 
   // React hook form and validation***********************
-  const {
-    control,
-    formState: { errors },
-    //getValues,
-    handleSubmit,
-    reset,
-    setValue,
-    //watch,
-  } = useForm({
+  // const {
+  //   control,
+  //   formState: { errors },
+  //   //getValues,
+  //   handleSubmit,
+  //   reset,
+  //   setValue,
+  //   //watch,
+  // } = useFormProvider({
+  //   resolver,
+  //   //mode:"onChange"
+  // });
+  const frmMethods = useFormProvider({
     resolver,
     //mode:"onChange"
   });
-  const attributes = { control, errors };
+  const { errors, handleSubmit, reset } = frmMethods;
+
   useEffect(() => {
     if (errors) {
       errorNotification(errors);
@@ -74,7 +81,6 @@ export const Task = () => {
         ></textarea>
       </div>
     );
-
     taskUpsert(values);
   };
 
@@ -99,70 +105,66 @@ export const Task = () => {
           <h4>Task</h4>
         </Col>
       </Row>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="hidden">
+      <FormProvider {...frmMethods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="hidden">
+            <Row>
+              <div className="hidden"> Col is INSIDE Input</div>
+              <Input name="id" />
+            </Row>
+          </div>
           <Row>
             <div className="hidden"> Col is INSIDE Input</div>
-            <Input name="id" {...attributes} />
+            <Input
+              //size={{xs:4,xm:7}} //size={4} muiv6 Grid2 uses size
+              name="subject"
+              //info="header|body" //ToDo: get info icon working
+            />
           </Row>
-        </div>
-        <Row>
-          <div className="hidden"> Col is INSIDE Input</div>
-          <Input
-            //size={{xs:4,xm:7}} //size={4} muiv6 Grid2 uses size
-            name="subject"
-            //info="header|body" //ToDo: get info icon working
-            {...attributes}
-          />
-        </Row>
-        <Row>
-          <Input name="body" label="Body" {...attributes} />
-        </Row>
-        <Row>
-          <Input name='names' label="Names" optionscheckbox={option.task.status/*["steve","cindy", "riley", "whatever"]*/} {...attributes} />
-        </Row>
+          <Row>
+            <Input name="body" label="Body" />
+          </Row>
+          <Row>
+            <Input
+              name="names"
+              label="Names"
+              optionscheckbox={
+                option.task.status /*["steve","cindy", "riley", "whatever"]*/
+              }
+            />
+          </Row>
 
-        <Row>
-          <Input
-            name="status"
-            label="Status"
-            options={option.task.status}
-            {...attributes}
-          />
-          {/* <Select name="status" label="Status" options={option.status}  {...attributes} /> */}
-          <Input
-            name="result"
-            label="Result"
-            options={option.task.result}
-            {...attributes}
-          />
-          <Input datepicker name="dfrom" label="From" {...attributes} />
-        </Row>
-        <Row>
-          <Input name="address.line1" label="address" {...attributes} />
-        </Row>
-        <Row>
-          <Input name="address.line2" {...attributes} />
-        </Row>
-        <Row>
-          <Input name="address.line3" {...attributes} />
-        </Row>
-        <Row>
-          <Col>
-            <input type="submit" value="Submit" />
-            &nbsp;&nbsp;
-            <input type="button" onClick={() => onCancel()} value="Cancel" />
-            &nbsp;&nbsp;
-            <input type="button" onClick={() => onDelete()} value="Delete" />
-          </Col>
-        </Row>
-        <NavSticky>
-          <Button id="btnSave" type="submit" variant="contained">
-            Save
-          </Button>
-        </NavSticky>
-      </form>
+          <Row>
+            <Input name="status" label="Status" options={option.task.status} />
+            {/* <Select name="status" label="Status" options={option.status} /> */}
+            <Input name="result" label="Result" options={option.task.result} />
+            <Input datepicker name="dfrom" label="From" />
+          </Row>
+          <Row>
+            <Input name="address.line1" label="address" />
+          </Row>
+          <Row>
+            <Input name="address.line2" />
+          </Row>
+          <Row>
+            <Input name="address.line3" />
+          </Row>
+          <Row>
+            <Col>
+              <input type="submit" value="Submit" />
+              &nbsp;&nbsp;
+              <input type="button" onClick={() => onCancel()} value="Cancel" />
+              &nbsp;&nbsp;
+              <input type="button" onClick={() => onDelete()} value="Delete" />
+            </Col>
+          </Row>
+          <NavSticky>
+            <Button id="btnSave" type="submit" variant="contained">
+              Save
+            </Button>
+          </NavSticky>
+        </form>
+      </FormProvider>
       <TextareaDebug value={{ item, option }} />
     </>
   );
