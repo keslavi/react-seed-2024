@@ -13,8 +13,8 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "installPackages": "npm install lodash moment axios react-router-dom react-redux @reduxjs/toolkit sass yup @hookform/resolvers react-toastify",
-    "installTesting": "npm install -D concurrency vitest jsdom @testing-library/jest-dom @testing-library/react @testing-library/user-event",
-    "inputallTesting2": "echo \"potential firewall issues also requires access to github\" && npm i -D vitest/ui"
+    "install:Testing": "npm install -D concurrency vitest jsdom happy-dom @testing-library/jest-dom @testing-library/react @testing-library/user-event",
+    "install:Testing2": "echo \"potential firewall issues also requires access to github\" && npm i -D vitest/ui"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -53,6 +53,7 @@
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "happy-dom": "^17.4.6",
     "jsdom": "^26.1.0",
     "vite": "^5.3.1",
     "vitest": "^3.1.1"
