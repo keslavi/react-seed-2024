@@ -5,7 +5,8 @@
   "main": "./server.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "nodemon  --ignore data --exec babel-node ./server/server.js",
+    "dev": "nodemon  --ignore data --inspect --exec babel-node ./server/server.js",
+    "dev0": "nodemon  --ignore data --exec babel-node ./server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

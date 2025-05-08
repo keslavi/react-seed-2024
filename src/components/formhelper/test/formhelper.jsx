@@ -7,6 +7,9 @@ import { useForm } from "react-hook-form";
 import { processChildren } from "./formhelper.utility";
 //import { store } from "store";
 
+//console.log group test: uncomment and view in console
+//import "helpers/extensions/console-extension.testmanual";
+
 //prettier-ignore
 import { 
   Input,
