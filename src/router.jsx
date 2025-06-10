@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 import App from "./app"; //router displays here
@@ -41,74 +41,6 @@ const menu = [
   },
 ];
 
-const Router = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App menu={menu} />}>
-          <Route path="home" element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="/dev">
-            <Route
-              path="formhelper"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Formhelper />
-                </Suspense>
-              }
-            />
-            <Route
-              path="tasks"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Tasks />
-                </Suspense>
-              }
-            />
-            <Route
-              path="tasks/:id"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Task />
-                </Suspense>
-              }
-            />
-            {/* <Route
-              path="contacts"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Contacts />
-                </Suspense>
-              }
-            />
-            <Route
-              path="contacts/:id"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Contact />
-                </Suspense>
-              }
-            /> */}
-            <Route
-              path="scratchpad"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Scratchpad />
-                </Suspense>
-              }
-            />
-          </Route>
-
-          <Route path="" element={<Home />} />
-          <Route path="*" element={<Route404 />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
-};
-
-export default Router;
-
 const Route404 = () => {
   return (
     <div>
@@ -116,3 +48,59 @@ const Route404 = () => {
     </div>
   );
 };
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App menu={menu} />,
+    children: [
+      { path: "home", element: <Home /> },
+      { path: "about", element: <About /> },
+      {
+        path: "dev",
+        children: [
+          {
+            path: "formhelper",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Formhelper />
+              </Suspense>
+            ),
+          },
+          {
+            path: "tasks",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Tasks />
+              </Suspense>
+            ),
+          },
+          {
+            path: "tasks/:id",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Task />
+              </Suspense>
+            ),
+          },
+          {
+            path: "scratchpad",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Scratchpad />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+      { path: "", element: <Home /> },
+      { path: "*", element: <Route404 /> },
+    ],
+  },
+]);
+
+const Router = () => {
+  return <RouterProvider router={router} />;
+};
+
+export default Router;

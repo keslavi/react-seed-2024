@@ -5,7 +5,7 @@ export const optionSlice = (set, get) => ({
   option: {},
 
   optionList: async () => {
-    const url = "mock/option";
+    const url = "public/options";
     try {
       let option = get().option;
       const res = await api.get(url);
@@ -16,7 +16,7 @@ export const optionSlice = (set, get) => ({
     }
   },
   optionRetrieve: async (id) => {
-    const url = `mock/option/${id}`;
+    const url = `public/options/${id}`;
     try {
       let option = get().option;
       if (!option.hasOwnProperty(id)) {

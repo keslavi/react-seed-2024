@@ -2,36 +2,45 @@ import api from "@/store/api";
 import { toast } from "react-toastify";
 
 export const taskSlice = (set, get) => ({
-  tasks: [{message:"wtf"}],
+  tasks: [],
   task: {},
 
   taskList: async () => {
-    const url = "mock/task";
+    const url = "public/tasks";
     try {
       const res = await api.get(url);
       const tasks = res.data;
-      set({ tasks });//, undefined, url);
-      //const options=get().options;
-      // const optionRetrieve=get().optionRetrieve;
-      get().optionRetrieve("task");
-//      get().optionRetrieve("task"); //loads using the other slice
+
+      let option = get().option ||{};
+      if(!option.task) {
+        get().optionRetrieve("task");
+        // option={...option,...{task:optionTask}}
+        // set({option},undefined,"optionRetrieve");
+      }
+      
+      set({ tasks });
     } catch (e) {
       toast.error(`<>${url} <br/>${e.message}`);
     }
   },
   taskRetrieve: async (id) => {
-    const url = `mock/task/${id}`;
+    const url = `public/tasks/${id}`;
     try {
       const res = await api.get(url);
       const task = res.data;
       set({ task }, undefined, url);
-      get().optionRetrieve("task"); //loads using the other slice
+      
+      let option = get().option ||{};
+      if(!option.task) {
+        get().optionRetrieve("task");
+      }
+
     } catch (e) {
       toast.error(`<>${url} <br/>${e.message}`);
     }
   },
   taskUpsert: async (kvp) => {
-    const url = "mock/task";
+    const url = "public/tasks";
     try {
       let res = await api.post(url, kvp);
       const task = res.data;
@@ -41,7 +50,7 @@ export const taskSlice = (set, get) => ({
     }
   },
   taskDelete: async (id) => {
-    const url = "mock/task";
+    const url = "public/tasks";
     const kvp = { id, delete: true };
     try {
       let res = await api.post(url, kvp);
