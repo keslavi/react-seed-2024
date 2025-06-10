@@ -3,7 +3,7 @@ import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
 import { useNavigate, /* NavLink,*/ useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useStore } from "../slice/store-zustand";
+import { store } from "../slice/store-zustand";
 
 import { ProfileMl } from "./profile-ml/profile-ml";
 import { ProfilePb } from "./profile-pb/profile-pb";
@@ -11,10 +11,10 @@ import { ProfilePb } from "./profile-pb/profile-pb";
 import {
   Col,
   Input,
-  //AutoComplete, //ALTERNATE to singe Input
-  //TextField,    //ALTERNATE to singe Input
+  useFormProvider,
   Row,
   TextareaDebug,
+  FormProvider,
 } from "components";
 
 import { resolver, errorNotification } from "./validation";
@@ -23,32 +23,17 @@ export const Contact = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const {
-    contact,
-    option,
-    contactRetrieve,
-    contactUpsert,
-    contactClear,
-    loading,
-    error,
-    errorMsg,
-  } = useStore();
-  const item = contact;
+  const item = store.use.contact();
+  const option = store.use.option();
+  const contactRetrieve = store.use.contactRetrieve();
+  const contactUpsert = store.use.contactUpsert();
 
-  // React hook form and validation***********************
-  const {
-    control,
-    formState: { errors },
-    //getValues,
-    handleSubmit,
-    reset,
-    //setValue,
-    //watch,
-  } = useForm({
+  const frmMethods = useFormProvider({
     resolver,
     //mode:"onChange"
   });
-  const attributes = { control, errors };
+  const { errors, handleSubmit, reset } = frmMethods;
+
   useEffect(() => {
     if (errors) {
       errorNotification(errors);
@@ -93,8 +78,6 @@ export const Contact = () => {
     navigate("/dev/contacts");
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {errorMsg}</div>;
   if (isEmpty(item)) return <div>loading...</div>;
 
   return (
@@ -105,6 +88,7 @@ export const Contact = () => {
         </h4>
       </div>
       <br />
+      <FormProvider {...frmMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="hidden">
           <Row>
@@ -140,6 +124,7 @@ export const Contact = () => {
           </Col>
         </Row>
       </form>
+      </FormProvider>
       <TextareaDebug value={{ item, option }} />
     </>
   );

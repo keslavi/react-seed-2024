@@ -1,19 +1,14 @@
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { useStore} from "../slice/store-zustand";
+import { store } from "../slice/store-zustand";
 
 import { TextareaDebug } from "components";
 
 export const Contacts = () => {
-  const {
-    contacts,
-    option,
-    contactList,    
-    loading,
-    error,
-    errorMsg,
-  }=useStore();
-  const items=contacts;
+
+  const items=store.use.contacts();
+  const option=store.use.option();
+  const contactList=store.use.contactList();
 
   useEffect(() => {
     contactList();

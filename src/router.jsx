@@ -34,7 +34,7 @@ const menu = [
     items: [
       //example of creating submenu (low css doesn't support it)
       { text: "Tasks", link: "/dev/tasks" },
-      { text: "Contacts", link: "/dev/contacts" },
+      //{ text: "Contacts", link: "/dev/contacts" },
       { text: "Scratchpad", link: "/dev/scratchpad" },
       { text: "FormHelper", link: "/dev/formhelper" },
     ],

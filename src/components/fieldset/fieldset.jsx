@@ -5,7 +5,7 @@ export const Fieldset = ({ children, legend, ...props }) => {
         <Box
             component="fieldset"
             sx={{
-                boxShadow: "0px 0px 12px rgba(0,0,0,0.2",
+                boxShadow: "0px 0px 12px rgba(0,0,0,0.2)",
                 borderRadius: '8px',
                 border: "1px #E0E0E0",
                 padding: "40px",
