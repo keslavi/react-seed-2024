@@ -8,7 +8,7 @@
     "start": "npm run dev",
     "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cd .. && npm install && npm run build && cp -r dist/* ./server-koa/public/",
+    "build": "cd .. && npm install && npm run build && xcopy /E /I /Y dist\\* .\\server-koa\\public\\",
     "start:prod": "NODE_ENV=production node src/index.js"
   },
   "dependencies": {
