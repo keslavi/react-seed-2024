@@ -10,13 +10,17 @@
     "start:prod": "node ./dist/server.js",
     "dev": "nodemon  --ignore data --inspect --exec babel-node ./server/server.js",
     "dev0": "nodemon  --ignore data --exec babel-node ./server/server.js",
-    "build": "rimraf dist && babel ./server -d dist --copy-files && cp package.json dist/ && cp .babelrc dist/",
+    "build": "rimraf dist && babel ./server -d dist --copy-files && cpy package.json .babelrc dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.16.11",
     "@babel/register": "^7.17.7",
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
@@ -41,11 +45,9 @@
     "moment": "^2.29.2",
     "mongoose": "^5.13.14",
     "nodemailer": "^6.7.3",
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.9",
-    "@babel/node": "^7.0.0",
-    "@babel/preset-env": "^7.16.11",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "cpy-cli": "^5.0.0"
+
   },
   "devDependencies": {
     "nodemon": "^2.0.15",
