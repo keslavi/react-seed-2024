@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "npm run dev",
+    "prestart:prod": "npm run build",
     "start:prod": "node ./dist/server.js",
     "dev": "nodemon  --ignore data --inspect --exec babel-node ./server/server.js",
     "dev0": "nodemon  --ignore data --exec babel-node ./server/server.js",
-    "build": "babel ./server -d dist --copy-files",
+    "build": "rimraf dist && babel ./server -d dist --copy-files && cp package.json dist/ && cp .babelrc dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
