@@ -12,7 +12,7 @@
     "build": "node ./node_modules/vite/bin/vite.js build",
     "build:server": "cd server-koa && npm install && npm run build",
     "build:all": "npm run build && npm run build:server",
-    "start:prod": "cd server-koa && npm start:prod",
+    "start:prod": "cd server-koa && npm run start:prod",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "installPackages": "npm install lodash moment axios react-router-dom react-redux @reduxjs/toolkit sass yup @hookform/resolvers react-toastify",
