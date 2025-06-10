@@ -3,10 +3,12 @@ services:
     name: react-seed-app
     env: node
     buildCommand: |
+      npm install -g vite
       npm install
       cd server-koa && npm install
       cd ..
-      npm run build:all
+      npm run build
+      cd server-koa && npm run build
     startCommand: npm run start:prod
     envVars:
       - key: NODE_ENV
