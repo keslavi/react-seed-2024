@@ -4,9 +4,10 @@
   "description": "",
   "main": "./server.js",
   "scripts": {
-    "start": "npm run dev",
+    "start": "node ./server/server.js",
     "dev": "nodemon  --ignore data --inspect --exec babel-node ./server/server.js",
     "dev0": "nodemon  --ignore data --exec babel-node ./server/server.js",
+    "build": "babel ./server -d dist --copy-files",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -31,6 +32,7 @@
     "koa-morgan": "^1.0.1",
     "koa-mount": "^4.0.0",
     "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
     "koa-static-server": "^1.4.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.2",

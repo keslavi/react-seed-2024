@@ -1,4 +1,3 @@
-
 //const Koa = require ('koa');
 import Koa from 'koa';
 import body from 'koa-bodyparser';
@@ -6,6 +5,9 @@ import logger from 'koa-morgan';
 import config from './config/main';
 import initDB from './config/database';
 import mount from 'koa-mount';
+import serve from 'koa-static';
+import path from 'path';
+import { fileURLToPath } from 'url';
 // import gql from 'koa-graphql';
 // import schema from './graphql/schema';
 import errorHandler from './middleware/errorhandler';
@@ -17,8 +19,13 @@ import auth from './routes/auth';
 
 const app = new Koa();
 const port = process.env.PORT || 5001;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 //initDB();
+
+// Serve static files from the React build directory
+app.use(serve(path.join(__dirname, '../../build')));
 
 app 
   .use(logger('tiny'))
@@ -44,6 +51,15 @@ app
   //   graphiql:true
   // })))
 
+// Handle React routing, return all requests to React app
+app.use(async (ctx, next) => {
+  if (ctx.path.startsWith('/api')) {
+    await next();
+  } else {
+    ctx.type = 'html';
+    ctx.body = require('fs').createReadStream(path.join(__dirname, '../../build/index.html'));
+  }
+});
 
 app.listen(port)
 console.log(`Listening on port ${port}`);
