@@ -10,7 +10,7 @@ import "./scss/index.scss";
 import { ThemeProvider } from "./theme-material";
 
 import "./helpers/extensions/console-extension";
-console.logGroup.test(); //works in any *.js, *.jsx file/*
+//console.logGroup.test(); //works in any *.js, *.jsx file/*
  
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>

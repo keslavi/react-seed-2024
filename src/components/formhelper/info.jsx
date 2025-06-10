@@ -1,23 +1,102 @@
 import { useState } from "react";
 import { isEmpty } from "lodash";
-import { InputAdornment, Popover, Typography } from "@mui/material";
-import HelpRoundedIcon from "@mui/icons-material/HelpRounded";
-import { Help /*helpOutline*/ as IconMui } from "@mui/icons-material";
-import { color } from "@/theme-material";
-import { InsertCommentOutlined } from "@mui/icons-material";
+import {
+  IconButton,
+  InputAdornment,
+  Popover,
+  Typography,
+} from "@mui/material";
 
-export const Info = (props) => {
-  const { id, info } = props;
+import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import { Clear, Help/*HelpOutline*/ as IconMui } from '@mui/icons-material';
+import { color } from "@/theme-material";
+
+export const Info = ({id, info}) => {
+  const [anchor, setAnchor] = useState(null);
+  const open = Boolean(anchor);
+
+  return (<></>);
+  let infoHeader = null;
+  let infoSubject = info;
+
+  if (info && typeof info == 'string' && info.indexOf("|") > 0) {
+    const arInfo = info.split("|");
+    infoHeader = arInfo[0];
+    infoSubject = arInfo[1];
+  }
+
+  const onTogglePopover = (e) => {
+    const el = isEmpty(anchor) ? e.currentTarget : null;
+    setAnchor(el);
+  };
+
+  const onClickIcon = e => {
+    setAnchor(e.currentTarget);
+  };
+
+  const onClosePopover = e => {
+    setAnchor(null);
+  };
+
+  const ret = {
+    endAdornment: (
+      <InputAdornment position="end">
+        <HelpRoundedIcon
+          sx={{ color: color.primary.blue }}
+          onClick={onClickIcon} />
+        <IconMui
+          color="primary"
+          fontSize="small"
+          onClick={onClickIcon}
+          sx={{
+            color: color.primary.blue,
+            // mb: 7,
+            //ml: 17.5
+          }}
+        />
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchor}
+          onClose={onClosePopover}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+
+          PaperProps={{
+            style: {
+              width: "400px"
+            }
+          }}
+        >
+          {infoHeader &&
+            <Typography variant="h5" gutterBottom>
+              {infoHeader}
+            </Typography>
+          }
+          {infoSubject ? String(infoSubject) : ""}
+        </Popover>
+      </InputAdornment>
+    )
+  };
+  return ret;
+};
+
+export const InfoIcon = (props) => {
+  const { id, info, label } = props;
   const [anchor, setAnchor] = useState(null);
   const open = Boolean(anchor);
 
   let infoHeader = null;
   let infoSubject = info;
 
-  if (info.indexOf("|") > 0) {
-    const arInfo = info.split("|");
-    infoHeader = arInfo[0];
-    infoSubject = arInfo[1];
+  if (typeof info === 'string') {
+    if (info.indexOf("|") > 0) {
+      const arInfo = info.split("|");
+      infoHeader = arInfo[0];
+      infoSubject = arInfo[1];
+    }
   }
 
   const onTogglePopover = (e) => {
@@ -28,42 +107,51 @@ export const Info = (props) => {
   const onClosePopover = (e) => {
     setAnchor(null);
   };
-  const ret=
-  // return (
-    // <div style={{ position: "absolute"}}>
-    // <div style={{transform: 'translate(-15px,-70px)'}}>
-      <div >
-        {/* <HelpRoundedIcon
-        sx={{ color: color.primary.blue }}
+
+  const ret = (
+    <>
+      <IconMui
+        color="primary"
+        fontSize="small"
         onClick={onTogglePopover}
-      /> */}
-        <IconMui
-          color="primary"
-          fontSize="small"
-          onClick={onTogglePopover}
-          sx={{ color: color.primary.blue }}
-          //style={{transform:'translate(-12px,-10px)'}}
-        />
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchor}
-          onClose={onClosePopover}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          slotProps={{ style: { width: "400px" } }}
-        >
-          {infoHeader && (
-            <Typography variant="h5" gutterBottom>
-              {infoHeader}
-            </Typography>
-          )}
-          {infoSubject}
-        </Popover>
-      </div>
-    // </div>
-  // );
+        sx={{
+          color: color.cobe1.blue,
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          transform: 'translate(-10%,50%)',
+          cursor: "pointer"
+        }}
+      />
+
+      {label}
+
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchor}
+        aria-hidden="false"
+        onClose={onClosePopover}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        slotProps={{ style: { width: "400px" } }}
+      >
+        <IconButton edge="start" aria-label="close" onClick={onClosePopover} style={{ position: 'absolute', top: '5px', right: '5px' }}>
+          <Clear fontSize='small' className="clear-icon" />
+        </IconButton>
+        {infoHeader && (
+          <Typography variant="h5" gutterBottom>
+            {infoHeader}
+          </Typography>
+        )}
+        {infoSubject}
+      </Popover>
+    </>
+  );
   return ret;
 };
+
+export default Info;
+

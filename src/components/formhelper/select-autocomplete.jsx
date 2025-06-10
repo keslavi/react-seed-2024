@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useController } from "./form-provider";
 
-
 import {
+  Box,
   TextField as MuiTextField,
   Autocomplete as MuiAutocomplete,
 } from "@mui/material";
@@ -24,7 +24,6 @@ export const SelectAutocomplete = (props) => {
 
 
   const {field,fieldState:{error}}=useController(props);
-
   return (
     <ColPadded {...colProps(props)}>
       <MuiAutocomplete
@@ -44,7 +43,7 @@ export const SelectAutocomplete = (props) => {
         popupIcon={<KeyboardArrowDown />}
         renderInput={(params) => {
           return (
-            <>
+            <Box xs={{position:'relative'}}>
               <MuiTextField
                 {...params}
                 label={props.label}
@@ -52,7 +51,7 @@ export const SelectAutocomplete = (props) => {
                 //placeholder={textPleaseSelect}
               />
               {props.info && <Info id={`${field.id}Info`} info={props.info} />}
-            </>
+            </Box>
           );
         }}
         {...cleanParentProps(props)}

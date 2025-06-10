@@ -28,14 +28,18 @@
     "subject": "Subject b",
     "body": "Body b",
     "status": "1",
-    "result": 2,
+    "result": 1,
     "address": {
       "line1": "bb",
       "line2": "A2L2",
       "line3": "A2L3"
     },
     "success": true,
-    "isDraft": true
+    "isDraft": true,
+    "names": [
+      0,
+      2
+    ]
   },
   {
     "id": 3,

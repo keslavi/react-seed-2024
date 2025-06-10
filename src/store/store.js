@@ -5,14 +5,14 @@ import api from "./slice/api-slice"; //http request counter
 import option from "./slice/option-slice";
 import task from "./slice/task-slice";
 
-export const useStoreDangerously = create(devtools((...a) => ({
+export const useStoreDirectly = create(devtools((...a) => ({
     ...api(...a),//http request counter
     ...option(...a),
     ...task(...a),
   }))
 );
 
-export const useStore=useStoreDangerously;
+//export const useStore=useStoreDangerously;
 
 const createSelectors= _store=>{
   const store=_store;
@@ -23,5 +23,6 @@ const createSelectors= _store=>{
   return store;
 }
 
-export const store=createSelectors(useStoreDangerously);
+export const store=createSelectors(useStoreDirectly);
+export const useStore=store;
 export default store;

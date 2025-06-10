@@ -9,11 +9,11 @@ export const App = (props) => {
   return (
     <>
       <Header menu={menu} />
-      {/* <ContainerFullWidth> */}
+      <ContainerFullWidth>
       <div style={{ width: "100%" }}>
         <RouterOutlet />
       </div>
-      {/* </ContainerFullWidth> */}
+      </ContainerFullWidth>
     </>
   );
 };

@@ -2,7 +2,7 @@ import  mongoose from 'mongoose';
 const config = require("./main");
 
 export const initDB = () => {
-  mongoose.connect(config.databaseL, {
+  mongoose.connect(config.databaseR, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });

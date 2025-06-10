@@ -2,25 +2,26 @@ import { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
 import { useNavigate, /*NavLink,*/ useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { Button } from "@mui/material";
 import { store } from "store";
 
 //prettier-ignore
-import { 
-  Col, 
+import {
+  Col,
   FormProvider,
   useFormProvider,
-  Input, 
+  Input,
   NavSticky,
-  Row, 
-  TextareaDebug, 
+  Row,
+  TextareaDebug,
+  Fieldset,
+  BtnContinueSave,
 } from "components";
 
 //prettier-ignore
-import { 
-  resolver, 
-  errorNotification 
+import {
+  resolver,
+  errorNotification
 } from "./validation";
 
 export const Task = () => {
@@ -68,6 +69,22 @@ export const Task = () => {
     }
   }, [item]);
 
+  // DO NOT SUBMIT HERE; it's done in BtnContinueSave
+  const onClickContinueSave = (e) => {
+    const id = e.currentTarget.id;
+    switch (id) {
+      case "btnContinue":
+        //alert("btnContinueSave. additional logic here if needed");
+        e.currentTarget.form.requestSubmit();
+        break;
+      case "btnSave":
+        alert("btnSave. additional logic here if needed");
+        break;
+      default:
+        toast.error(`onClickContinueSave: unknown id: ${id}`);
+    }
+  }
+
   const onSubmit = (values) => {
     //note:  values can't get here prior to form & business validation
     toast.info(
@@ -107,49 +124,61 @@ export const Task = () => {
       </Row>
       <FormProvider {...frmMethods}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <BtnContinueSave
+            onClickContinueSave={onClickContinueSave}
+          />
+
           <div className="hidden">
             <Row>
               <div className="hidden"> Col is INSIDE Input</div>
               <Input name="id" />
             </Row>
           </div>
-          <Row>
-            <div className="hidden"> Col is INSIDE Input</div>
-            <Input
-              //size={{xs:4,xm:7}} //size={4} muiv6 Grid2 uses size
-              name="subject"
-              //info="header|body" //ToDo: get info icon working
-            />
-          </Row>
-          <Row>
-            <Input name="body" label="Body" />
-          </Row>
-          <Row>
-            <Input
-              name="names"
-              label="Names"
-              optionscheckbox={
-                option.task.status /*["steve","cindy", "riley", "whatever"]*/
-              }
-            />
-          </Row>
+          <Fieldset>
+            <Row>
+              <div className="hidden"> Col is INSIDE Input</div>
+              <Input
+                //size={{xs:4,xm:7}} //size={4} muiv6 Grid2 uses size
+                name="subject"
+                label="Subject"
+                info="header|body"
+                //info={<font color='red'>object support</font>}
+              />
+              <Input name="body" label="Body" />
+            </Row>
+          </Fieldset>
+          <br />
+          <Fieldset>
+            <Row>
+              <Input
+                name="names"
+                label="Names"
+                optionscheckbox={
+                  option.task.status /*["steve","cindy", "riley", "whatever"]*/
+                }
+              />
+            </Row>
 
-          <Row>
-            <Input name="status" label="Status" options={option.task.status} />
-            {/* <Select name="status" label="Status" options={option.status} /> */}
-            <Input name="result" label="Result" options={option.task.result} />
-            <Input datepicker name="dfrom" label="From" />
-          </Row>
-          <Row>
-            <Input name="address.line1" label="address" />
-          </Row>
-          <Row>
-            <Input name="address.line2" />
-          </Row>
-          <Row>
-            <Input name="address.line3" />
-          </Row>
-          <Row>
+            <Row>
+              <Input name="status" label="Status" options={option.task.status} info="header2|body2" />
+              {/* <Select name="status" label="Status" options={option.status} /> */}
+              <Input name="result" label="Result" options={option.task.result} />
+              <Input datepicker name="dfrom" label="From" />
+            </Row>
+          </Fieldset>
+          <br />
+          <Fieldset>
+            <Row>
+              <Input name="address.line1" label="address" />
+            </Row>
+            <Row>
+              <Input name="address.line2" />
+            </Row>
+            <Row>
+              <Input name="address.line3" />
+            </Row>
+          </Fieldset>
+          {/* <Row>
             <Col>
               <input type="submit" value="Submit" />
               &nbsp;&nbsp;
@@ -162,10 +191,10 @@ export const Task = () => {
             <Button id="btnSave" type="submit" variant="contained">
               Save
             </Button>
-          </NavSticky>
+          </NavSticky> */}
         </form>
       </FormProvider>
-      <TextareaDebug value={{ item, option }} />
+      {/* <TextareaDebug value={{ item, option }} /> */}
     </>
   );
 };
