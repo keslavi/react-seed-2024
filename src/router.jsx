@@ -19,8 +19,8 @@ import {
 const Tasks = lazy(() => import("./pages/-example-task-section/tasks/tasks"));
 const Task = lazy(() => import("./pages/-example-task-section/task/task"));
 // prettier-ignore
-const Contacts = lazy(() => import("./pages/-example-contact/contacts/contacts"));
-const Contact = lazy(() => import("./pages/-example-contact/contact/contact"));
+//const Contacts = lazy(() => import("./pages/-example-contact/contacts/contacts"));
+//const Contact = lazy(() => import("./pages/-example-contact/contact/contact"));
 const Scratchpad = lazy(() => import("./pages/dev-section/scratchpad"));
 const Formhelper = lazy(() =>
   import("./components/formhelper/test/formhelper")
@@ -73,7 +73,7 @@ const Router = () => {
                 </Suspense>
               }
             />
-            <Route
+            {/* <Route
               path="contacts"
               element={
                 <Suspense fallback={<div>Loading...</div>}>
@@ -88,7 +88,7 @@ const Router = () => {
                   <Contact />
                 </Suspense>
               }
-            />
+            /> */}
             <Route
               path="scratchpad"
               element={
