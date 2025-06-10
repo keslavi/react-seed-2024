@@ -5,7 +5,8 @@
   "main": "./server.js",
   "type": "module",
   "scripts": {
-    "start": "node ./server/server.js",
+    "start": "npm run dev",
+    "start:prod": "node ./dist/server.js",
     "dev": "nodemon  --ignore data --inspect --exec babel-node ./server/server.js",
     "dev0": "nodemon  --ignore data --exec babel-node ./server/server.js",
     "build": "babel ./server -d dist --copy-files",
