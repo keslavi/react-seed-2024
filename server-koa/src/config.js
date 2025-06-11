@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
-// Load environment variables from .env file
-dotenv.config();
+// Load environment variables from .env.local file
+dotenv.config({ path: '.env.local' });
 
 const config = {
   // Server settings
@@ -10,7 +10,7 @@ const config = {
 
   // MongoDB settings
   mongodb: {
-    uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/songrequest',
+    uri: process.env.MONGODB_URI,
     options: {
       // Modern MongoDB driver options
       maxPoolSize: 10,
@@ -22,20 +22,20 @@ const config = {
 
   // JWT settings
   jwt: {
-    secret: process.env.JWT_SECRET || 'jeskavu',
+    secret: process.env.JWT_SECRET,
     expiresIn: process.env.JWT_EXPIRES_IN || '24h'
   },
 
   // Email settings
   email: {
-    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    host: process.env.EMAIL_HOST,
     port: parseInt(process.env.EMAIL_PORT || '587', 10),
     secure: process.env.EMAIL_SECURE === 'true',
     auth: {
-      user: process.env.EMAIL_USER || 'dev@evensteven.us',
-      pass: process.env.EMAIL_PASSWORD || 'GrapeBird747'
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
     },
-    defaultFrom: process.env.EMAIL_FROM || 'noreply@evenSteven.us'
+    defaultFrom: process.env.EMAIL_FROM
   },
 
   // Client URL for CORS

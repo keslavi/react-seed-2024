@@ -5,6 +5,8 @@ import react from "@vitejs/plugin-react-swc";
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
+    port: 3000,
+    host: true,
     proxy: {
       //mock server should have the same endpoint as the eventual live endpoint
       //that way we can just remove "mock/" and switch to live endpoint.
@@ -50,14 +52,7 @@ export default defineConfig({
       
     },
   },
-  plugins: [
-    react({
-      jsxImportSource: '@emotion/react',
-      babel: {
-        plugins: ['@emotion/babel-plugin'],
-      }
-    })
-  ],
+  plugins: [react()],
   optimizeDeps:{
     include: [
       '@emotion/react',
@@ -67,5 +62,7 @@ export default defineConfig({
       '@mui/material/Box',
       '@mui/icons-material',
     ]
-  }
+  },
+  envDir: '.',
+  envPrefix: 'VITE_',
 });

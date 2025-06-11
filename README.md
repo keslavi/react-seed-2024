@@ -1,4 +1,3 @@
-
 # react seed 2024
 straight javascript seed starter project with zustand, notifications, form validation
 
@@ -108,3 +107,33 @@ For more complex examples that use the redux store and mockups, look at todo*.te
 - zustand
 - react-hook-form
 - yup 
+
+# React Application
+
+## Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```env
+# API Configuration
+VITE_API_URL=http://localhost:5000/api
+
+# Other Configuration
+VITE_APP_ENV=development
+```
+
+Note: All environment variables must be prefixed with `VITE_` to be exposed to the client-side code.
+
+## Development
+
+To start the development server:
+
+```bash
+npm run dev
+```
+
+This will use the environment variables from `.env.local` file.
+
+## Production
+
+For production deployment, make sure to set all required environment variables in your hosting platform (e.g., Render.com).
