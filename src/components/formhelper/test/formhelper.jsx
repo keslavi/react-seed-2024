@@ -72,7 +72,7 @@ const option0 = {
     result: [
       {
         key: 0,
-        text: "",
+        text: "whoops",
       },
       {
         key: 1,
@@ -96,7 +96,7 @@ const item0 = {
   names: [1, 2],
   names2: [3, 4],
   body: "Body b",
-  status: "1",
+  status: "3",
   result: 2,
   address: {
     line1: "ddd",
@@ -130,10 +130,13 @@ const chidrenDefault = () => {
         />
       </Row>
       <Row>
-        <Input name="status" label="Status" options={option0.task.status} />
-        {/* <Select name="status" label="Status" options={option.status}  {...attributes} /> */}
+        <Input 
+          name="status" 
+          label="Status" 
+          options={option0.task.status} 
+          placeholder="Select a status" 
+        />
         <Input name="result" label="Result" options={option0.task.result} />
-        {/* <Input datepicker name="dfrom" label="From" {...attributes} /> */}
       </Row>
     </>
   );
@@ -142,7 +145,7 @@ const chidrenDefault = () => {
 export const Formhelper = (props) => {
   const [submitValues, setSubmitValues] = useState({});
 
-  let item = props.item || item0;
+  const item = props.item || item0;
   const option = props.option || option0;
   const TestComponent = props.TestComponent || null;
   const children = props.children || chidrenDefault();
@@ -151,15 +154,13 @@ export const Formhelper = (props) => {
   const {
     control,
     formState: { errors },
-    //getValues,
     handleSubmit,
     reset,
     setValue,
-    //watch,
   } = useForm({
     resolver,
     defaultValues: item,
-    //mode:"onChange"
+    mode: "onChange"
   });
   const attributes = { control, errors };
   useEffect(() => {

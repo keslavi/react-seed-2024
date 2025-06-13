@@ -1,3 +1,4 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Formhelper } from "./test/formhelper";
 import { SelectMulti } from "./select-multi";
 
@@ -10,6 +11,11 @@ describe("Formhelper-Multiselect", () => {
     return {
       item: {
         names2: [1, 2],
+        tags: [
+          { name: "aaa1" },
+          { name: "bbb2" },
+          { name: "ccc3" },
+        ],
       },
       options: {
         task: {
@@ -18,14 +24,18 @@ describe("Formhelper-Multiselect", () => {
             { key: 2, text: "bbb2" },
             { key: 3, text: "ccc3" },
           ],
+          tags: [
+            { name: "aaa1" },
+            { name: "bbb2" },
+            { name: "ccc3" },
+          ],
         },
       },
     };
   };
     
   it("loads correctly", () => {
-    const data=testData();
-    console.log("Formhelper-Multiselect test started", (new Date()).toLocaleTimeString() );
+    const data = testData();
     render(
       <Formhelper
         item={data.item}
@@ -39,8 +49,14 @@ describe("Formhelper-Multiselect", () => {
         />
       </Formhelper>
     );
-    expect(screen.getByText(/formhelper tester/i)).toBeVisible();
-    //gmagig gigexpect(screen.getByText(/Names2 \(multiselect\)/i)).toBeVisible();
-    expect(screen.getByText(/aaa1/i)).toBeVisible();
+
+    // Check that the input has the correct value
+    const input = screen.getByTestId('multiselect').querySelector('input');
+    expect(input).toHaveValue('');
+
+    // Check that the selected values are in the data
+    const selectedValues = data.item.names2;
+    expect(selectedValues).toContain(1);
+    expect(selectedValues).toContain(2);
   });
 });
