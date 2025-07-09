@@ -21,7 +21,21 @@ export const SelectAutocomplete = (props) => {
   const onChange = props.onChange || fnPlaceholder;
   const options = useMemo(() => props.options || [], [props.options]);
   const { field, error } = useFormField(props);
-  const [isCleared, setIsCleared] = useState(!field.value);
+  
+  // Memoize error props to prevent object recreation
+  const errorProps = useMemo(() => {
+    // Form field error takes precedence over directly passed error prop
+    const hasFormError = !!error;
+    const directError = props.error;
+    
+    return {
+      error: hasFormError || !!directError || undefined,
+      helperText: hasFormError ? error?.message : (directError?.message || directError)
+    };
+  }, [error, props.error]);
+  
+  // Update isCleared state when field.value changes
+  const isCleared = !field.value || field.value === "" || field.value === null || field.value === undefined;
 
   const placeholder=props.placeholder===undefined ? "Please Select" : props.placeholder;
 
@@ -42,10 +56,8 @@ export const SelectAutocomplete = (props) => {
         getOptionLabel={(option) => option?.text || ""}
         onChange={(event, newValue) => {
           if (newValue) {
-            setIsCleared(false);
             field.onChange(newValue.key);
           } else {
-            setIsCleared(true);
             field.onChange(undefined);
           }
           onChange(event, newValue);
@@ -65,7 +77,7 @@ export const SelectAutocomplete = (props) => {
                   ...params.InputLabelProps,
                   shrink: true
                 }}
-                {...{ error: !!error || undefined, helperText: error?.message }}
+                {...errorProps}
               />
               {props.info && <Info id={`${field.id}Info`} info={props.info} />}
             </Box>

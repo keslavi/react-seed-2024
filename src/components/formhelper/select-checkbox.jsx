@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { TextField, Autocomplete, Checkbox } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
@@ -35,6 +35,9 @@ export const SelectCheckbox = React.memo((props) => {
   // Handle placeholder logic like select-autocomplete
   const placeholder = props.placeholder === undefined ? "Please Select" : props.placeholder;
 
+  // State to manage input value for placeholder visibility
+  const [inputValue, setInputValue] = useState("");
+
   const selectedOptions = useMemo(() => {
     return Array.isArray(field.value) 
       ? options.filter((opt) => field.value.includes(opt.key))
@@ -55,8 +58,25 @@ export const SelectCheckbox = React.memo((props) => {
     onChange(selectedValues);
   }, [field, onChange]);
 
-  // Only show placeholder when no options are selected
-  const shouldShowPlaceholder = selectedOptions.length === 0;
+  // Handle input change to manage placeholder visibility
+  const handleInputChange = useCallback((event, newInputValue) => {
+    setInputValue(newInputValue);
+  }, []);
+
+  // Memoize error props to prevent object recreation
+  const errorProps = useMemo(() => {
+    // Form field error takes precedence over directly passed error prop
+    const hasFormError = !!error;
+    const directError = props.error;
+    
+    return {
+      error: hasFormError || !!directError || undefined,
+      helperText: hasFormError ? error?.message : (directError?.message || directError)
+    };
+  }, [error, props.error]);
+
+  // Show placeholder when no options are selected and input is empty
+  const shouldShowPlaceholder = selectedOptions.length === 0 && inputValue === "";
 
   return (
     <ColPadded {...colProps(props)}>
@@ -65,6 +85,8 @@ export const SelectCheckbox = React.memo((props) => {
         multiple
         onBlur={handleBlur}
         onChange={handleChange}
+        onInputChange={handleInputChange}
+        inputValue={inputValue}
         options={options}
         disableCloseOnSelect
         getOptionLabel={(option) => option?.text || ""}
@@ -91,8 +113,7 @@ export const SelectCheckbox = React.memo((props) => {
             label={label}
             placeholder={shouldShowPlaceholder ? placeholder : ""}
             variant="outlined"
-            error={Boolean(error)}
-            helperText={error?.message || ""}
+            {...errorProps}
           />
         )}
         value={selectedOptions}

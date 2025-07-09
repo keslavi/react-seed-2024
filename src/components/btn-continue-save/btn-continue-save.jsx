@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 
 import { ModalConfirmExit } from "components";
+import { useFormContext } from "@/components/formhelper/form-provider";
 //import { store } from '@/store';
 
 export const BtnContinueSave = (props) => {
@@ -21,6 +22,9 @@ export const BtnContinueSave = (props) => {
     setIsModalOpen(!isModalOpen);
   };
 
+  // Get form context to access errors and form methods
+  const { errors, formMethods } = useFormContext();
+
   useEffect(() => {
     return () => {
       delete window.isDraft;
@@ -33,9 +37,18 @@ export const BtnContinueSave = (props) => {
   const textSave = props.textSave || "Save";
   const disableButton = props.disabled || false;
 
+  // Check if there are any form errors
+  const hasErrors = errors && Object.keys(errors).length > 0;
 
   const onClickContinueSave = (e) => {
     e.preventDefault();
+    
+    // Prevent submission if there are validation errors
+    if (hasErrors) {
+      toast.error("Please fix the validation errors before submitting.");
+      return;
+    }
+    
     const id = e.currentTarget.id;
     switch (id) {
       case "btnContinue":
@@ -57,7 +70,19 @@ export const BtnContinueSave = (props) => {
       props.onClickContinueSave(e);
       return;
     }
-    e.currentTarget.form.requestSubmit();
+    
+    // Use form's handleSubmit instead of requestSubmit to ensure validation
+    if (formMethods && formMethods.handleSubmit) {
+      // Trigger form submission through React Hook Form
+      const form = e.currentTarget.form;
+      if (form) {
+        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+        form.dispatchEvent(submitEvent);
+      }
+    } else {
+      // Fallback to requestSubmit if form methods not available
+      e.currentTarget.form.requestSubmit();
+    }
   }
 
   const onModalConfirm = (e) => {
@@ -66,7 +91,17 @@ export const BtnContinueSave = (props) => {
       props.onClickContinueSave(e);
       return;
     }
-    e.currentTarget.form.requestSubmit();
+    
+    // Use form's handleSubmit instead of requestSubmit
+    if (formMethods && formMethods.handleSubmit) {
+      const form = e.currentTarget.form;
+      if (form) {
+        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+        form.dispatchEvent(submitEvent);
+      }
+    } else {
+      e.currentTarget.form.requestSubmit();
+    }
   }
 
 
@@ -99,7 +134,7 @@ export const BtnContinueSave = (props) => {
           <Button
             id="btnContinue"
             variant="contained"
-            disabled={disableButton}
+            disabled={disableButton || hasErrors}
             onClick={onClickContinueSave}
           >
             {textContinue}
@@ -109,7 +144,7 @@ export const BtnContinueSave = (props) => {
             id="btnSave"
             onClick={onClickContinueSave}
             variant="outlined"
-            disabled={disableButton}
+            disabled={disableButton || hasErrors}
           >
             {textSave}
           </Button>

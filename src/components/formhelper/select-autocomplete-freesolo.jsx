@@ -20,6 +20,18 @@ export const SelectAutocompleteFreesolo = (props) => {
 
   const { field, error } = useFormField(props);
 
+  // Memoize error props to prevent object recreation
+  const errorProps = useMemo(() => {
+    // Form field error takes precedence over directly passed error prop
+    const hasFormError = !!error;
+    const directError = props.error;
+    
+    return {
+      error: hasFormError || !!directError || undefined,
+      helperText: hasFormError ? error?.message : (directError?.message || directError)
+    };
+  }, [error, props.error]);
+
   return (
     <ColPadded {...colProps(props)}>
       <MuiAutocomplete
@@ -65,7 +77,7 @@ export const SelectAutocompleteFreesolo = (props) => {
                 {...params}
                 label={props.label}
                 placeholder={props.placeholder}
-                {...{ error: !!error || undefined, helperText: error?.message }}
+                {...errorProps}
               />
               {props.info && <Info id={`${field.id}Info`} info={props.info} />}
             </Box>
@@ -75,4 +87,4 @@ export const SelectAutocompleteFreesolo = (props) => {
       />
     </ColPadded>
   );
-}; 
+};

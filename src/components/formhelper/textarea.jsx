@@ -44,10 +44,16 @@ export const Textarea = React.memo((props) => {
   }, [field, onChange]);
 
   // Memoize error props to prevent object recreation
-  const errorProps = useMemo(() => ({
-    error: !!error || undefined,
-    helperText: error?.message
-  }), [error]);
+  const errorProps = useMemo(() => {
+    // Form field error takes precedence over directly passed error prop
+    const hasFormError = !!error;
+    const directError = props.error;
+    
+    return {
+      error: hasFormError || !!directError || undefined,
+      helperText: hasFormError ? error?.message : (directError?.message || directError)
+    };
+  }, [error, props.error]);
 
   return (
     <ColPadded {...colProps(props)}>
@@ -66,7 +72,7 @@ export const Textarea = React.memo((props) => {
         {...cleanParentProps(props)}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
-      {props.helperText && <FormHelperText error>{error?.message}</FormHelperText>}
+      {props.helperText && <FormHelperText error>{errorProps.helperText}</FormHelperText>}
     </ColPadded>
   );
 

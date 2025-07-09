@@ -121,12 +121,13 @@ const chidrenDefault = () => {
           name="names"
           label="Names (checkbox)"
           optionscheckbox={option0.task.names}
+          info="header1|body1"
         />
         <Input
           size={{xs:6}}        
           name="names2"
           label="Names2 (multiselect)"
-          optionsMulti={option0.task.names}
+          optionsMulti={option0.task.names}s
         />
       </Row>
       <Row>
@@ -143,6 +144,7 @@ const chidrenDefault = () => {
           options={option0.task.result} 
           info="header3|body3"
         />
+
       </Row>
     </>
   );

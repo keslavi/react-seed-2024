@@ -194,7 +194,39 @@ describe("Formhelper-SelectAutocomplete", () => {
         />
       </Formhelper>
     );
+    
     const input = screen.getByTestId('status-select').querySelector('input');
+    
+    // Check the placeholder attribute is set correctly
     expect(input).toHaveAttribute('placeholder', 'Select a status');
+    
+    // Check that the input is empty (showing placeholder)
+    expect(input).toHaveDisplayValue('');
+    
+    // Verify the input is visible and accessible
+    expect(input).toBeVisible();
+    expect(input).toBeEnabled();
+    
+    // Test that placeholder behavior works correctly when focusing
+    fireEvent.focus(input);
+    expect(input).toHaveDisplayValue('');
+    
+    // Test that placeholder disappears when typing
+    fireEvent.change(input, { target: { value: 'test' } });
+    expect(input).toHaveDisplayValue('test');
+    
+    // Test that placeholder reappears when clearing
+    fireEvent.change(input, { target: { value: '' } });
+    expect(input).toHaveDisplayValue('');
+    
+    // Test that the placeholder text is actually rendered and visible
+    // This checks that the input shows the placeholder text when empty
+    expect(input).toHaveAttribute('placeholder', 'Select a status');
+    
+    // Alternative approach: Check if we can find the placeholder text in the DOM
+    // Note: This might not work with Material-UI's implementation, but worth trying
+    const placeholderText = screen.getByPlaceholderText('Select a status');
+    expect(placeholderText).toBeInTheDocument();
+    expect(placeholderText).toBeVisible();
   });
 }); 

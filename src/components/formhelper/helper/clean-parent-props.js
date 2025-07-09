@@ -24,6 +24,7 @@ export const cleanParentProps = (props) => {
       "min",
       "max",
       "size",
+      "defaultvalue",
     ];
 
     exclude.forEach(key => {
