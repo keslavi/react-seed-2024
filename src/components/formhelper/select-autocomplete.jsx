@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useController } from "./form-provider";
+import { useFormField } from "./form-provider";
 
 import {
   Box,
@@ -20,7 +20,7 @@ export const SelectAutocomplete = (props) => {
 
   const onChange = props.onChange || fnPlaceholder;
   const options = useMemo(() => props.options || [], [props.options]);
-  const {field,fieldState:{error}}=useController(props);
+  const { field, error } = useFormField(props);
   const [isCleared, setIsCleared] = useState(!field.value);
 
   const placeholder=props.placeholder===undefined ? "Please Select" : props.placeholder;

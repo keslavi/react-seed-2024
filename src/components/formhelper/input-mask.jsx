@@ -1,6 +1,6 @@
 //import { TextField as MuiTextField } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
-import { useController } from "./form-provider";
+import { useFormField } from "./form-provider";
 
 import { Col } from "components";
 
@@ -9,7 +9,7 @@ export const InputMask = (props) => {
 
 
 
-  const {field,fieldState:{error}}=useController(props);
+  const { field, error } = useFormField(props);
   return (
     <Col {...colProps(props)}>
       {label && <label>{label}</label>}
@@ -18,10 +18,10 @@ export const InputMask = (props) => {
       <label className="validation-error-message">
         formhelper/InputMask not fully implemented
       </label>
-      {fieldState.error && (
-        <label classname="validation-error-message">
+      {error && (
+        <label className="validation-error-message">
           <br />
-          {fieldState.error.message}
+          {error.message}
         </label>
       )}
     </Col>

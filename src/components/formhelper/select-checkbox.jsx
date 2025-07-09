@@ -1,21 +1,19 @@
+import React, { useCallback, useMemo } from "react";
 import { TextField, Autocomplete, Checkbox } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
-import { useController } from "./form-provider";
+import { useFormField } from "./form-provider";
 import { ColPadded } from "@/components/grid";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { useMemo } from "react";
 import { useFormContext } from "./form-provider";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export const SelectCheckbox = (props) => {
+export const SelectCheckbox = React.memo((props) => {
   const {
     optionscheckbox: options,
-    onBlur = () => {},
-    onChange = () => {},
     unbound = props.unbound === "true",
     label,
     info,
@@ -23,7 +21,16 @@ export const SelectCheckbox = (props) => {
     ...restProps
   } = props;
 
-  const {field,fieldState:{error}}=useController(props);
+  // Memoize placeholder function to prevent recreation on every render
+  const fnPlaceholder = useCallback((e) => {
+    return;
+  }, []);
+
+  // Use the same pattern as select-autocomplete for better performance
+  const onBlur = props.onBlur || fnPlaceholder;
+  const onChange = props.onChange || fnPlaceholder;
+
+  const { field, error } = useFormField(props);
 
   const selectedOptions = useMemo(() => {
     return Array.isArray(field.value) 
@@ -31,22 +38,27 @@ export const SelectCheckbox = (props) => {
       : [];
   }, [field.value, options]);
 
+  // Memoize event handlers to prevent recreation on every render
+  const handleBlur = useCallback((e) => {
+    field.onBlur();
+    onBlur(e);
+  }, [field, onBlur]);
+
+  const handleChange = useCallback((e, newValue) => {
+    const selectedValues = Array.isArray(newValue)
+      ? newValue.map((item) => item.key)
+      : [];
+    field.onChange(selectedValues);
+    onChange(selectedValues);
+  }, [field, onChange]);
+
   return (
     <ColPadded {...colProps(props)}>
       <Autocomplete
         id={field.name}
         multiple
-        onBlur={(e) => {
-          field.onBlur();
-          onBlur(e);
-        }}
-        onChange={(e, newValue) => {
-          const selectedValues = Array.isArray(newValue)
-            ? newValue.map((item) => item.key)
-            : [];
-          field.onChange(selectedValues);
-          onChange(selectedValues);
-        }}
+        onBlur={handleBlur}
+        onChange={handleChange}
         options={options}
         disableCloseOnSelect
         getOptionLabel={(option) => option?.text || ""}
@@ -82,4 +94,7 @@ export const SelectCheckbox = (props) => {
       {info && <Info id={`${field.id}Info`} info={info} />}
     </ColPadded>
   );
-};
+});
+
+// Add display name for better debugging
+SelectCheckbox.displayName = 'SelectCheckbox';

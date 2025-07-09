@@ -135,8 +135,14 @@ const chidrenDefault = () => {
           label="Status" 
           options={option0.task.status} 
           placeholder="Select a status" 
+          info="header2|body2"
         />
-        <Input name="result" label="Result" options={option0.task.result} />
+        <Input 
+          name="result" 
+          label="Result" 
+          options={option0.task.result} 
+          info="header3|body3"
+        />
       </Row>
     </>
   );

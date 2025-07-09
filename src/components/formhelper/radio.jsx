@@ -1,3 +1,4 @@
+import React, { useCallback, useMemo } from "react";
 import {
   FormControl,
   FormControlLabel,
@@ -7,18 +8,40 @@ import {
 } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 
-import { useController } from "./form-provider";
+import { useFormField } from "./form-provider";
 
 import { ColPadded } from "components/grid";
 
-export const Radio = (props) => {
+export const Radio = React.memo((props) => {
   const options = props.optionsRadio;
-  const placeholder = (e) => {
+  
+  // Memoize placeholder function to prevent recreation on every render
+  const placeholder = useCallback((e) => {
     return;
-  };
-  const onChange = props.onChange || placeholder;
+  }, []);
+  
+  // Memoize event handler to prevent recreation on every render
+  const onChange = useCallback(props.onChange || placeholder, [props.onChange, placeholder]);
 
-  const {field,fieldState:{error}}=useController(props);
+  const { field, error } = useFormField(props);
+
+  // Memoize options rendering to prevent recalculation on every render
+  const renderedOptions = useMemo(() => {
+    return options?.map((x) => (
+      <FormControlLabel
+        key={x.key}
+        value={x.value}
+        control={<MuiRadio />}
+        label={<>{x.text}&nbsp;&nbsp;&nbsp;&nbsp;</>}
+      />
+    )) || [];
+  }, [options]);
+
+  // Memoize event handler to prevent recreation on every render
+  const handleChange = useCallback((e) => {
+    field.onChange(e.target.value);
+    onChange(e);
+  }, [field, onChange]);
 
   return (
     <ColPadded {...colProps(props)}>
@@ -28,24 +51,17 @@ export const Radio = (props) => {
           id={field.name}
           name={field.name}
           row={props.row}
-          label={label}
+          label={props.label}
           onBlur={field.onBlur}
-          onChange={(e) => {
-            field.onChange(e.target.value);
-            onChange(e);
-          }}
+          onChange={handleChange}
           value={field.value || ""}
         >
-          {options.map((x) => (
-            <FormControlLabel
-              key={x.key}
-              value={x.value}
-              control={<MuiRadio />}
-              label={<>{x.text}&nbsp;&nbsp;&nbsp;&nbsp;</>}
-            />
-          ))}
+          {renderedOptions}
         </RadioGroup>
       </FormControl>
     </ColPadded>
   );
-};
+});
+
+// Add display name for better debugging
+Radio.displayName = 'Radio';

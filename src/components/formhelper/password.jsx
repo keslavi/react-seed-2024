@@ -1,28 +1,24 @@
 import React, { useCallback, useMemo } from "react";
-import { /* InputAdornment, */ TextField as MuiTextField } from "@mui/material";
+import { TextField as MuiTextField, Box } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
 import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
-//import { BootstrapTooltip } from "./infotooltip";
-import { Help /*HelpOutline*/ as Help } from "@mui/icons-material";
-import { color } from "@/theme-material";
-import { use } from "react";
 
-export const TextField = React.memo((props) => {
+export const Password = React.memo((props) => {
   // Memoize placeholder function to prevent recreation on every render
   const placeholder = useCallback((e) => {
     return;
   }, []);
-
+  
   // Memoize event handlers to prevent recreation on every render
   const onBlur = useCallback(props.onBlur || placeholder, [props.onBlur, placeholder]);
   const onChange = useCallback(props.onChange || placeholder, [props.onChange, placeholder]);
   
   const unbound = props.unbound === "true" ? true : false;
 
+  // Use common hook for both patterns
   const { field, error } = useFormField(props);
-  //fieldstate{error, invalid, isTouched, isDirty, }
 
   let valueProp = {};
   if (!props.defaultvalue) {
@@ -52,23 +48,27 @@ export const TextField = React.memo((props) => {
 
   return (
     <ColPadded {...colProps(props)}>
-      <MuiTextField
-        fullWidth
-        id={field.name}
-        name={field.name}
-        label={props.label}
-        inputRef={field.ref}
-        onBlur={handleBlur}
-        onChange={handleChange}
-        {...valueProp}
-        {...errorProps}
-        {...cleanParentProps(props)}
-      />
-      {props.info && <Info id={`${field.id}Info`} info={props.info} />}
-      {/* {props.info &&  Info(`${field.id}Info`, props.info)}       */}
+      <Box sx={{ position: 'relative' }}>
+        <MuiTextField
+          fullWidth
+          type="password"
+          id={field.name}
+          name={field.name}
+          label={props.label}
+          inputRef={field.ref}
+          onBlur={handleBlur}
+          onChange={handleChange}
+          {...valueProp}
+          {...errorProps}
+          {...cleanParentProps(props)}
+        />
+        {props.info && <Info id={`${field.id}Info`} info={props.info} />}
+      </Box>
     </ColPadded>
   );
 });
 
 // Add display name for better debugging
-TextField.displayName = 'TextField';
+Password.displayName = 'Password';
+
+export default Password; 

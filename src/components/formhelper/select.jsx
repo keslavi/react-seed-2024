@@ -1,20 +1,47 @@
-import { useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { cleanParentProps, colProps } from "./helper";
-import { useController } from "./form-provider";
+import { useFormField } from "./form-provider";
 import { TextField as MuiTextField, Select as MuiSelect } from "@mui/material";
 
 import { ColPadded } from "@/components/grid";
 
-export const Select = (props) => {
-  const placeholder = (e) => {
+export const Select = React.memo((props) => {
+  // Memoize placeholder function to prevent recreation on every render
+  const fnPlaceholder = useCallback((e) => {
     return;
-  };
-  const onBlur = props.onBlur || placeholder;
-  const onChange = props.onChange || placeholder;
-  const options = props.options;
-  //const onKeyDown = props.onKeyDown || placeholder;
+  }, []);
 
-  const {field,fieldState:{error}}=useController(props);
+  // Memoize event handlers to prevent recreation on every render
+  const onBlur = useCallback(props.onBlur || fnPlaceholder, [props.onBlur, fnPlaceholder]);
+  const onChange = useCallback(props.onChange || fnPlaceholder, [props.onChange, fnPlaceholder]);
+
+  const { field, error } = useFormField(props);
+
+  // Memoize options rendering to prevent recalculation on every render
+  const renderedOptions = useMemo(() => {
+    return props.options?.map((x) => (
+      <option key={x.key} value={x.key}>
+        {x.text}
+      </option>
+    )) || [];
+  }, [props.options]);
+
+  // Memoize event handlers to prevent recreation on every render
+  const handleBlur = useCallback((e) => {
+    field.onBlur(e.target.value);
+    onBlur(e);
+  }, [field, onBlur]);
+
+  const handleChange = useCallback((e) => {
+    field.onChange(e.target.value);
+    onChange(e);
+  }, [field, onChange]);
+
+  // Memoize error props to prevent object recreation
+  const errorProps = useMemo(() => ({
+    error: !!error || undefined,
+    helperText: error?.message
+  }), [error]);
 
   return (
     <ColPadded {...colProps(props)}>
@@ -29,24 +56,17 @@ export const Select = (props) => {
             native: true,
           },
         }}
-        onBlur={(e) => {
-          field.onBlue(e.target.value);
-          onBlur(e);
-        }}
-        onChange={(e) => {
-          field.onChange(e.target.value);
-          onChange(e);
-        }}
+        onBlur={handleBlur}
+        onChange={handleChange}
         value={field.value || ""}
-        {...{ error: !!error || undefined, helperText: error?.message }}
+        {...errorProps}
         {...cleanParentProps(props)}
       >
-        {options.map((x) => (
-          <option key={x.key} value={x.key}>
-            {x.text}
-          </option>
-        ))}
+        {renderedOptions}
       </MuiTextField>
     </ColPadded>
   );
-};
+});
+
+// Add display name for better debugging
+Select.displayName = 'Select';

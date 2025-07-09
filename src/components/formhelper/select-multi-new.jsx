@@ -1,4 +1,3 @@
-import React, { useCallback, useMemo } from "react";
 import { TextField, Autocomplete } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
@@ -6,26 +5,25 @@ import { useFormField } from "./form-provider";
 import { ColPadded } from "@/components/grid";
 // import { Help } from "@mui/icons-material";
 // import { color } from "@/theme-material";
+import { useMemo } from "react";
 
-export const SelectMulti = React.memo((props) => {
+export const SelectMulti = (props) => {
   const {
     optionsMulti: options,
+    onBlur = () => {},
+    onChange = () => {},
     unbound = props.unbound === "true",
     label,
     info,
     defaultvalue,
+    placeholder,
     ...restProps
   } = props;
 
-  // Memoize placeholder function to prevent recreation on every render
-  const fnPlaceholder = useCallback((e) => {
-    return;
-  }, []);
+  // Handle placeholder logic like select-autocomplete
+  const placeholderText = placeholder === undefined ? "Please Select" : placeholder;
 
-  // Use the same pattern as select-autocomplete for better performance
-  const onBlur = props.onBlur || fnPlaceholder;
-  const onChange = props.onChange || fnPlaceholder;
-
+  // Use common hook for both patterns like select-autocomplete
   const { field, error } = useFormField(props);
 
   const selectedOptions = useMemo(() => {
@@ -44,27 +42,32 @@ export const SelectMulti = React.memo((props) => {
     );
   }, [field.value, options]);
 
-  // Memoize event handlers to prevent recreation on every render
-  const handleBlur = useCallback(() => {
-    field.onBlur();
-    onBlur();
-  }, [field, onBlur]);
-
-  const handleChange = useCallback((e, newValue) => {
-    const selectedValues = Array.isArray(newValue)
-      ? newValue.map((item) => item.key)
-      : [];
-    field.onChange(selectedValues);
-    onChange(selectedValues);
-  }, [field, onChange]);
+  // Handle value prop conditionally based on unbound state
+  let valueProp = {};
+  if (!defaultvalue) {
+    if (!unbound) {
+      valueProp = {
+        value: selectedOptions,
+      };
+    }
+  }
 
   return (
     <ColPadded {...colProps(props)}>
       <Autocomplete
         id={field.name}
         multiple
-        onBlur={handleBlur}
-        onChange={handleChange}
+        onBlur={() => {
+          field.onBlur();
+          onBlur();
+        }}
+        onChange={(e, newValue) => {
+          const selectedValues = Array.isArray(newValue)
+            ? newValue.map((item) => item.key)
+            : [];
+          field.onChange(selectedValues);
+          onChange(selectedValues);
+        }}
         options={filteredOptions}
         getOptionLabel={(option) => option?.text || ""}
         isOptionEqualToValue={(option, value) => option?.key == value?.key}
@@ -73,18 +76,16 @@ export const SelectMulti = React.memo((props) => {
             {...params}
             inputRef={field.ref}  // Moved inputRef here
             label={label}
+            placeholder={placeholderText}
             variant="outlined"
             error={Boolean(error)}
             helperText={error?.message || ""}
           />
         )}
-        value={selectedOptions}
+        {...valueProp}
         {...cleanParentProps(restProps)}
       />
       {info && <Info id={`${field.id}Info`} info={info} />}
     </ColPadded>
   );
-});
-
-// Add display name for better debugging
-SelectMulti.displayName = 'SelectMulti';
+};

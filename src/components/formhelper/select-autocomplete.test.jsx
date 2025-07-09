@@ -49,7 +49,7 @@ describe("Formhelper-SelectAutocomplete", () => {
     
     // Wait for react-hook-form to initialize and populate the form values
     await waitFor(() => {
-      const selectedOption = data.options.task.status.find(opt => opt.key === parseInt(data.item.status));
+      const selectedOption = data.options.task.status.find(opt => opt.key == parseInt(data.item.status));
       expect(selectedOption).toBeTruthy();
       expect(input).toHaveValue(selectedOption.text);
     }, { 
