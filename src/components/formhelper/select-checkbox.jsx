@@ -32,6 +32,9 @@ export const SelectCheckbox = React.memo((props) => {
 
   const { field, error } = useFormField(props);
 
+  // Handle placeholder logic like select-autocomplete
+  const placeholder = props.placeholder === undefined ? "Please Select" : props.placeholder;
+
   const selectedOptions = useMemo(() => {
     return Array.isArray(field.value) 
       ? options.filter((opt) => field.value.includes(opt.key))
@@ -51,6 +54,9 @@ export const SelectCheckbox = React.memo((props) => {
     field.onChange(selectedValues);
     onChange(selectedValues);
   }, [field, onChange]);
+
+  // Only show placeholder when no options are selected
+  const shouldShowPlaceholder = selectedOptions.length === 0;
 
   return (
     <ColPadded {...colProps(props)}>
@@ -83,6 +89,7 @@ export const SelectCheckbox = React.memo((props) => {
             {...params}
             inputRef={field.ref}
             label={label}
+            placeholder={shouldShowPlaceholder ? placeholder : ""}
             variant="outlined"
             error={Boolean(error)}
             helperText={error?.message || ""}

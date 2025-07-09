@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { TextField, Autocomplete } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
@@ -27,6 +27,12 @@ export const SelectMulti = React.memo((props) => {
   const onChange = props.onChange || fnPlaceholder;
 
   const { field, error } = useFormField(props);
+
+  // Handle placeholder logic like select-autocomplete
+  const placeholder = props.placeholder === undefined ? "Please Select" : props.placeholder;
+
+  // State to manage input value for placeholder visibility
+  const [inputValue, setInputValue] = useState("");
 
   const selectedOptions = useMemo(() => {
     return Array.isArray(field.value)
@@ -58,6 +64,14 @@ export const SelectMulti = React.memo((props) => {
     onChange(selectedValues);
   }, [field, onChange]);
 
+  // Handle input change to manage placeholder visibility
+  const handleInputChange = useCallback((event, newInputValue) => {
+    setInputValue(newInputValue);
+  }, []);
+
+  // Show placeholder when no options are selected and input is empty
+  const shouldShowPlaceholder = selectedOptions.length === 0 && inputValue === "";
+
   return (
     <ColPadded {...colProps(props)}>
       <Autocomplete
@@ -65,6 +79,8 @@ export const SelectMulti = React.memo((props) => {
         multiple
         onBlur={handleBlur}
         onChange={handleChange}
+        onInputChange={handleInputChange}
+        inputValue={inputValue}
         options={filteredOptions}
         getOptionLabel={(option) => option?.text || ""}
         isOptionEqualToValue={(option, value) => option?.key == value?.key}
@@ -73,6 +89,7 @@ export const SelectMulti = React.memo((props) => {
             {...params}
             inputRef={field.ref}  // Moved inputRef here
             label={label}
+            placeholder={shouldShowPlaceholder ? placeholder : ""}
             variant="outlined"
             error={Boolean(error)}
             helperText={error?.message || ""}
