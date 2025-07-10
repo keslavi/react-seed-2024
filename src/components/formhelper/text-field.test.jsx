@@ -1,8 +1,13 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Formhelper } from "./test/formhelper";
 import { TextField } from "./text-field";
 
 describe("Formhelper-TextField", () => {
+  let user;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   const testData = () => {
     return {
       item: {
@@ -73,7 +78,7 @@ describe("Formhelper-TextField", () => {
     const input = screen.getByTestId('subject-field').querySelector('input');
 
     // Type in the input field
-    fireEvent.change(input, { target: { value: 'New Subject' } });
+    await user.type(input, 'New Subject');
 
     await waitFor(() => {
       expect(input).toHaveValue('New Subject');
@@ -123,11 +128,11 @@ describe("Formhelper-TextField", () => {
     const input = screen.getByTestId('subject-field').querySelector('input');
 
     // Test onChange
-    fireEvent.change(input, { target: { value: 'Test Value' } });
+    await user.type(input, 'Test Value');
     expect(handleChange).toHaveBeenCalled();
 
     // Test onBlur
-    fireEvent.blur(input);
+    await user.tab(); // This will blur the input
     expect(handleBlur).toHaveBeenCalled();
   });
 
@@ -147,7 +152,7 @@ describe("Formhelper-TextField", () => {
 
     // Click the info icon to open the popover
     const infoIcon = screen.getByTestId('HelpRoundedIcon');
-    fireEvent.click(infoIcon);
+    await user.click(infoIcon);
 
     // Wait for the popover to open and check for info text
     await waitFor(() => {

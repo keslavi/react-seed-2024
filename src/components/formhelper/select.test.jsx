@@ -1,8 +1,14 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Formhelper } from "./test/formhelper";
 import { Select } from "./select";
 
 describe("Formhelper-Select", () => {
+  let user;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   const testData = () => {
     return {
       item: {
@@ -121,7 +127,7 @@ describe("Formhelper-Select", () => {
 
     // Open the dropdown
     const select = screen.getByRole('combobox', { name: /status/i });
-    fireEvent.mouseDown(select);
+    await user.click(select);
 
     // Wait for dropdown to open and check that placeholder is not in the options
     await waitFor(() => {
@@ -161,7 +167,7 @@ describe("Formhelper-Select", () => {
 
     // Open the dropdown
     const select = screen.getByRole('combobox', { name: /status/i });
-    fireEvent.mouseDown(select);
+    await user.click(select);
 
     // Wait for dropdown to open and select an option
     await waitFor(() => {
@@ -169,7 +175,7 @@ describe("Formhelper-Select", () => {
     });
 
     // Click on an option
-    fireEvent.click(screen.getByText('completed'));
+    await user.click(screen.getByText('completed'));
 
     // Check that the select now shows the selected option
     await waitFor(() => {
@@ -219,15 +225,15 @@ describe("Formhelper-Select", () => {
     const select = screen.getByRole('combobox', { name: /status/i });
     
     // Test onChange by opening dropdown and selecting an option
-    fireEvent.mouseDown(select);
+    await user.click(select);
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByText('cancelled'));
+    await user.click(screen.getByText('cancelled'));
     expect(handleChange).toHaveBeenCalled();
 
     // Test onBlur
-    fireEvent.blur(select);
+    await user.tab(); // This will blur the select
     expect(handleBlur).toHaveBeenCalled();
   });
 
@@ -263,7 +269,7 @@ describe("Formhelper-Select", () => {
 
     // Click the info icon to open the popover
     const infoIcon = screen.getByTestId('HelpRoundedIcon');
-    fireEvent.click(infoIcon);
+    await user.click(infoIcon);
 
     // Wait for the popover to open and check for info text
     await waitFor(() => {

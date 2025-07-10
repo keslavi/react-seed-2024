@@ -1,4 +1,3 @@
-//import { render, screen } from "@testing-library/react";
 import { Test } from "./test-sample";
 
 it("renders without crashing", () => {

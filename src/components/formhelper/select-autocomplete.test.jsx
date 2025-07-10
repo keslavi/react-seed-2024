@@ -1,8 +1,13 @@
-import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { Formhelper } from "./test/formhelper";
 import { SelectAutocomplete } from "./select-autocomplete";
 
 describe("Formhelper-SelectAutocomplete", () => {
+  let user;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   const testData = () => {
     return {
       item: {
@@ -96,16 +101,18 @@ describe("Formhelper-SelectAutocomplete", () => {
     const input = screen.getByTestId('status-select').querySelector('input');
     
     // Click to open dropdown and type to filter
-    fireEvent.click(input);
-    fireEvent.change(input, { target: { value: 'completed' } });
+    await user.click(input);
+    await user.type(input, 'completed');
     
     // Wait for and select the option
     await waitFor(() => {
       const options = screen.getAllByRole('option');
       const option = options.find(opt => opt.textContent === 'completed');
       expect(option).toBeTruthy();
-      fireEvent.click(option);
     });
+    
+    const option = screen.getAllByRole('option').find(opt => opt.textContent === 'completed');
+    await user.click(option);
 
     // Verify the value was selected
     expect(input).toHaveValue('completed');
@@ -130,11 +137,11 @@ describe("Formhelper-SelectAutocomplete", () => {
     const input = screen.getByRole('combobox', { name: /status/i });
     
     // Focus the field
-    fireEvent.focus(input);
+    await user.click(input);
     
     // Look for the clear button
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    fireEvent.click(clearButton);
+    await user.click(clearButton);
 
     // Verify the value was cleared
     expect(input).toHaveValue('');
@@ -158,23 +165,27 @@ describe("Formhelper-SelectAutocomplete", () => {
     const input = screen.getByTestId('status-select').querySelector('input');
     
     // First select a value
-    fireEvent.click(input);
-    fireEvent.change(input, { target: { value: 'completed' } });
+    await user.click(input);
+    await user.type(input, 'completed');
     await waitFor(() => {
       const options = screen.getAllByRole('option');
       const option = options.find(opt => opt.textContent === 'completed');
       expect(option).toBeTruthy();
-      fireEvent.click(option);
     });
+    
+    const option = screen.getAllByRole('option').find(opt => opt.textContent === 'completed');
+    await user.click(option);
     
     // Now try to clear it
-    fireEvent.click(input);
+    await user.click(input);
     await waitFor(() => {
       const clearButton = screen.getByRole('button', { name: /clear/i });
-      fireEvent.click(clearButton);
     });
     
-    fireEvent.blur(input);
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    await user.click(clearButton);
+    
+    await user.tab(); // This will blur the input
     expect(input).toHaveValue('');
   });
 
@@ -202,23 +213,23 @@ describe("Formhelper-SelectAutocomplete", () => {
     });
     
     // Focus the field and clear it
-    fireEvent.focus(input);
+    await user.click(input);
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    fireEvent.click(clearButton);
+    await user.click(clearButton);
 
     // Verify the value was cleared
     expect(input).toHaveValue('');
     
     // Blur the field and verify it stays cleared
-    fireEvent.blur(input);
+    await user.tab(); // This will blur the input
     expect(input).toHaveValue('');
     
     // Focus again and verify it's still cleared
-    fireEvent.focus(input);
+    await user.click(input);
     expect(input).toHaveValue('');
   });
 
-  it("uses custom placeholder when provided", () => {
+  it("uses custom placeholder when provided", async () => {
     const data = testData();
     render(
       <Formhelper
@@ -248,15 +259,15 @@ describe("Formhelper-SelectAutocomplete", () => {
     expect(input).toBeEnabled();
     
     // Test that placeholder behavior works correctly when focusing
-    fireEvent.focus(input);
+    await user.click(input);
     expect(input).toHaveDisplayValue('');
     
     // Test that placeholder disappears when typing
-    fireEvent.change(input, { target: { value: 'test' } });
+    await user.type(input, 'test');
     expect(input).toHaveDisplayValue('test');
     
     // Test that placeholder reappears when clearing
-    fireEvent.change(input, { target: { value: '' } });
+    await user.clear(input);
     expect(input).toHaveDisplayValue('');
     
     // Test that the placeholder text is actually rendered and visible

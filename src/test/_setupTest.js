@@ -1,11 +1,20 @@
-import {render,screen,userEvent,waitFor,act,within} from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within
+} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
+global.act = act;
+global.fireEvent = fireEvent;
 global.render = render;
 global.screen = screen;
 global.userEvent = userEvent;
 global.waitFor = waitFor;
-global.act = act;
 global.within = within;
 
 //import "@testing-library/user-event"; //maybe add here? 

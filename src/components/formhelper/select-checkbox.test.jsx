@@ -1,8 +1,13 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Formhelper } from "./test/formhelper";
 import { SelectCheckbox } from "./select-checkbox";
 
 describe("Formhelper-SelectCheckbox", () => {
+  let user;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   const testData = () => {
     return {
       item: {
@@ -80,7 +85,7 @@ describe("Formhelper-SelectCheckbox", () => {
     
     // Click the dropdown arrow button to open the dropdown
     const dropdownButton = screen.getByRole('button', { name: /open/i });
-    fireEvent.click(dropdownButton);
+    await user.click(dropdownButton);
 
     // Add a 2-second delay for debugging
     // await new Promise(resolve => setTimeout(resolve, 2000));
@@ -95,8 +100,10 @@ describe("Formhelper-SelectCheckbox", () => {
       // Click the checkbox input inside the option to select it
       const checkbox = options[0].querySelector('input[type="checkbox"]');
       expect(checkbox).toBeInTheDocument();
-      fireEvent.click(checkbox);
     });
+    
+    const checkbox = screen.getAllByRole('option')[0].querySelector('input[type="checkbox"]');
+    await user.click(checkbox);
     
     // Verify the option was selected by checking for the chip/tag
     await waitFor(() => {
@@ -125,7 +132,7 @@ describe("Formhelper-SelectCheckbox", () => {
     
     // Click the dropdown arrow button to open the dropdown
     const dropdownButton = screen.getByRole('button', { name: /open/i });
-    fireEvent.click(dropdownButton);
+    await user.click(dropdownButton);
     
     // Wait for the dropdown to open
     await waitFor(() => {
@@ -135,10 +142,14 @@ describe("Formhelper-SelectCheckbox", () => {
     await waitFor(() => {
       const options = screen.getAllByRole('option');
       const inProgressOption = options.find(opt => opt.textContent.includes('in progress'));
-      fireEvent.click(inProgressOption);
-      // Try clicking again to deselect
-      fireEvent.click(inProgressOption);
+      expect(inProgressOption).toBeTruthy();
     });
+    
+    const options = screen.getAllByRole('option');
+    const inProgressOption = options.find(opt => opt.textContent.includes('in progress'));
+    await user.click(inProgressOption);
+    // Try clicking again to deselect
+    await user.click(inProgressOption);
     expect(input).toHaveValue('');
   });
 
@@ -162,7 +173,7 @@ describe("Formhelper-SelectCheckbox", () => {
     
     // Click the dropdown arrow button to open the dropdown
     const dropdownButton = screen.getByRole('button', { name: /open/i });
-    fireEvent.click(dropdownButton);
+    await user.click(dropdownButton);
     
     // Wait for the dropdown to open
     await waitFor(() => {
@@ -171,10 +182,13 @@ describe("Formhelper-SelectCheckbox", () => {
     
     await waitFor(() => {
       const options = screen.getAllByRole('option');
-      fireEvent.click(options[0]);
+      expect(options.length).toBeGreaterThan(0);
     });
+    
+    const options = screen.getAllByRole('option');
+    await user.click(options[0]);
     expect(handleChange).toHaveBeenCalled();
-    fireEvent.blur(input);
+    await user.tab(); // This will blur the input
     expect(handleBlur).toHaveBeenCalled();
   });
 
@@ -195,7 +209,7 @@ describe("Formhelper-SelectCheckbox", () => {
     
     // Click the info icon to open the popover
     const infoIcon = screen.getByTestId('HelpRoundedIcon');
-    fireEvent.click(infoIcon);
+    await user.click(infoIcon);
     
     // Wait for the popover to open and check for info text
     await waitFor(() => {
