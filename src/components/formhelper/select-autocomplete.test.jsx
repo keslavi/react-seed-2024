@@ -178,6 +178,46 @@ describe("Formhelper-SelectAutocomplete", () => {
     expect(input).toHaveValue('');
   });
 
+  it("clears form field value properly without reverting to initial values", async () => {
+    const data = testData();
+    render(
+      <Formhelper
+        item={data.item}
+        option={data.options}
+      >
+        <SelectAutocomplete
+          name="status"
+          label="Status"
+          options={data.options.task.status}
+          data-testid="status-select"
+        />
+      </Formhelper>
+    );
+
+    const input = screen.getByRole('combobox', { name: /status/i });
+    
+    // Verify initial value is loaded
+    await waitFor(() => {
+      expect(input).toHaveValue('cancelled'); // Should show the initial value
+    });
+    
+    // Focus the field and clear it
+    fireEvent.focus(input);
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    fireEvent.click(clearButton);
+
+    // Verify the value was cleared
+    expect(input).toHaveValue('');
+    
+    // Blur the field and verify it stays cleared
+    fireEvent.blur(input);
+    expect(input).toHaveValue('');
+    
+    // Focus again and verify it's still cleared
+    fireEvent.focus(input);
+    expect(input).toHaveValue('');
+  });
+
   it("uses custom placeholder when provided", () => {
     const data = testData();
     render(

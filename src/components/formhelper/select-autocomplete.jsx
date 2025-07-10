@@ -58,7 +58,8 @@ export const SelectAutocomplete = (props) => {
           if (newValue) {
             field.onChange(newValue.key);
           } else {
-            field.onChange(undefined);
+            // Clear the field value properly when clear button is clicked
+            field.onChange("");
           }
           onChange(event, newValue);
         }}

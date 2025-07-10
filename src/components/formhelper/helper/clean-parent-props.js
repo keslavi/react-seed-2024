@@ -25,6 +25,8 @@ export const cleanParentProps = (props) => {
       "max",
       "size",
       "defaultvalue",
+      "error",
+      "helperText",
     ];
 
     exclude.forEach(key => {

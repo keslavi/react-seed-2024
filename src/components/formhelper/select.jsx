@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from "react";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
-import { TextField as MuiTextField, Select as MuiSelect } from "@mui/material";
+import { Select as MuiSelect, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Info } from "./info";
 
 import { ColPadded } from "@/components/grid";
 
@@ -20,9 +21,9 @@ export const Select = React.memo((props) => {
   // Memoize options rendering to prevent recalculation on every render
   const renderedOptions = useMemo(() => {
     return props.options?.map((x) => (
-      <option key={x.key} value={x.key}>
+      <MenuItem key={x.key} value={x.key}>
         {x.text}
-      </option>
+      </MenuItem>
     )) || [];
   }, [props.options]);
 
@@ -51,25 +52,37 @@ export const Select = React.memo((props) => {
 
   return (
     <ColPadded {...colProps(props)}>
-      <MuiTextField
-        id={field.name}
-        name={field.name}
-        label={props.label}
-        fullWidth
-        select
-        slotProps={{
-          select: {
-            native: true,
-          },
-        }}
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={field.value || ""}
-        {...errorProps}
-        {...cleanParentProps(props)}
-      >
-        {renderedOptions}
-      </MuiTextField>
+      <FormControl fullWidth error={errorProps.error}>
+        <InputLabel id={`${field.name}-label`}>{props.label}</InputLabel>
+        <MuiSelect
+          labelId={`${field.name}-label`}
+          id={field.name}
+          name={field.name}
+          label={props.label}
+          onBlur={handleBlur}
+          onChange={handleChange}
+          value={field.value || ""}
+          displayEmpty
+          renderValue={(selected) => {
+            if (!selected || selected === "") {
+              return <span style={{ color: '#666' }}>{props.placeholder || "Please Select"}</span>;
+            }
+            const selectedOption = props.options?.find(option => 
+              String(option.key) === String(selected)
+            );
+            return selectedOption ? selectedOption.text : selected;
+          }}
+          {...cleanParentProps(props)}
+        >
+          {renderedOptions}
+        </MuiSelect>
+        {errorProps.helperText && (
+          <div style={{ color: 'red', fontSize: '0.75rem', marginTop: '3px' }}>
+            {errorProps.helperText}
+          </div>
+        )}
+      </FormControl>
+      {props.info && <Info id={`${field.name}Info`} info={props.info} />}
     </ColPadded>
   );
 });

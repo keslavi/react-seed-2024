@@ -96,7 +96,7 @@ const item0 = {
   names: [1, 2],
   names2: [3, 4],
   body: "Body b",
-  status: "3",
+  //status: "3",
   result: 2,
   address: {
     line1: "ddd",
@@ -127,20 +127,21 @@ const chidrenDefault = () => {
           size={{xs:6}}        
           name="names2"
           label="Names2 (multiselect)"
-          optionsMulti={option0.task.names}s
+          optionsMulti={option0.task.names}
         />
       </Row>
       <Row>
         <Input 
           name="status" 
-          label="Status" 
+          label="Status (select)"
+          select 
           options={option0.task.status} 
-          placeholder="Select a status" 
+//          placeholder="Select a status" 
           info="header2|body2"
         />
         <Input 
           name="result" 
-          label="Result" 
+          label="Result (autocomplete)" 
           options={option0.task.result} 
           info="header3|body3"
         />
