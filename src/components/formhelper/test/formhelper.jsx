@@ -264,34 +264,11 @@ const chidrenDefault = () => {
       </Row>
       <Row>
         <Input 
-          name="persistentSSN" 
-          label="Persistent SSN" 
-          mask="ssn"
+          name="currency" 
+          label="Amount" 
+          mask="currency"
           persistent
-          info="SSN always visible (no eye icon, no auto-mask)"
-        />
-        <Input 
-          name="persistentPhone" 
-          label="Persistent Phone" 
-          mask="phone"
-          alwaysVisible
-          info="Phone always visible (alternative attribute name)"
-        />
-      </Row>
-      <Row>
-        <Input 
-          name="persistentCustom" 
-          label="Persistent Custom Pattern" 
-          mask="AAA-####"
-          persistent
-          info="Custom pattern always visible"
-        />
-        <Input 
-          name="persistentCreditCard" 
-          label="Persistent Credit Card" 
-          mask="creditCard"
-          alwaysVisible
-          info="Credit card always visible"
+          info="Enter amount with dollar sign and commas (always visible)"
         />
       </Row>
       
