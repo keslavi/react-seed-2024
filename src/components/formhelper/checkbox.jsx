@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import {
   Checkbox as MuiCheckbox,
   FormControlLabel as MuiFormControlLabel,
@@ -7,27 +7,15 @@ import {
 } from "@mui/material";
 
 import { useFormField } from "./form-provider";
-
 import { color } from "@/theme-material";
 import { cleanParentProps, colProps } from "./helper";
-
-
-import { ColPadded } from "components/grid";
+import { ColPadded } from "@/components/grid";
 import { isTruthy } from "helpers";
 
-export const Checkbox = React.memo((props) => {
-  // Memoize placeholder function to prevent recreation on every render
-  const placeholder = useCallback((e) => {
-    return;
-  }, []);
-  
-  // Memoize event handlers to prevent recreation on every render
-  const onChange = useCallback(props.onChange || placeholder, [props.onChange, placeholder]);
-  const onBlur = useCallback(props.onBlur || placeholder, [props.onBlur, placeholder]);
-  
+export const Checkbox = memo((props) => {
   const variant = props.variant || "";
 
-  const { field, error } = useFormField(props);
+  const { field, errorMui } = useFormField(props);
 
   const isChecked = useCallback(() => {
     const v = field.value;
@@ -76,16 +64,15 @@ export const Checkbox = React.memo((props) => {
 
   const checked = isChecked();
 
-  // Memoize event handlers to prevent recreation on every render
-  const handleChange = useCallback((e) => {
+  const onChange = useCallback((e) => {
     field.onChange(e.target.checked);
-    onChange(e);
-  }, [field, onChange]);
+    props.onChange?.(e);
+  }, [field, props]);
 
-  const handleBlurCapture = useCallback((e) => {
+  const onBlur = useCallback((e) => {
     field.onBlur(e.target.checked);
-    onBlur(e);
-  }, [field, onBlur]);
+    props.onBlur?.(e);
+  }, [field, props]);
 
   return (
     <ColPadded {...colProps(props)}>
@@ -94,8 +81,8 @@ export const Checkbox = React.memo((props) => {
           <MuiCheckbox
             id={field.name}
             name={field.name}
-            onChange={handleChange}
-            onBlurCapture={handleBlurCapture}
+            onChange={onChange}
+            onBlurCapture={onBlur}
             checked={checked}
             color="success"
             {...cleanParentProps(props)}
@@ -104,8 +91,8 @@ export const Checkbox = React.memo((props) => {
         label={label}
         style={{ marginLeft: 0 }}
       />
-      {error && (
-        <FormHelperText className="mui-error">{error.message}</FormHelperText>
+      {errorMui?.helperText && (
+        <FormHelperText className="Mui-error">{errorMui.helperText}</FormHelperText>
       )}
     </ColPadded>
   );
