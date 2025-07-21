@@ -10,6 +10,12 @@ export const isTruthy = (value)=>{
   ]
 
   if (value===true) return true;
-  const normalizedValue=(value||"").toString().toLowercase();
+  const normalizedValue=(value||"").toString().toLowerCase();
   return truthyValues.includes(normalizedValue);
 }
+
+export const isFalsy = (value)=>{
+  return !isTruthy(value);
+}
+
+export default { isTruthy, isFalsy };

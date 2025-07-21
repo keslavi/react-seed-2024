@@ -9,6 +9,8 @@ import { SelectAutocomplete } from "./select-autocomplete";
 import { SelectCheckbox } from "./select-checkbox";
 import { Textarea } from "./textarea";
 import { TextField } from "./text-field";
+import { TextMask } from "./text-mask";
+import { Password } from "./password";
 
 /**
  * @property {react-hook Form Input} multitype Input control (default TextField)
@@ -40,10 +42,12 @@ export const Input = (props) => {
   const {
     checkbox,
     datepicker,
+    mask,
     options,
     optionsMulti,
     optionsRadio,
     optionscheckbox,
+    password,
     select,
     textarea,
   } = props;
@@ -52,6 +56,8 @@ export const Input = (props) => {
     ? Datepicker
     : checkbox
     ? Checkbox
+    : password
+    ? Password
     : !isEmpty(options)
     ? select
       ? Select
@@ -64,6 +70,8 @@ export const Input = (props) => {
     ? SelectCheckbox
     : textarea
     ? Textarea
+    : mask
+    ? TextMask
     : TextField;
 
   //const Ctl = TextField;

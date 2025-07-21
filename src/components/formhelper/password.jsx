@@ -1,11 +1,14 @@
-import React, { useCallback, useMemo } from "react";
-import { TextField as MuiTextField, Box } from "@mui/material";
+import React, { useCallback, useMemo, useState } from "react";
+import { TextField as MuiTextField, Box, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
 import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
 
 export const Password = React.memo((props) => {
+  const [showPassword, setShowPassword] = useState(false);
+  
   // Memoize placeholder function to prevent recreation on every render
   const placeholder = useCallback((e) => {
     return;
@@ -46,12 +49,21 @@ export const Password = React.memo((props) => {
     helperText: error?.message
   }), [error]);
 
+  // Handle show/hide password toggle
+  const handleClickShowPassword = useCallback(() => {
+    setShowPassword(!showPassword);
+  }, [showPassword]);
+
+  const handleMouseDownPassword = useCallback((event) => {
+    event.preventDefault();
+  }, []);
+
   return (
     <ColPadded {...colProps(props)}>
       <Box sx={{ position: 'relative' }}>
         <MuiTextField
           fullWidth
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           id={field.name}
           name={field.name}
           label={props.label}
@@ -61,6 +73,20 @@ export const Password = React.memo((props) => {
           {...valueProp}
           {...errorProps}
           {...cleanParentProps(props)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         {props.info && <Info id={`${field.id}Info`} info={props.info} />}
       </Box>

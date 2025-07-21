@@ -1,6 +1,16 @@
-import { createContext, useContext, useMemo, useEffect, useRef } from "react";
+import { 
+  createContext, 
+  useContext, 
+  useMemo, 
+  useEffect, 
+  useRef 
+} from "react";
 import { useForm, useController as useRealController } from "react-hook-form";
 import { errorNotification } from "@/helpers/form-validation/errorNotification";
+import {isTruthy} from "@/helpers";
+
+//???wsc UNCOMMENT THIS when moving to company
+//import store from "@/store";
 
 const FormContext = createContext();
 
@@ -61,10 +71,23 @@ export const FormProvider = ({
   const { control, formState, reset, register, handleSubmit, watch, setValue, getValues } = frmMethods;
   const errors = formState?.errors || {};
 
+  /*
+  //???wsc UNCOMMENT THIS when moving to company
+  const clearPageErrorMessage = store.use.clearPageErrorMessage();
+  const pageErrorMessage = store.use.pageErrorMessage();
+  */
+
   // Handle error notifications automatically
   useEffect(() => {
     if (errors && Object.keys(errors).length > 0) {
       errorNotification(errors);
+    }
+
+    //???wsc UNCOMMENT THIS when moving to company
+    return()=>{
+      // if(pageErrorMessage){
+      //   clearPageErrorMessage();
+      // }
     }
   }, [errors]);
 
@@ -97,8 +120,10 @@ export const useController = (props) => {
   const ctx = useContext(FormContext);
   
   // If no context is available, throw a helpful error
-  if (!ctx) {
-    throw new Error("useController must be used within a FormProvider");
+  if (!ctx && !props?.control) {
+    //throw new Error("useController must be used within a FormProvider");
+    console.trace("Function called from:");
+    //let i=1;
   }
   
   const control = props.control || ctx.control;
@@ -133,26 +158,52 @@ export const useFormContext = () => {
 
 // Common hook for all input controls to handle both patterns
 export const useFormField = (props) => {
-  let field, error;
+  let field, 
+  error,
+  errorMui={},
+  valueProp={};
 
   try {
-    if (props.control && props.errors) {
+    if (props.control) {
       // Direct props pattern (task-old.jsx style)
       const result = useRealController({ control: props.control, name: props.name });
       field = result.field;
-      error = result.fieldState.error;
+
+      if (!props.error){
+        error = result.fieldState.error;
+      } else{
+        if (isTruthy(props.error) || !isEmpty(props.error)){
+          error = {
+            message: props.error.messaage || props.helperText || `${props.name}: custom error with no helperText or {message}`
+          };
+        }
+      }
     } else {
-      // Context pattern (task.jsx style)
+      // newer pattern with <FormProvider> and useFormProvider
       const result = useController(props);
       field = result.field;
-      error = result.fieldState.error;
+      if (!props.error){
+        error = result.fieldState.error;
+      } else{
+        if (isTruthy(props.error) || !isEmpty(props.error)){
+          error = {
+            message: props.error.messaage || props.helperText || `${props.name}: custom error with no helperText or {message}`
+          };
+        }
+      }
     }
   } catch (err) {
     // Fallback: try context if direct fails
     const result = useController(props);
     field = result.field;
     error = result.fieldState.error;
+    console.warn(`${props.name} - error in useFormField:`,err);
   }
-
-  return { field, error };
+  if (!props.defaultValue && !isTruthy(props.unbound)){
+    valueProp = {
+      value: field.value || props.value || "",
+    };
+  }
+    
+  return { field, error,errorMui,valueProp };
 };
