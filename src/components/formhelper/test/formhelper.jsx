@@ -173,8 +173,6 @@ const chidrenDefault = () => {
           info="header3|body3"
         />
       </Row>
-{/*       
-
       <Row>
         <h3>Masked Input Examples</h3>
       </Row>
@@ -403,7 +401,8 @@ const chidrenDefault = () => {
           showLast={3}
           info="Custom pattern showing only last 3 characters when masked"
         />
-      </Row> */}
+      </Row> 
+      
     </>
   );
 };
