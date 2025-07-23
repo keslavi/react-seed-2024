@@ -122,13 +122,23 @@ const item0 = {
   formattedValue: "12345678",
   licensePlate: "ABC1234",
   productCode: "12ABC3456",
+  // Sample data for partial masking examples
+  creditCardPartial: "1234567890123456",
+  ssnPartial: "123456789",
+  phonePartial: "5551234567",
+  customPartial: "12345678",
 };
 
 const chidrenDefault = () => {
   return (
     <>
       <Row>
-        <Input name="subject" label="Subject" />
+        <Input 
+          name="subject" 
+          label="Subject" 
+          placeholder="Enter subject" 
+          info="header1|body1"
+        />
       </Row>
       <Row>
         <Input name="body" label="Body" />
@@ -163,8 +173,8 @@ const chidrenDefault = () => {
           info="header3|body3"
         />
       </Row>
-      
-      {/* Masked Input Examples */}
+{/*       
+
       <Row>
         <h3>Masked Input Examples</h3>
       </Row>
@@ -225,7 +235,7 @@ const chidrenDefault = () => {
         />
       </Row>
       
-      {/* Custom Pattern Examples */}
+
       <Row>
         <h3>Custom Pattern Examples</h3>
       </Row>
@@ -258,7 +268,7 @@ const chidrenDefault = () => {
         />
       </Row>
       
-      {/* Persistent (Always Visible) Examples */}
+
       <Row>
         <h3>Persistent (Always Visible) Examples</h3>
       </Row>
@@ -272,7 +282,7 @@ const chidrenDefault = () => {
         />
       </Row>
       
-      {/* Password Input Examples */}
+
       <Row>
         <h3>Password Input Examples</h3>
       </Row>
@@ -291,7 +301,7 @@ const chidrenDefault = () => {
         />
       </Row>
       
-      {/* Guided Data Input Examples */}
+
       <Row>
         <h3>Guided Data Input Examples</h3>
       </Row>
@@ -339,7 +349,7 @@ const chidrenDefault = () => {
         />
       </Row>
       
-      {/* Additional Examples */}
+
       <Row>
         <h3>Additional Examples</h3>
       </Row>
@@ -357,6 +367,43 @@ const chidrenDefault = () => {
           info="Enter product code in format 12-ABC-3456"
         />
       </Row>
+      
+
+      <Row>
+        <h3>Partial Masking Examples (Show Last 4 Characters)</h3>
+      </Row>
+      <Row>
+        <Input 
+          name="creditCardPartial" 
+          label="Credit Card (Last 4)" 
+          mask="creditCard"
+          showLast={4}
+          info="Credit card showing only last 4 digits when masked"
+        />
+        <Input 
+          name="ssnPartial" 
+          label="SSN (Last 4)" 
+          mask="ssn"
+          showLast={4}
+          info="SSN showing only last 4 digits when masked"
+        />
+      </Row>
+      <Row>
+        <Input 
+          name="phonePartial" 
+          label="Phone (Last 4)" 
+          mask="phone"
+          showLast={4}
+          info="Phone showing only last 4 digits when masked"
+        />
+        <Input 
+          name="customPartial" 
+          label="Custom (Last 3)" 
+          mask="##-##-####"
+          showLast={3}
+          info="Custom pattern showing only last 3 characters when masked"
+        />
+      </Row> */}
     </>
   );
 };

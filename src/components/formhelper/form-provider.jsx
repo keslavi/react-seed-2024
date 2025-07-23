@@ -199,6 +199,11 @@ export const useFormField = (props) => {
     error = result.fieldState.error;
     console.warn(`${props.name} - error in useFormField:`,err);
   }
+  if (!!error){
+    errorMui.error=true;
+    errorMui.helperText=error?.message || props.helperText || `${props.name}: custom error with no helperText or {message}` ;
+  }
+
   if (!props.defaultValue && !isTruthy(props.unbound)){
     valueProp = {
       value: field.value || props.value || "",

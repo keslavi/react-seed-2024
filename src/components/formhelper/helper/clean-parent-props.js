@@ -29,6 +29,7 @@ export const cleanParentProps = (props) => {
       "persistent",
       "alwaysVisible",
       "select",
+      "showLast",
       "size",
       "sm",
       "xl",
@@ -41,7 +42,7 @@ export const cleanParentProps = (props) => {
       }
     });
 
-    if (props.label) {
+    if (props.label && !props.placeholder) {
       ret.placeholder = props.label;
     }
 

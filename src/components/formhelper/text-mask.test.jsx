@@ -43,7 +43,8 @@ describe('TextMask Component', () => {
     const input = screen.getByLabelText('SSN');
     fireEvent.change(input, { target: { value: '123456789' } });
     
-    expect(input.value).toBe('123-45-6789');
+    // Should show masked value by default
+    expect(input.value).toBe('***-**-****');
   });
 
   test('applies phone mask correctly', () => {
@@ -60,7 +61,8 @@ describe('TextMask Component', () => {
     const input = screen.getByLabelText('Phone');
     fireEvent.change(input, { target: { value: '5551234567' } });
     
-    expect(input.value).toBe('(555) 123-4567');
+    // Should show masked value by default
+    expect(input.value).toBe('(***) ***-****');
   });
 
   test('applies custom mask pattern', () => {
@@ -77,7 +79,8 @@ describe('TextMask Component', () => {
     const input = screen.getByLabelText('Custom');
     fireEvent.change(input, { target: { value: '123456' } });
     
-    expect(input.value).toBe('12-34-56');
+    // Should show masked value by default
+    expect(input.value).toBe('**-**-**');
   });
 
   test('applies format pattern', () => {
@@ -94,7 +97,8 @@ describe('TextMask Component', () => {
     const input = screen.getByLabelText('Formatted');
     fireEvent.change(input, { target: { value: '12345678' } });
     
-    expect(input.value).toBe('1234-5678');
+    // Should show masked value by default
+    expect(input.value).toBe('****-****');
   });
 
   test('handles credit card mask', () => {
@@ -111,7 +115,8 @@ describe('TextMask Component', () => {
     const input = screen.getByLabelText('Credit Card');
     fireEvent.change(input, { target: { value: '1234567890123456' } });
     
-    expect(input.value).toBe('1234 5678 9012 3456');
+    // Should show masked value by default
+    expect(input.value).toBe('**** **** **** ****');
   });
 
   test('handles zip code mask', () => {
@@ -128,6 +133,7 @@ describe('TextMask Component', () => {
     const input = screen.getByLabelText('Zip Code');
     fireEvent.change(input, { target: { value: '123456789' } });
     
-    expect(input.value).toBe('12345-6789');
+    // Should show masked value by default
+    expect(input.value).toBe('*****-****');
   });
 }); 

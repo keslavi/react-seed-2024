@@ -94,6 +94,53 @@ const MASK_PATTERNS = {
   percentage: '##%'
 };
 
+// Function to create partial mask showing only last N characters
+const createPartialMask = (value, maskPattern, showLast = 4) => {
+  if (!value || !maskPattern) return value;
+  
+  // Apply the mask first to get the formatted value
+  const formattedValue = applyMask(value, maskPattern);
+  
+  if (formattedValue.length <= showLast) {
+    return formattedValue; // If value is shorter than showLast, show all
+  }
+  
+  // Count the actual characters (excluding mask characters)
+  const actualChars = value.replace(/[^a-zA-Z0-9]/g, '');
+  
+  if (actualChars.length <= showLast) {
+    return formattedValue; // If actual characters are fewer than showLast, show all
+  }
+  
+  // Create a mask pattern that shows asterisks for all but the last N characters
+  let result = '';
+  let actualCharIndex = 0;
+  let lastChars = actualChars.slice(-showLast);
+  let lastCharIndex = 0;
+  
+  for (let i = 0; i < maskPattern.length; i++) {
+    const maskChar = maskPattern[i];
+    
+    if (maskChar === '#' || maskChar === 'A' || maskChar === '*') {
+      // This is a character position
+      if (actualCharIndex < actualChars.length - showLast) {
+        // Mask this character
+        result += '*';
+      } else {
+        // Show the actual character from the last N characters
+        result += lastChars[lastCharIndex] || '*';
+        lastCharIndex++;
+      }
+      actualCharIndex++;
+    } else {
+      // Static character from mask
+      result += maskChar;
+    }
+  }
+  
+  return result;
+};
+
 export const TextMask = memo((props) => {
   const [showValue, setShowValue] = useState(false);
   const timeoutRef = useRef(null);
@@ -139,26 +186,42 @@ export const TextMask = memo((props) => {
     
     if (maskPattern) {
       const formattedValue = applyMask(rawValue, maskPattern);
+      
       // If persistent or value is visible, show formatted value
       if (isPersistent || showValue || !rawValue) {
         return formattedValue;
       }
-      // If value is hidden, show asterisks instead
+      
+      // If value is hidden, check if partial masking is requested
+      if (props.showLast && typeof props.showLast === 'number' && props.showLast > 0) {
+        // Show partial mask with last N characters
+        return createPartialMask(rawValue, maskPattern, props.showLast);
+      }
+      
+      // If value is hidden and no partial masking, show asterisks instead
       return maskPattern.replace(/[#A*]/g, '*');
     }
     
     if (formatPattern) {
       const formattedValue = applyFormat(rawValue, formatPattern);
+      
       // If persistent or value is visible, show formatted value
       if (isPersistent || showValue || !rawValue) {
         return formattedValue;
       }
-      // If value is hidden, show asterisks instead
+      
+      // If value is hidden, check if partial masking is requested for format patterns
+      if (props.showLast && typeof props.showLast === 'number' && props.showLast > 0) {
+        // Show partial mask with last N characters
+        return createPartialMask(rawValue, formatPattern, props.showLast);
+      }
+      
+      // If value is hidden and no partial masking, show asterisks instead
       return formatPattern.replace(/[#A*]/g, '*');
     }
     
     return rawValue;
-  }, [field.value, maskPattern, formatPattern, showValue, isPersistent]);
+  }, [field.value, maskPattern, formatPattern, showValue, isPersistent, props.showLast]);
 
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
