@@ -39,14 +39,24 @@ export const Info = ({ id, info }) => {
       top: 8,
       zIndex: 1
     }}>
-      <HelpRoundedIcon
+      <IconButton
+        onClick={onClickIcon}
+        size="small"
+        aria-label="help"
         sx={{ 
           color: color.primary.blue,
-          cursor: 'pointer',
-          fontSize: '1.2rem'
+          padding: 0,
+          '&:hover': {
+            backgroundColor: 'transparent'
+          }
         }}
-        onClick={onClickIcon} 
-      />
+      >
+        <HelpRoundedIcon
+          sx={{ 
+            fontSize: '1.2rem'
+          }}
+        />
+      </IconButton>
       <Popover
         id={id}
         open={open}

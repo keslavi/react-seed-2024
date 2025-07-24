@@ -50,14 +50,12 @@ describe("Formhelper-Select", () => {
       </Formhelper>
     );
 
-    // Check that the select shows the selected option text
     const select = screen.getByRole('combobox', { name: /status/i });
     expect(select).toHaveTextContent('in progress');
   });
 
   it("shows placeholder when no value is selected", () => {
     const data = testData();
-    // Remove status from item to simulate empty state
     const itemWithoutStatus = { ...data.item };
     delete itemWithoutStatus.status;
 
@@ -76,7 +74,6 @@ describe("Formhelper-Select", () => {
       </Formhelper>
     );
 
-    // Check that the select shows the placeholder text
     const select = screen.getByRole('combobox', { name: /status/i });
     expect(select).toHaveTextContent('Select a status');
   });
@@ -100,7 +97,6 @@ describe("Formhelper-Select", () => {
       </Formhelper>
     );
 
-    // Check that the select shows the default placeholder text
     const select = screen.getByRole('combobox', { name: /status/i });
     expect(select).toHaveTextContent('Please Select');
   });
@@ -125,22 +121,18 @@ describe("Formhelper-Select", () => {
       </Formhelper>
     );
 
-    // Open the dropdown
     const select = screen.getByRole('combobox', { name: /status/i });
     await user.click(select);
 
-    // Wait for dropdown to open and check that placeholder is not in the options
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
 
-    // Check that only the actual options are present, not the placeholder
     expect(screen.getByText('pending')).toBeInTheDocument();
     expect(screen.getByText('in progress')).toBeInTheDocument();
     expect(screen.getByText('completed')).toBeInTheDocument();
     expect(screen.getByText('cancelled')).toBeInTheDocument();
     
-    // Placeholder should not be in the dropdown options list
     const listbox = screen.getByRole('listbox');
     expect(listbox).not.toHaveTextContent('Select a status');
   });
@@ -165,19 +157,15 @@ describe("Formhelper-Select", () => {
       </Formhelper>
     );
 
-    // Open the dropdown
     const select = screen.getByRole('combobox', { name: /status/i });
     await user.click(select);
 
-    // Wait for dropdown to open and select an option
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
 
-    // Click on an option
     await user.click(screen.getByText('completed'));
 
-    // Check that the select now shows the selected option
     await waitFor(() => {
       expect(select).toHaveTextContent('completed');
     });
@@ -196,7 +184,6 @@ describe("Formhelper-Select", () => {
       </Formhelper>
     );
 
-    // Check that the select shows the placeholder text
     const select = screen.getByRole('combobox', { name: /status/i });
     expect(select).toHaveTextContent('Select a status');
   });
@@ -224,7 +211,6 @@ describe("Formhelper-Select", () => {
 
     const select = screen.getByRole('combobox', { name: /status/i });
     
-    // Test onChange by opening dropdown and selecting an option
     await user.click(select);
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
@@ -232,8 +218,7 @@ describe("Formhelper-Select", () => {
     await user.click(screen.getByText('cancelled'));
     expect(handleChange).toHaveBeenCalled();
 
-    // Test onBlur
-    await user.tab(); // This will blur the select
+    await user.tab();
     expect(handleBlur).toHaveBeenCalled();
   });
 
@@ -250,7 +235,6 @@ describe("Formhelper-Select", () => {
       </Formhelper>
     );
 
-    // Check that the error message is displayed
     expect(screen.getByText('This field is required')).toBeInTheDocument();
   });
 
@@ -267,11 +251,9 @@ describe("Formhelper-Select", () => {
       </Formhelper>
     );
 
-    // Click the info icon to open the popover
     const infoIcon = screen.getByTestId('HelpRoundedIcon');
     await user.click(infoIcon);
 
-    // Wait for the popover to open and check for info text
     await waitFor(() => {
       expect(screen.getByText('This is helpful information')).toBeInTheDocument();
     });

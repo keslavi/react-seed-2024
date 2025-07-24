@@ -1,17 +1,14 @@
 import React from 'react';
 import { FormProvider, useFormProvider } from './form-provider';
-import { TextMask } from './text-mask';
+import { TextMask, inputMask } from './text-mask';
 import { Button } from '@mui/material';
 
 export const TextMaskExample = () => {
   const methods = useFormProvider({
     defaultValues: {
       ssn: '',
-      phone: '',
-      creditCard: '',
-      zipCode: '',
-      customMask: '',
-      formattedValue: ''
+      ssn2: '',
+      licensePlate: ''
     }
   });
 
@@ -27,57 +24,33 @@ export const TextMaskExample = () => {
         <h2>TextMask Component Examples</h2>
         
         <div style={{ marginBottom: '20px' }}>
-          <h3>Predefined Masks</h3>
+          <h3>SSN Masks</h3>
           
           <TextMask
             name="ssn"
             label="Social Security Number"
-            mask="ssn"
+            mask={inputMask.ssn}
             info="Enter your 9-digit SSN"
             xs={6}
           />
           
           <TextMask
-            name="phone"
-            label="Phone Number"
-            mask="phone"
-            info="Enter your phone number"
-            xs={6}
-          />
-          
-          <TextMask
-            name="creditCard"
-            label="Credit Card Number"
-            mask="creditCard"
-            info="Enter your 16-digit credit card number"
-            xs={6}
-          />
-          
-          <TextMask
-            name="zipCode"
-            label="Zip Code"
-            mask="zipCodePlus4"
-            info="Enter your ZIP+4 code"
+            name="ssn2"
+            label="Social Security Number 2"
+            mask={inputMask.ssn}
+            info="Enter your 9-digit SSN"
             xs={6}
           />
         </div>
 
         <div style={{ marginBottom: '20px' }}>
-          <h3>Custom Masks</h3>
+          <h3>Alphabetic Mask Example</h3>
           
           <TextMask
-            name="customMask"
-            label="Custom Pattern (##-##-##)"
-            mask="##-##-##"
-            info="Custom 6-digit pattern with dashes"
-            xs={6}
-          />
-          
-          <TextMask
-            name="formattedValue"
-            label="Formatted Value (####-####)"
-            format="####-####"
-            info="This uses format instead of mask"
+            name="licensePlate"
+            label="License Plate"
+            mask={inputMask.licensePlate}
+            info="Enter license plate in format AAA-1234 (3 letters, dash, 4 numbers)"
             xs={6}
           />
         </div>
@@ -86,16 +59,7 @@ export const TextMaskExample = () => {
           <h3>Available Predefined Patterns</h3>
           <ul>
             <li><strong>ssn:</strong> ###-##-####</li>
-            <li><strong>phone:</strong> (###) ###-####</li>
-            <li><strong>phoneExt:</strong> (###) ###-#### x####</li>
-            <li><strong>creditCard:</strong> #### #### #### ####</li>
-            <li><strong>creditCardExpiry:</strong> ##/##</li>
-            <li><strong>zipCode:</strong> #####</li>
-            <li><strong>zipCodePlus4:</strong> #####-####</li>
-            <li><strong>date:</strong> ##/##/####</li>
-            <li><strong>time:</strong> ##:##</li>
-            <li><strong>currency:</strong> $#,###.##</li>
-            <li><strong>percentage:</strong> ##%</li>
+            <li><strong>licensePlate:</strong> AAA-####</li>
           </ul>
         </div>
 

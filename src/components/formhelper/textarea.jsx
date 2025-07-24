@@ -33,8 +33,7 @@ export const Textarea = memo((props) => {
         style={{width: "100%"}}
         id={field.name}
         name={field.name}
-        // minRows={3}
-        // maxRows={6}
+
         ref={field.ref}
         onBlur={onBlur}
         onChange={onChange}
@@ -49,5 +48,4 @@ export const Textarea = memo((props) => {
 
 });
 
-// Add display name for better debugging
 Textarea.displayName = 'Textarea';

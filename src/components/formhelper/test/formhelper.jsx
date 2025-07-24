@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { isEmpty } from "lodash";
-//import { toast } from "react-toastify";
-//import { useNavigate, /*NavLink,*/ useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-//import { Button } from "@mui/material";
 import { processChildren } from "./formhelper.utility";
-//import { store } from "store";
 
-//console.log group test: uncomment and view in console
-//import "helpers/extensions/console-extension.testmanual";
+
 
 //prettier-ignore
 import { 
   Input,
   Row,
-  Col, 
-  //TextareaDebug //actual textarea for easier testing
+  Col,
+  inputMask,
+  LabelMask,
 } from "components";
 
 //prettier-ignore
@@ -26,12 +22,7 @@ import {
 
 const option0 = {
   task: {
-    // names: [
-    //   "steve",
-    //   "cindy",
-    //   "riley",
-    //   "whatever",
-    // ],
+
     names: [
       {
         key: 1,
@@ -96,7 +87,7 @@ const item0 = {
   names: [1, 2],
   names2: [3, 4],
   body: "Body b",
-  //status: "3",
+
   result: 2,
   address: {
     line1: "ddd",
@@ -180,106 +171,82 @@ const chidrenDefault = () => {
         <Input 
           name="ssn" 
           label="SSN" 
-          mask="ssn"
+          mask={inputMask.ssn}
           info="Enter your 9-digit SSN in format XXX-XX-XXXX"
         />
         <Input 
-          name="tin" 
-          label="TIN" 
-          mask="ssn"
-          info="Enter your 9-digit TIN in format XXX-XX-XXXX"
+          name="ssn2" 
+          label="SSN2" 
+          mask={inputMask.ssn}
+          info="Enter your 9-digit SSN in format XXX-XX-XXXX"
         />
       </Row>
       <Row>
         <Input 
-          name="phone" 
-          label="Phone Number" 
-          mask="phone"
-          info="Enter your phone number in format (XXX) XXX-XXXX"
-        />
-        <Input 
-          name="phoneExt" 
-          label="Phone with Extension" 
-          mask="phoneExt"
-          info="Enter your phone number with extension"
+          name="ssnPartial" 
+          label="SSN (Partial Mask)" 
+          mask={inputMask.ssn}
+          showLast={4}
+          info="SSN with partial masking - shows last 4 digits when masked"
         />
       </Row>
       <Row>
         <Input 
-          name="creditCard" 
-          label="Credit Card Number" 
-          mask="creditCard"
-          info="Enter your 16-digit credit card number"
-        />
-        <Input 
-          name="creditCardExpiry" 
-          label="Credit Card Expiry" 
-          mask="creditCardExpiry"
-          info="Enter expiry date in MM/YY format"
+          name="licensePlate" 
+          label="License Plate" 
+          mask={inputMask.licensePlate}
+          info="Enter license plate in format AAA-1234 (3 letters, dash, 4 numbers)"
         />
       </Row>
-      <Row>
-        <Input 
-          name="zipCode" 
-          label="ZIP Code" 
-          mask="zipCode"
-          info="Enter 5-digit ZIP code"
-        />
-        <Input 
-          name="zipCodePlus4" 
-          label="ZIP+4 Code" 
-          mask="zipCodePlus4"
-          info="Enter ZIP+4 code in format XXXXX-XXXX"
-        />
-      </Row>
-      
 
       <Row>
-        <h3>Custom Pattern Examples</h3>
+        <h3>Label Mask Examples</h3>
       </Row>
       <Row>
-        <Input 
-          name="customPattern1" 
-          label="Custom: ##-##-####" 
-          mask="##-##-####"
-          info="Custom pattern: 2 digits, dash, 2 digits, dash, 4 digits"
-        />
-        <Input 
-          name="customPattern2" 
-          label="Custom: AAA-####" 
-          mask="AAA-####"
-          info="Custom pattern: 3 letters, dash, 4 digits"
-        />
+        <Col xs={6}>
+          <h4>SSN Label Mask (Children)</h4>
+          <LabelMask mask={inputMask.ssn}>123456789</LabelMask>
+        </Col>
+        <Col xs={6}>
+          <h4>SSN Label Mask (Text Prop)</h4>
+          <LabelMask mask={inputMask.ssn} text="123456789" />
+        </Col>
       </Row>
       <Row>
-        <Input 
-          name="customPattern3" 
-          label="Custom: +## (###) ###-####" 
-          mask="+## (###) ###-####"
-          info="Custom pattern: International phone with country code"
-        />
-        <Input 
-          name="customPattern4" 
-          label="Custom: PROD-####-AAA" 
-          mask="PROD-####-AAA"
-          info="Custom pattern: Product code format"
-        />
-      </Row>
-      
-
-      <Row>
-        <h3>Persistent (Always Visible) Examples</h3>
+        <Col xs={6}>
+          <h4>Phone Number Label Mask</h4>
+          <LabelMask mask={inputMask.phone}>5551234567</LabelMask>
+        </Col>
+        <Col xs={6}>
+          <h4>License Plate Label Mask</h4>
+          <LabelMask mask={inputMask.licensePlate}>ABC1234</LabelMask>
+        </Col>
       </Row>
       <Row>
-        <Input 
-          name="currency" 
-          label="Amount" 
-          mask="currency"
-          persistent
-          info="Enter amount with dollar sign and commas (always visible)"
-        />
+        <Col xs={6}>
+          <h4>Partial Mask (Last 4 digits)</h4>
+          <LabelMask mask={inputMask.ssn} showLast={4}>123456789</LabelMask>
+        </Col>
+        <Col xs={6}>
+          <h4>Persistent (Always Visible)</h4>
+          <LabelMask mask={inputMask.ssn} persistent>123456789</LabelMask>
+        </Col>
       </Row>
-      
+      <Row>
+        <Col xs={6}>
+          <h4>With Label Heading Variant (h1)</h4>
+          <LabelMask mask={inputMask.ssn} variant="h1">123456789</LabelMask>
+        </Col>
+        <Col xs={6}>
+          <h4>With Custom Style</h4>
+          <LabelMask 
+            mask={inputMask.ssn} 
+            style={{ color: 'blue', fontWeight: 'bold', fontSize: '18px' }}
+          >
+            123456789
+          </LabelMask>
+        </Col>
+      </Row>
 
       <Row>
         <h3>Password Input Examples</h3>
@@ -300,108 +267,13 @@ const chidrenDefault = () => {
       </Row>
       
 
-      <Row>
-        <h3>Guided Data Input Examples</h3>
-      </Row>
-      <Row>
-        <Input 
-          name="dateOfBirth" 
-          label="Date of Birth" 
-          mask="date"
-          info="Enter date in MM/DD/YYYY format"
-        />
-        <Input 
-          name="appointmentTime" 
-          label="Appointment Time" 
-          mask="time"
-          info="Enter time in HH:MM format (24-hour)"
-        />
-      </Row>
-      <Row>
-        <Input 
-          name="currency" 
-          label="Amount" 
-          mask="currency"
-          persistent
-          info="Enter amount with dollar sign and commas (always visible)"
-        />
-        <Input 
-          name="percentage" 
-          label="Percentage" 
-          mask="percentage"
-          info="Enter percentage value"
-        />
-      </Row>
-      <Row>
-        <Input 
-          name="customPattern" 
-          label="Custom Pattern (##-##-##)" 
-          mask="##-##-##"
-          info="Custom 6-digit pattern with dashes"
-        />
-        <Input 
-          name="formattedValue" 
-          label="Formatted Value (####-####)" 
-          format="####-####"
-          info="This uses format instead of mask"
-        />
-      </Row>
+
       
 
-      <Row>
-        <h3>Additional Examples</h3>
-      </Row>
-      <Row>
-        <Input 
-          name="licensePlate" 
-          label="License Plate" 
-          mask="AAA-####"
-          info="Enter license plate in format ABC-1234"
-        />
-        <Input 
-          name="productCode" 
-          label="Product Code" 
-          mask="##-AAA-####"
-          info="Enter product code in format 12-ABC-3456"
-        />
-      </Row>
+
       
 
-      <Row>
-        <h3>Partial Masking Examples (Show Last 4 Characters)</h3>
-      </Row>
-      <Row>
-        <Input 
-          name="creditCardPartial" 
-          label="Credit Card (Last 4)" 
-          mask="creditCard"
-          showLast={4}
-          info="Credit card showing only last 4 digits when masked"
-        />
-        <Input 
-          name="ssnPartial" 
-          label="SSN (Last 4)" 
-          mask="ssn"
-          showLast={4}
-          info="SSN showing only last 4 digits when masked"
-        />
-      </Row>
-      <Row>
-        <Input 
-          name="phonePartial" 
-          label="Phone (Last 4)" 
-          mask="phone"
-          showLast={4}
-          info="Phone showing only last 4 digits when masked"
-        />
-        <Input 
-          name="customPartial" 
-          label="Custom (Last 3)" 
-          mask="##-##-####"
-          showLast={3}
-          info="Custom pattern showing only last 3 characters when masked"
-        />
-      </Row> 
+ 
       
     </>
   );

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-//import { clone } from '@/helpers';
+
 
 export const cleanParentProps = (props) => {
   return useMemo(() => {
@@ -47,5 +47,5 @@ export const cleanParentProps = (props) => {
     }
 
     return ret;
-  }, [props]); // Only recalculate when props change
+  }, [props]);
 };

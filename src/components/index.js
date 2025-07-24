@@ -10,6 +10,7 @@ export * from './btn-continue-save/btn-continue-save';
 export * from './navbar/navbar';
 export * from './modal';
 export * from './label-heading';
+export * from './label-mask';
 export * from './info-popover'; 
 
 

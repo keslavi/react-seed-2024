@@ -25,7 +25,6 @@ export const Password = memo((props) => {
     props.onChange?.(e);
   }, [field, props]);
 
-  // Handle show/hide password toggle
   const handleClickShowPassword = useCallback(() => {
     setShowPassword(!showPassword);
   }, [showPassword]);
@@ -68,7 +67,6 @@ export const Password = memo((props) => {
   );
 });
 
-// Add display name for better debugging
 Password.displayName = 'Password';
 
 export default Password; 

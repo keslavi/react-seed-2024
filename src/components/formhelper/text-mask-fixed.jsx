@@ -6,11 +6,10 @@ import { useFormField } from "./form-provider";
 import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
 
-// Utility functions for masking and formatting
+
 const applyMask = (value, mask) => {
   if (!value || !mask) return value;
   
-  // Remove all non-alphanumeric characters from input
   const cleanValue = value.replace(/[^a-zA-Z0-9]/g, '');
   let result = '';
   let valueIndex = 0;
@@ -19,7 +18,6 @@ const applyMask = (value, mask) => {
     const maskChar = mask[i];
     
     if (maskChar === '#') {
-      // Only allow digits
       if (/\d/.test(cleanValue[valueIndex])) {
         result += cleanValue[valueIndex];
         valueIndex++;
@@ -27,7 +25,6 @@ const applyMask = (value, mask) => {
         break;
       }
     } else if (maskChar === 'A') {
-      // Only allow letters
       if (/[a-zA-Z]/.test(cleanValue[valueIndex])) {
         result += cleanValue[valueIndex];
         valueIndex++;
@@ -35,11 +32,9 @@ const applyMask = (value, mask) => {
         break;
       }
     } else if (maskChar === '*') {
-      // Allow any character
       result += cleanValue[valueIndex];
       valueIndex++;
     } else {
-      // Static character from mask
       result += maskChar;
     }
   }
@@ -50,7 +45,6 @@ const applyMask = (value, mask) => {
 const applyFormat = (value, format) => {
   if (!value || !format) return value;
   
-  // Remove all non-alphanumeric characters from input
   const cleanValue = value.replace(/[^a-zA-Z0-9]/g, '');
   let result = '';
   let valueIndex = 0;
@@ -75,27 +69,24 @@ const applyFormat = (value, format) => {
 const removeMask = (value, mask) => {
   if (!value || !mask) return value;
   
-  // For removal, we just extract alphanumeric characters
   return value.replace(/[^a-zA-Z0-9]/g, '');
 };
 
-// Predefined mask patterns
-export const inputMask = {
-  ssn: '###-##-####',
-  phone: '(###) ###-####',
-  phoneExt: '(###) ###-#### x####',
+const MASK_PATTERNS = {
   creditCard: '#### #### #### ####',
   creditCardExpiry: '##/##',
+  currency: '$#,###.##',
+  date: '##/##/####',
+  licensePlate: 'AAA-####',
+  percentage: '##%',
+  phone: '(###) ###-####',
+  phoneExt: '(###) ###-#### x####',
+  ssn: '###-##-####',
+  time: '##:##',
   zipCode: '#####',
   zipCodePlus4: '#####-####',
-  date: '##/##/####',
-  time: '##:##',
-  currency: '$#,###.##',
-  percentage: '##%',
-  licensePlate: 'AAA-####'
 };
 
-// Function to create partial mask showing only last N characters
 const createPartialMask = (value, maskPattern, showLast = 4) => {
   if (!value || !maskPattern) return value;
   
@@ -110,10 +101,9 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
   const actualChars = value.replace(/[^a-zA-Z0-9]/g, '');
   
   if (actualChars.length <= showLast) {
-    return formattedValue; // If actual characters are fewer than showLast, show all
+    return formattedValue;
   }
   
-  // Create a mask pattern that shows asterisks for all but the last N characters
   let result = '';
   let actualCharIndex = 0;
   let lastChars = actualChars.slice(-showLast);
@@ -123,18 +113,14 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
     const maskChar = maskPattern[i];
     
     if (maskChar === '#' || maskChar === 'A' || maskChar === '*') {
-      // This is a character position
       if (actualCharIndex < actualChars.length - showLast) {
-        // Mask this character
         result += '*';
       } else {
-        // Show the actual character from the last N characters
         result += lastChars[lastCharIndex] || '*';
         lastCharIndex++;
       }
       actualCharIndex++;
     } else {
-      // Static character from mask
       result += maskChar;
     }
   }
@@ -143,6 +129,7 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
 };
 
 export const TextMask = memo((props) => {
+  const [showValue, setShowValue] = useState(false);
   const timeoutRef = useRef(null);
   
   const { 
@@ -150,42 +137,29 @@ export const TextMask = memo((props) => {
     errorMui, 
     valueProp,
   } = useFormField(props);
-
-  const [showValue, setShowValue] = useState(
-    !(valueProp && valueProp.value && String(valueProp.value).trim() !== '')
-  );
-
   
-  // Check if masking should be disabled (always show unmasked value)
   const isPersistent = props.persistent || props.alwaysVisible;
 
-  // Get mask pattern from props or predefined patterns
   const maskPattern = useMemo(() => {
     if (props.mask) {
-      // First check if it's a predefined pattern
-      if (inputMask[props.mask]) {
-        return inputMask[props.mask];
+      if (MASK_PATTERNS[props.mask]) {
+        return MASK_PATTERNS[props.mask];
       }
-      // If not found in predefined patterns, treat as custom string pattern
       return props.mask;
     }
     return null;
   }, [props.mask]);
 
-  // Get format pattern
   const formatPattern = useMemo(() => {
     if (props.format) {
-      // First check if it's a predefined pattern
-      if (inputMask[props.format]) {
-        return inputMask[props.format];
+      if (MASK_PATTERNS[props.format]) {
+        return MASK_PATTERNS[props.format];
       }
-      // If not found in predefined patterns, treat as custom string pattern
       return props.format;
     }
     return null;
   }, [props.format]);
 
-  // Apply mask/format to display value
   const displayValue = useMemo(() => {
     const rawValue = field.value || '';
     
@@ -210,18 +184,14 @@ export const TextMask = memo((props) => {
     if (formatPattern) {
       const formattedValue = applyFormat(rawValue, formatPattern);
       
-      // If persistent or value is visible, show formatted value
       if (isPersistent || showValue || !rawValue) {
         return formattedValue;
       }
       
-      // If value is hidden, check if partial masking is requested for format patterns
       if (props.showLast && typeof props.showLast === 'number' && props.showLast > 0) {
-        // Show partial mask with last N characters
         return createPartialMask(rawValue, formatPattern, props.showLast);
       }
       
-      // If value is hidden and no partial masking, show asterisks instead
       return formatPattern.replace(/[#A*]/g, '*');
     }
     
@@ -234,14 +204,16 @@ export const TextMask = memo((props) => {
   }, [field, props]);
 
   const onChange = useCallback((e) => {
+    if (!isPersistent && !showValue && field.value) {
+      return;
+    }
+    
     let newValue = e.target.value;
     
-    // If using mask, remove mask characters for storage
     if (maskPattern) {
       newValue = removeMask(newValue, maskPattern);
     }
     
-    // If using format, clean the value
     if (formatPattern) {
       newValue = newValue.replace(/[^a-zA-Z0-9]/g, '');
     }
@@ -249,7 +221,6 @@ export const TextMask = memo((props) => {
     field.onChange(newValue);
     props.onChange?.(e);
     
-    // Reset the auto-mask timer when user types (only if not persistent)
     if (showValue && !isPersistent) {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -260,14 +231,28 @@ export const TextMask = memo((props) => {
     }
   }, [field, props, maskPattern, formatPattern, showValue, isPersistent]);
 
-  // Handle show/hide toggle (only if not persistent)
+  const onKeyDown = useCallback((e) => {
+    if (!isPersistent && !showValue && field.value) {
+      const allowedKeys = [
+        'Tab', 'Escape', 'Enter', 'ArrowUp', 'ArrowDown', 
+        'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown'
+      ];
+      
+      if (!allowedKeys.includes(e.key)) {
+        e.preventDefault();
+        return;
+      }
+    }
+    
+    props.onKeyDown?.(e);
+  }, [isPersistent, showValue, field.value, props]);
+
   const handleClickShowValue = useCallback(() => {
-    if (isPersistent) return; // No toggle for persistent fields
+    if (isPersistent) return;
     
     const newShowValue = !showValue;
     setShowValue(newShowValue);
     
-    // Set up auto-mask timer when showing value
     if (newShowValue) {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -276,7 +261,6 @@ export const TextMask = memo((props) => {
         setShowValue(false);
       }, 30000); // 30 seconds
     } else {
-      // Clear timer when manually hiding
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
@@ -288,27 +272,6 @@ export const TextMask = memo((props) => {
     event.preventDefault();
   }, []);
 
-  // Prevent keyboard input when field is masked
-  const handleKeyDown = useCallback((event) => {
-    const hasValue = field.value && String(field.value).trim() !== '';
-    const isMasked = hasValue && !showValue && !isPersistent;
-    
-    if (isMasked) {
-      // Allow only specific keys: Tab, Escape, Enter, Arrow keys, Home, End, Page Up, Page Down
-      const allowedKeys = [
-        'Tab', 'Escape', 'Enter', 
-        'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
-        'Home', 'End', 'PageUp', 'PageDown'
-      ];
-      
-      if (!allowedKeys.includes(event.key)) {
-        event.preventDefault();
-        return;
-      }
-    }
-  }, [field.value, showValue, isPersistent]);
-
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -327,7 +290,7 @@ export const TextMask = memo((props) => {
         inputRef={field.ref}
         onBlur={onBlur}
         onChange={onChange}
-        onKeyDown={handleKeyDown}
+        onKeyDown={onKeyDown}
         value={displayValue}
         {...cleanParentProps(props)}
         {...errorMui}
@@ -351,7 +314,6 @@ export const TextMask = memo((props) => {
   );
 });
 
-// Add display name for better debugging
 TextMask.displayName = 'TextMask';
 
 export default TextMask; 

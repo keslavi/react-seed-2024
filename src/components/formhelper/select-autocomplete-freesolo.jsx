@@ -20,9 +20,7 @@ export const SelectAutocompleteFreesolo = (props) => {
 
   const { field, error } = useFormField(props);
 
-  // Memoize error props to prevent object recreation
   const errorProps = useMemo(() => {
-    // Form field error takes precedence over directly passed error prop
     const hasFormError = !!error;
     const directError = props.error;
     
@@ -40,24 +38,19 @@ export const SelectAutocompleteFreesolo = (props) => {
         options={options}
         freeSolo={true}
         getOptionLabel={(option) => {
-          // Handle both string and object options
           if (typeof option === 'string') {
             return option;
           }
           return option.text || option.songname || "";
         }}
         onChange={(event, newValue) => {
-          // Handle both selected option and free text input
           if (typeof newValue === 'string') {
-            // Free text input
             field.onChange(newValue);
             onChange(event, { songname: newValue, isCustom: true });
           } else if (newValue && newValue.key) {
-            // Selected from dropdown
             field.onChange(newValue.songname);
             onChange(event, newValue);
           } else {
-            // No value
             field.onChange('');
             onChange(event, null);
           }

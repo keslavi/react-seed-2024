@@ -13,7 +13,6 @@ export const Datepicker = memo((props) => {
     valueProp,
   } = useFormField(props);
 
-  // Memoize attributes to prevent object recreation on every render
   const attributes = useMemo(() => {
     const attrs = { inputProps: {} };
     if (!isEmpty(props.min)){
@@ -51,5 +50,4 @@ export const Datepicker = memo((props) => {
 
 });
 
-// Add display name for better debugging
 Datepicker.displayName = 'Datepicker';

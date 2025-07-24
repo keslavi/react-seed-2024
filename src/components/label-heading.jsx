@@ -20,29 +20,31 @@ export const labelHeadingVariant = {
  */
 export const LabelHeading = ({ props }) => {
   const id = new Date().getTime().toString();
-  const variant = "labelHeadingRoot labelHeading" + (props.variant || "").toUpper();
+  const variant = "labelHeadingRoot labelHeading" + (props.variant || "").toUpperCase();
   const color = props.headingColor;
 
   return (
     <>
-      <span className={variant}>
+      <span 
+        className={variant}
         style={{
           display: "inline-flex",
           alignItems: "center",
-          color: color || "black"
+          color: color || "black",
+          gap: "8px"
         }}
-        gap: "8px"
+      >
+        {props.children}
+        {props.info && <InfoPopover info={props.info} id={id} />}
+        {props.infoquestion && <span
+          style={{ position: "relative", left: '4%' }}>
+          <Info
+            id={`${id}Info`}
+            info={props.infoquestion}
+          />
+        </span>
+        }
       </span>
-      {props.children}
-      {props.info && <InfoPopover info={props.info} id={id} />}
-      {props.infoquestion && <span
-        style={{ position: "relative", left: '4%', padding }}>
-        <Info
-          id={`${id}Info`}
-          info={props.infoquestion}
-        />
-      </span>
-      }
     </>
   )
 }
