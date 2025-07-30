@@ -19,7 +19,7 @@ import { Col } from "@/components";
  * - select options={} select
  * - optionsMulti={} multi-select
  * - allowFreeText options={} autocomplete that allows free text
- *  * - xs={4} number of columns (optional, default 4)
+ *  * - size={4} number of columns (optional, default 4)
  *  @param control required for react-hook-form
  *  @param name required
  *  @param value default filled from form defaultValues
@@ -29,7 +29,7 @@ import { Col } from "@/components";
  *  @param checkbox
  *  @param onValueChange callback function
  *  @param datepicker
- *  @param xs={4} number of columns (optional, default 4)
+ *  @param size={4} number of columns (optional, default 4)
  *  @returns {wrapped Form Input}
  */
 export const Input = (props) => {
@@ -48,7 +48,7 @@ export const Input = (props) => {
     value,
   } = props;
 
-  const xs = props.xs || 4;
+  const size = props.size || 4;
 
   const childProps = cleanParentProps(props);
 
@@ -67,7 +67,7 @@ export const Input = (props) => {
 
   return (
     <>
-      <Col xs={xs || 4}>
+      <Col size={size || 4}>
         <Controller
           name={name}
           defaultValue={value}

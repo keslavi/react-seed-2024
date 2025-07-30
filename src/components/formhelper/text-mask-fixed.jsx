@@ -1,6 +1,7 @@
 import { memo, useCallback, useMemo, useState, useEffect, useRef } from "react";
 import { TextField as MuiTextField, IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import IconVisibility from "@mui/icons-material/Visibility";
+import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
 import { Info } from "./info";
@@ -247,7 +248,7 @@ export const TextMask = memo((props) => {
     props.onKeyDown?.(e);
   }, [isPersistent, showValue, field.value, props]);
 
-  const handleClickShowValue = useCallback(() => {
+  const onClickShowValue = useCallback(() => {
     if (isPersistent) return;
     
     const newShowValue = !showValue;
@@ -268,7 +269,7 @@ export const TextMask = memo((props) => {
     }
   }, [showValue, isPersistent]);
 
-  const handleMouseDownShowValue = useCallback((event) => {
+  const onMouseDownShowValue = useCallback((event) => {
     event.preventDefault();
   }, []);
 
@@ -299,11 +300,11 @@ export const TextMask = memo((props) => {
             <InputAdornment position="end">
               <IconButton
                 aria-label="toggle value visibility"
-                onClick={handleClickShowValue}
-                onMouseDown={handleMouseDownShowValue}
+                onClick={onClickShowValue}
+                onMouseDown={onMouseDownShowValue}
                 edge="end"
               >
-                {showValue ? <VisibilityOff /> : <Visibility />}
+                {showValue ? <IconVisibilityOff /> : <IconVisibility />}
               </IconButton>
             </InputAdornment>
           ) : undefined,

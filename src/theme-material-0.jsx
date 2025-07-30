@@ -4,7 +4,7 @@ import { CssBaseline } from "@mui/material";
 
 import { AccordionSummary } from "@mui/material";
 import { bgcolor, fontSize, fontWeight, styled } from "@mui/system";
-import { Padding } from "@mui/icons-material";
+import IconPadding from "@mui/icons-material/Padding";
 
 /************************************ 
 
@@ -123,7 +123,7 @@ export const theme = createTheme({
         },
       },
     },
-    MuiGrid2:{
+    MuiGrid:{
       styleOverrides:{
         root:{
           boxShadow:"none",

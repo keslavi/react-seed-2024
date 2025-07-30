@@ -1,16 +1,14 @@
-import { 
-  createContext, 
-  useContext, 
-  useMemo, 
-  useEffect, 
-  useRef 
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useEffect,
+  useRef
 } from "react";
 import { useForm, useController as useRealController } from "react-hook-form";
 import { errorNotification } from "@/helpers/form-validation/errorNotification";
-import {isTruthy} from "@/helpers";
 
-//???wsc UNCOMMENT THIS when moving to company
-//import store from "@/store";
+import { store } from "store";
 
 const FormContext = createContext();
 
@@ -31,21 +29,21 @@ export const useFormProvider = (options = {}) => {
       // All other useForm() options
       ...options,
     });
-    
+
     // Register the form methods with a unique ID
     const formId = useRef(Math.random().toString(36).substr(2, 9)).current;
     formMethodsRegistry.set(formId, formMethods);
-    
+
     // Add cleanup function to remove from registry when component unmounts
     useEffect(() => {
       return () => {
         formMethodsRegistry.delete(formId);
       };
     }, [formId]);
-    
+
     // Add the formId to the formMethods for later retrieval
     formMethods._formId = formId;
-    
+
     return formMethods;
   } catch (error) {
     console.error('Error in useFormProvider:', error);
@@ -53,13 +51,13 @@ export const useFormProvider = (options = {}) => {
   }
 };
 
-export const FormProvider = ({ 
-  children, 
-  onSubmit, 
-  formProps = {}, 
+export const FormProvider = ({
+  children,
+  onSubmit,
+  formProps = {},
   formOptions = {},
   formMethods: externalFormMethods,
-  ...rest 
+  ...rest
 }) => {
   // Use external form methods if provided, otherwise create new ones
   const frmMethods = externalFormMethods || useForm({
@@ -67,15 +65,11 @@ export const FormProvider = ({
     resolver: formOptions.resolver,
     ...formOptions,
   });
+  const errorsClear = store.use.errorsClear();
+  const errorsList = store.use.errorsList();
 
   const { control, formState, reset, register, handleSubmit, watch, setValue, getValues } = frmMethods;
   const errors = formState?.errors || {};
-
-  /*
-  //???wsc UNCOMMENT THIS when moving to company
-  const clearPageErrorMessage = store.use.clearPageErrorMessage();
-  const pageErrorMessage = store.use.pageErrorMessage();
-  */
 
   // Handle error notifications automatically
   useEffect(() => {
@@ -83,12 +77,12 @@ export const FormProvider = ({
       errorNotification(errors);
     }
 
-    //???wsc UNCOMMENT THIS when moving to company
-    return()=>{
-      // if(pageErrorMessage){
-      //   clearPageErrorMessage();
-      // }
-    }
+    //for pages without BtnContinueSave
+    return () => {
+      if (!isEmpty(errorsList)) {
+        errorsClear();
+      };
+    };
   }, [errors]);
 
   // Memoized context value
@@ -118,14 +112,14 @@ export const FormProvider = ({
 
 export const useController = (props) => {
   const ctx = useContext(FormContext);
-  
+
   // If no context is available, throw a helpful error
   if (!ctx && !props?.control) {
     //throw new Error("useController must be used within a FormProvider");
     console.trace("Function called from:");
-    //let i=1;
+    let i = 1;
   }
-  
+
   const control = props.control || ctx.control;
   const errors = props.errors || ctx.errors;
 
@@ -158,38 +152,34 @@ export const useFormContext = () => {
 
 // Common hook for all input controls to handle both patterns
 export const useFormField = (props) => {
-  let field, 
-  error,
-  errorMui={},
-  valueProp={};
+  let field,
+    error,
+    errorMui = {},
+    valueProp = {};
 
   try {
     if (props.control) {
-      // Direct props pattern (task-old.jsx style)
+      // using the older <Input name="whatever" {...attributes}/> pattern
       const result = useRealController({ control: props.control, name: props.name });
       field = result.field;
 
-      if (!props.error){
+      if (!props.error) {
         error = result.fieldState.error;
-      } else{
-        if (isTruthy(props.error) || !isEmpty(props.error)){
-          error = {
-            message: props.error.messaage || props.helperText || `${props.name}: custom error with no helperText or {message}`
-          };
-        }
+      } else {
+        error = {
+          message: props.error.message || props.helperText || `${props.name}: custom error with no helperText or {message}`
+        };
       }
     } else {
       // newer pattern with <FormProvider> and useFormProvider
       const result = useController(props);
       field = result.field;
-      if (!props.error){
+      if (!props.error) {
         error = result.fieldState.error;
-      } else{
-        if (isTruthy(props.error) || !isEmpty(props.error)){
-          error = {
-            message: props.error.messaage || props.helperText || `${props.name}: custom error with no helperText or {message}`
-          };
-        }
+      } else {
+        error = {
+          message: props.error.message || props.helperText || `${props.name}: custom error with no helperText or {message}`
+        };
       }
     }
   } catch (err) {
@@ -197,18 +187,24 @@ export const useFormField = (props) => {
     const result = useController(props);
     field = result.field;
     error = result.fieldState.error;
-    console.warn(`${props.name} - error in useFormField:`,err);
+    console.warn(`${props.name} - Error in useFormField:`, err);
   }
-  if (!!error){
-    errorMui.error=true;
-    errorMui.helperText=error?.message || props.helperText || `${props.name}: custom error with no helperText or {message}` ;
+  if (!!error) {
+    errorMui.error = true;
+    errorMui.helperText = error?.message || props.helperText || "?no error message?";
   }
 
-  if (!props.defaultValue && !isTruthy(props.unbound)){
-    valueProp = {
-      value: field.value || props.value || "",
-    };
+  // handle unbound field values
+  if (!props.defaultvalue) {
+    if (!isTruthy(props.unbound)) {
+      valueProp = {
+        value: field.value || props.value || "",
+      };
+    }
   }
-    
-  return { field, error,errorMui,valueProp };
+
+  return { field, error, errorMui, valueProp };
 };
+
+
+

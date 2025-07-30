@@ -23,7 +23,7 @@ import { Password } from "./password";
  *  - select options={} select
  *  - optionsMulti={} multi-select
  *  - allowFreeText options=[] autocomplete that allows free text
- *  * - xs={4} number of columns (optionsl, default 4)
+ *  * - size={4} number of columns (optional, default 4)
  *  @param control required for react-hook-form
  *  @param name required
  *  @param value normally not needed, react-hook-form will fill this
@@ -34,7 +34,7 @@ import { Password } from "./password";
  *  @param datepicker returns date control
  *  @param checkbox returns checkbox control
  *  @param textarea returns textarea
- *  @param xs={4} number of columns (optional, default 4)
+ *  @param size={4} number of columns (optional, default 4)
  *  @returns {wrapped Form Input inside Col}
  */
 
@@ -46,7 +46,7 @@ export const Input = (props) => {
     options,
     optionsMulti,
     optionsRadio,
-    optionscheckbox,
+    optionsCheckbox,
     password,
     select,
     textarea,
@@ -66,7 +66,7 @@ export const Input = (props) => {
     ? SelectMulti
     : !isEmpty(optionsRadio)
     ? Radio 
-    : optionscheckbox
+    : !isEmpty(optionsCheckbox)
     ? SelectCheckbox
     : textarea
     ? Textarea

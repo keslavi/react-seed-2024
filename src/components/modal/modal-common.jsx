@@ -1,6 +1,5 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { WidthFull } from "@mui/icons-material";
 import { head, rest } from "lodash";
 
 export const ModalCommon = ({

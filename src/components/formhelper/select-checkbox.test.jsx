@@ -1,7 +1,7 @@
-import { Formhelper } from "./test/formhelper";
-import { SelectCheckbox } from "./select-checkbox";
+import { TestHarness } from "./test/testHarness";
+import { Input } from "components";
 
-describe("Formhelper-SelectCheckbox", () => {
+describe("SelectCheckbox", () => {
   let user;
 
   beforeEach(() => {
@@ -37,55 +37,54 @@ describe("Formhelper-SelectCheckbox", () => {
   it("loads with initial values", async () => {
     const data = testData();
     render(
-      <Formhelper
-        item={data.item}
-        option={data.options}
-      >
-        <SelectCheckbox
+      <TestHarness item={data.item}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={data.options.task.categories}
+          optionsCheckbox={data.options.task.categories}
           data-testid="categories-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
-    expect(screen.getByText(/formhelper tester/i)).toBeVisible();
     
-    expect(screen.getByText(/in progress/i)).toBeVisible();
+    // Wait for the component to fully render and initialize
+    await waitFor(() => {
+      expect(screen.getByText(/in progress/i)).toBeVisible();
+    });
   });
 
   it("renders with no options and does not crash", () => {
     render(
-      <Formhelper item={{}} option={{}}>
-        <SelectCheckbox
+      <TestHarness item={{}}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={[]}
+          optionsCheckbox={[]}
           data-testid="categories-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
     const input = screen.getByTestId('categories-select').querySelector('input');
     expect(input).toBeVisible();
     //expect(input).toHaveAttribute('placeholder', 'Please Select');
   });
+
   it("renders with a single option and allows selection", async () => {
     const singleOption = [{ key: 99, text: "only option" }];
     render(
-      <Formhelper item={{}} option={{singleOption}}>
-        <SelectCheckbox
+      <TestHarness item={{}}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={singleOption}
+          optionsCheckbox={singleOption}
           data-testid="categories-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
     const input = screen.getByTestId('categories-select').querySelector('input');
     
-    // Click the dropdown arrow button to open the dropdown
-    const dropdownButton = screen.getByRole('button', { name: /open/i });
-    await user.click(dropdownButton);
+    // Click the input to open the dropdown (MUI v7 Autocomplete behavior)
+    await user.click(input);
 
     // Add a 2-second delay for debugging
     // await new Promise(resolve => setTimeout(resolve, 2000));
@@ -119,24 +118,24 @@ describe("Formhelper-SelectCheckbox", () => {
   it("does not allow duplicate selection", async () => {
     const data = testData();
     render(
-      <Formhelper item={{}} option={data.options}>
-        <SelectCheckbox
+      <TestHarness item={{}}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={data.options.task.categories}
+          optionsCheckbox={data.options.task.categories}
           data-testid="categories-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
     const input = screen.getByTestId('categories-select').querySelector('input');
     
-    // Click the dropdown arrow button to open the dropdown
-    const dropdownButton = screen.getByRole('button', { name: /open/i });
-    await user.click(dropdownButton);
+    // Click the input to open the dropdown (MUI v7 Autocomplete behavior)
+    await user.click(input);
     
-    // Wait for the dropdown to open
+    // Wait for the dropdown to open (MUI v7 might not set aria-expanded immediately)
     await waitFor(() => {
-      expect(input).toHaveAttribute('aria-expanded', 'true');
+      const options = screen.getAllByRole('option');
+      expect(options.length).toBeGreaterThan(0);
     });
     
     await waitFor(() => {
@@ -155,31 +154,26 @@ describe("Formhelper-SelectCheckbox", () => {
 
   it("calls onChange and onBlur props if provided", async () => {
     const data = testData();
-    const handleChange = vi.fn();
-    const handleBlur = vi.fn();
+    const onChange = vi.fn();
+    const onBlur = vi.fn();
     render(
-      <Formhelper item={{}} option={data.options}>
-        <SelectCheckbox
+      <TestHarness item={{}}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={data.options.task.categories}
+          optionsCheckbox={data.options.task.categories}
           data-testid="categories-select"
-          onChange={handleChange}
-          onBlur={handleBlur}
+          onChange={onChange}
+          onBlur={onBlur}
         />
-      </Formhelper>
+      </TestHarness>
     );
     const input = screen.getByTestId('categories-select').querySelector('input');
     
-    // Click the dropdown arrow button to open the dropdown
-    const dropdownButton = screen.getByRole('button', { name: /open/i });
-    await user.click(dropdownButton);
+    // Click the input to open the dropdown (MUI v7 Autocomplete behavior)
+    await user.click(input);
     
-    // Wait for the dropdown to open
-    await waitFor(() => {
-      expect(input).toHaveAttribute('aria-expanded', 'true');
-    });
-    
+    // Wait for the dropdown to open (MUI v7 might not set aria-expanded immediately)
     await waitFor(() => {
       const options = screen.getAllByRole('option');
       expect(options.length).toBeGreaterThan(0);
@@ -187,24 +181,24 @@ describe("Formhelper-SelectCheckbox", () => {
     
     const options = screen.getAllByRole('option');
     await user.click(options[0]);
-    expect(handleChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalled();
     await user.tab(); // This will blur the input
-    expect(handleBlur).toHaveBeenCalled();
+    expect(onBlur).toHaveBeenCalled();
   });
 
   it("renders info and error together", async () => {
     const data = testData();
     render(
-      <Formhelper item={{}} option={data.options}>
-        <SelectCheckbox
+      <TestHarness item={{}}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={data.options.task.categories}
+          optionsCheckbox={data.options.task.categories}
           data-testid="categories-select"
           info="Some info"
           error={{ message: "Some error" }}
         />
-      </Formhelper>
+      </TestHarness>
     );
     
     // Click the info icon to open the popover
@@ -223,33 +217,38 @@ describe("Formhelper-SelectCheckbox", () => {
   it("allows developer to override error with custom error prop", () => {
     const data = testData();
     render(
-      <Formhelper item={{}} option={data.options}>
-        <SelectCheckbox
+      <TestHarness item={{}}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={data.options.task.categories}
+          optionsCheckbox={data.options.task.categories}
           data-testid="categories-select"
           error={{ message: "Custom error message" }}
         />
-      </Formhelper>
+      </TestHarness>
     );
     
-    // Check that the custom error message is displayed
+    // Check that the custom error message is displayed as helper text
+    // Material-UI renders helper text in a p element with role="alert"
     expect(screen.getByText('Custom error message')).toBeInTheDocument();
+    
+    // Alternative: Check if it's rendered as helper text
+    const helperText = screen.getByText('Custom error message');
+    expect(helperText).toBeVisible();
   });
 
   it("renders with unbound prop", () => {
     const data = testData();
     render(
-      <Formhelper item={{}} option={data.options}>
-        <SelectCheckbox
+      <TestHarness item={{}}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={data.options.task.categories}
+          optionsCheckbox={data.options.task.categories}
           data-testid="categories-select"
           unbound="true"
         />
-      </Formhelper>
+      </TestHarness>
     );
     const input = screen.getByTestId('categories-select').querySelector('input');
     expect(input).toBeVisible();
@@ -258,15 +257,15 @@ describe("Formhelper-SelectCheckbox", () => {
   it("renders with defaultvalue prop", () => {
     const data = testData();
     render(
-      <Formhelper item={{}} option={data.options}>
-        <SelectCheckbox
+      <TestHarness item={{}}>
+        <Input
           name="categories"
           label="Categories"
-          optionscheckbox={data.options.task.categories}
+          optionsCheckbox={data.options.task.categories}
           data-testid="categories-select"
           defaultvalue={[2]}
         />
-      </Formhelper>
+      </TestHarness>
     );
     const input = screen.getByTestId('categories-select').querySelector('input');
     // The defaultvalue is not used in the component, but test that it doesn't crash

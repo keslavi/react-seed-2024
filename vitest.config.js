@@ -20,7 +20,7 @@ export default mergeConfig(baseConfig, {
     fileParallelism: true, // default: true
     poolOptions: {
       threads: {
-        maxThreads: 8 // Adjust based on your CPU cores
+        maxThreads: 2 // Reduced to avoid file handle issues
       },
     },
     onConsoleLog: (log, type) => {

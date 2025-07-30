@@ -1,5 +1,4 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
 import { LabelMask } from './label-mask';
 import { inputMask } from 'components';
 
@@ -13,6 +12,12 @@ const TestWrapper = ({ children }) => {
 };
 
 describe('LabelMask Component', () => {
+  let user;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   test('renders with SSN mask using children', () => {
     render(
       <TestWrapper>
@@ -46,7 +51,7 @@ describe('LabelMask Component', () => {
     expect(toggleButton).toBeInTheDocument();
   });
 
-  test('toggles visibility when clicked', () => {
+  test('toggles visibility when clicked', async () => {
     render(
       <TestWrapper>
         <LabelMask mask={inputMask.ssn}>123456789</LabelMask>
@@ -59,11 +64,11 @@ describe('LabelMask Component', () => {
     expect(screen.getByText('***-**-****')).toBeInTheDocument();
     
     // Click to show
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
     expect(screen.getByText('123-45-6789')).toBeInTheDocument();
     
     // Click to hide again
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
     expect(screen.getByText('***-**-****')).toBeInTheDocument();
   });
 
@@ -92,7 +97,7 @@ describe('LabelMask Component', () => {
     expect(screen.queryByLabelText('toggle value visibility')).not.toBeInTheDocument();
   });
 
-  test('handles phone number mask', () => {
+  test('handles phone number mask', async () => {
     render(
       <TestWrapper>
         <LabelMask mask={inputMask.phone}>5551234567</LabelMask>
@@ -103,13 +108,13 @@ describe('LabelMask Component', () => {
     expect(screen.getByText('(***) ***-****')).toBeInTheDocument();
     
     const toggleButton = screen.getByLabelText('toggle value visibility');
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
     
     // Should show formatted phone number
     expect(screen.getByText('(555) 123-4567')).toBeInTheDocument();
   });
 
-  test('handles license plate mask', () => {
+  test('handles license plate mask', async () => {
     render(
       <TestWrapper>
         <LabelMask mask={inputMask.licensePlate}>ABC1234</LabelMask>
@@ -120,7 +125,7 @@ describe('LabelMask Component', () => {
     expect(screen.getByText('***-****')).toBeInTheDocument();
     
     const toggleButton = screen.getByLabelText('toggle value visibility');
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
     
     // Should show formatted license plate
     expect(screen.getByText('ABC-1234')).toBeInTheDocument();

@@ -8,7 +8,8 @@ import {
 } from "@mui/material";
 
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
-import { Clear, Help/*HelpOutline*/ as IconMui } from '@mui/icons-material';
+import IconClear from '@mui/icons-material/Clear';
+import IconHelp from '@mui/icons-material/Help';
 import { color } from "@/theme-material";
 
 export const Info = ({ id, info }) => {
@@ -52,6 +53,7 @@ export const Info = ({ id, info }) => {
         }}
       >
         <HelpRoundedIcon
+          data-testid="HelpRoundedIcon"
           sx={{ 
             fontSize: '1.2rem'
           }}
@@ -110,7 +112,7 @@ export const InfoIcon = (props) => {
 
   const ret = (
     <>
-      <IconMui
+              <IconHelp
         color="primary"
         fontSize="small"
         onClick={onTogglePopover}
@@ -139,7 +141,7 @@ export const InfoIcon = (props) => {
         slotProps={{ style: { width: "400px" } }}
       >
         <IconButton edge="start" aria-label="close" onClick={onClosePopover} style={{ position: 'absolute', top: '5px', right: '5px' }}>
-          <Clear fontSize='small' className="clear-icon" />
+          <IconClear fontSize='small' className="clear-icon" />
         </IconButton>
         {infoHeader && (
           <Typography variant="h5" gutterBottom>

@@ -1,6 +1,7 @@
 import { memo, useCallback, useState } from "react";
 import { TextField as MuiTextField, IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import IconVisibility from "@mui/icons-material/Visibility";
+import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
 import { Info } from "./info";
@@ -25,11 +26,11 @@ export const Password = memo((props) => {
     props.onChange?.(e);
   }, [field, props]);
 
-  const handleClickShowPassword = useCallback(() => {
+  const onClickShowPassword = useCallback(() => {
     setShowPassword(!showPassword);
   }, [showPassword]);
 
-  const handleMouseDownPassword = useCallback((event) => {
+  const onMouseDownPassword = useCallback((event) => {
     event.preventDefault();
   }, []);
 
@@ -47,16 +48,16 @@ export const Password = memo((props) => {
         {...cleanParentProps(props)}
         {...valueProp}
         {...errorMui}
-        InputProps={{
+        slots={{
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
                 aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
+                onClick={onClickShowPassword}
+                onMouseDown={onMouseDownPassword}
                 edge="end"
               >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
+                {showPassword ? <IconVisibilityOff /> : <IconVisibility />}
               </IconButton>
             </InputAdornment>
           ),

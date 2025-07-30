@@ -1,4 +1,4 @@
-import { Grid2 as Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { Item, ItemNoPadding } from "./item";
 import { memo, useMemo } from 'react';
 

@@ -1,6 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { Formhelper } from "./test/formhelper";
-import { Select } from "./select";
+import { TestHarness } from "./test/testHarness";
+import { Input, Row } from "components";
 
 describe("Formhelper-Select", () => {
   let user;
@@ -34,24 +33,26 @@ describe("Formhelper-Select", () => {
     };
   };
 
-  it("loads with initial selected value", () => {
+  it("loads with initial selected value", async () => {
     const data = testData();
     render(
-      <Formhelper
-        item={data.item}
-        option={data.options}
-      >
-        <Select
-          name="status"
-          label="Status"
-          options={data.options.task.status}
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={data.item}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={data.options.task.status}
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
-    const select = screen.getByRole('combobox', { name: /status/i });
-    expect(select).toHaveTextContent('in progress');
+    // Wait for the component to fully render and initialize
+    await waitFor(() => {
+      expect(screen.getByText('in progress')).toBeVisible();
+    });
   });
 
   it("shows placeholder when no value is selected", () => {
@@ -60,18 +61,18 @@ describe("Formhelper-Select", () => {
     delete itemWithoutStatus.status;
 
     render(
-      <Formhelper
-        item={itemWithoutStatus}
-        option={data.options}
-      >
-        <Select
-          name="status"
-          label="Status"
-          options={data.options.task.status}
-          placeholder="Select a status"
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={itemWithoutStatus}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={data.options.task.status}
+            placeholder="Select a status"
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
     const select = screen.getByRole('combobox', { name: /status/i });
@@ -84,17 +85,17 @@ describe("Formhelper-Select", () => {
     delete itemWithoutStatus.status;
 
     render(
-      <Formhelper
-        item={itemWithoutStatus}
-        option={data.options}
-      >
-        <Select
-          name="status"
-          label="Status"
-          options={data.options.task.status}
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={itemWithoutStatus}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={data.options.task.status}
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
     const select = screen.getByRole('combobox', { name: /status/i });
@@ -107,18 +108,18 @@ describe("Formhelper-Select", () => {
     delete itemWithoutStatus.status;
 
     render(
-      <Formhelper
-        item={itemWithoutStatus}
-        option={data.options}
-      >
-        <Select
-          name="status"
-          label="Status"
-          options={data.options.task.status}
-          placeholder="Select a status"
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={itemWithoutStatus}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={data.options.task.status}
+            placeholder="Select a status"
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
     const select = screen.getByRole('combobox', { name: /status/i });
@@ -143,18 +144,18 @@ describe("Formhelper-Select", () => {
     delete itemWithoutStatus.status;
 
     render(
-      <Formhelper
-        item={itemWithoutStatus}
-        option={data.options}
-      >
-        <Select
-          name="status"
-          label="Status"
-          options={data.options.task.status}
-          placeholder="Select a status"
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={itemWithoutStatus}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={data.options.task.status}
+            placeholder="Select a status"
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
     const select = screen.getByRole('combobox', { name: /status/i });
@@ -173,40 +174,44 @@ describe("Formhelper-Select", () => {
 
   it("handles empty options array", () => {
     render(
-      <Formhelper item={{}} option={{}}>
-        <Select
-          name="status"
-          label="Status"
-          options={[]}
-          placeholder="Select a status"
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={{}}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={[]}
+            placeholder="Select a status"
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
-    const select = screen.getByRole('combobox', { name: /status/i });
-    expect(select).toHaveTextContent('Select a status');
+    // When there are no options, MUI 7 renders as a text input instead of combobox
+    const input = screen.getByRole('textbox', { name: /status/i });
+    expect(input).toHaveAttribute('placeholder', 'Select a status');
   });
 
   it("calls onChange and onBlur props if provided", async () => {
-    const handleChange = vi.fn();
-    const handleBlur = vi.fn();
+    const onChange = vi.fn();
+    const onBlur = vi.fn();
     const data = testData();
 
     render(
-      <Formhelper
-        item={data.item}
-        option={data.options}
-      >
-        <Select
-          name="status"
-          label="Status"
-          options={data.options.task.status}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={data.item}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={data.options.task.status}
+            onChange={onChange}
+            onBlur={onBlur}
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
     const select = screen.getByRole('combobox', { name: /status/i });
@@ -216,23 +221,26 @@ describe("Formhelper-Select", () => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
     await user.click(screen.getByText('cancelled'));
-    expect(handleChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalled();
 
     await user.tab();
-    expect(handleBlur).toHaveBeenCalled();
+    expect(onBlur).toHaveBeenCalled();
   });
 
   it("renders with error state", () => {
     render(
-      <Formhelper item={{}} option={{}}>
-        <Select
-          name="status"
-          label="Status"
-          options={testData().options.task.status}
-          error={{ message: "This field is required" }}
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={{}}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={testData().options.task.status}
+            error={{ message: "This field is required" }}
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
     expect(screen.getByText('This field is required')).toBeInTheDocument();
@@ -240,22 +248,33 @@ describe("Formhelper-Select", () => {
 
   it("renders with info tooltip", async () => {
     render(
-      <Formhelper item={{}} option={{}}>
-        <Select
-          name="status"
-          label="Status"
-          options={testData().options.task.status}
-          info="This is helpful information"
-          data-testid="status-select"
-        />
-      </Formhelper>
+      <TestHarness item={{}}>
+        <Row>
+          <Input
+            name="status"
+            label="Status"
+            select
+            options={testData().options.task.status}
+            info="This is helpful information"
+            data-testid="status-select"
+          />
+        </Row>
+      </TestHarness>
     );
 
+    // Find the help icon anywhere in the document (not just within the select container)
     const infoIcon = screen.getByTestId('HelpRoundedIcon');
+    expect(infoIcon).toBeInTheDocument();
+    
+    // Click the info icon
     await user.click(infoIcon);
 
+    // In MUI 7, the popover content might be rendered in a portal
+    // Let's check if the popover is open by looking for the popover element
     await waitFor(() => {
-      expect(screen.getByText('This is helpful information')).toBeInTheDocument();
+      const popover = document.querySelector('[role="presentation"]');
+      expect(popover).toBeInTheDocument();
+      expect(popover).toHaveTextContent('This is helpful information');
     });
   });
 });

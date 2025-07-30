@@ -35,30 +35,33 @@ const validate = (res) => {
         }
         message(action.type, msg, netDetails, rrid, httperrorRes);
         //addErrorToStore(action.type, msg, netDetails, rrid);
-        return Promise.reject(`http error ${res.status}`);
+        const error = new Error(msg || `HTTP ${res.status} error`);
+        error.status = res.status;
+        error.response = res;
+        error.data = data;
+        return Promise.reject(error);
     }
 
     // handle company specific success:false errors
-    /*
-      some 
-    */
-        
+    // Check if response indicates an error despite 200 status
+    if (data && typeof data === 'object') {
+        // Check for common error patterns in response body
+        if (data.success === false || data.error || data.errors || data.message?.toLowerCase().includes('error')) {
+            action.type = 'apiError';
+            rrid = 'business logic error';
+            msg = data.message || data.error || 'Business logic error';
+            
+            if (!_.isEmpty(data)) {
+                httperrorRes = data;
+                netDetails = data.details || data.ErrorDetails;
+            }
+            message(action.type, msg, netDetails, rrid, httperrorRes);
+            return Promise.reject(new Error(msg || 'Business logic error'));
+        }
+    }
 
     return res;
 }
-
-// function //addErrorToStore(name, message, stack, rrid = null) {
-//     if (rrid) {
-//         message = 'rrid: ' + rrid + ' ' + message;
-//     }
-//     //make the basic properties match an http error
-//     const err = {
-//         name,
-//         message,
-//         stack
-//     }
-//     addError(err);
-// }
 
 function message(actionType, msg, netDetails, rrid, httperrorRes = null) {
     toast.error(
@@ -74,49 +77,33 @@ function message(actionType, msg, netDetails, rrid, httperrorRes = null) {
             {!_.isEmpty(httperrorRes) ? <div><div><br /><b>Details</b></div>httperrorRes</div> : ''}
         </span>
         , {
-            position: toast.POSITION.TOP_CENTER,
+            position: "top-center",
             className: 'toast-wide',
             autoClose: false
         });
 }
 
 export function messageHttpError(error) {
-    const url = error.config.url;
-    const method = error.config.method;
+    const url = error.config?.url || 'Unknown URL';
+    const method = error.config?.method || 'Unknown Method';
     const msg = error.message;
+    
+    // Special handling for timeout errors
+    const isTimeout = error.code === 'ECONNABORTED' || msg.includes('timeout');
+    const errorType = isTimeout ? 'Request Timeout' : 'HTTP Error';
 
     toast.error(
         <span>
+            <div><b>Error Type:</b> {errorType}</div>
             <div><b>url:</b> {url}</div>
             <div><b>method:</b> {method}</div>
             {!_.isEmpty(msg) ? <div>{msg}</div> : ''}
         </span>
         , {
-            position: toast.POSITION.TOP_CENTER,
+            position: "top-center",
             className: 'toast-wide',
-            autoClose: false
+            autoClose: isTimeout ? 5000 : false
         });
-
-    // "error: {
-    //     "message": "Request failed with status code 404",
-    //     "name": "Error",
-    //     "stack": "Error: Request failed with status code 404\n    at createError (http://localhost:3000/static/js/1.chunk.js:4085:15)\n    at settle (http://localhost:3000/static/js/1.chunk.js:4301:12)\n    at XMLHttpRequest.handleLoad (http://localhost:3000/static/js/1.chunk.js:3608:7)",
-    //     "config": {
-    //       "url": "/server-net/api/ztask",
-    //       "method": "get",
-    //       "headers": {},
-    //       "transformRequest": [
-    //         null
-    //       ],
-    //       "transformResponse": [
-    //         null
-    //       ],
-    //       "timeout": 0,
-    //       "xsrfCookieName": "XSRF-TOKEN",
-    //       "xsrfHeaderName": "X-XSRF-TOKEN",
-    //       "maxContentLength": -1
-    //     }
-    //   }"    
 }
 
 export default validate;

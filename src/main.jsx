@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 //import App from "./app"; //loaded in router
 import Router from "./router";
 //import { useStore } from "./store";
-import { Provider } from "react-redux";
+
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "@/components/spinner";
 import "./scss/index.scss";
 import { ThemeProvider } from "./theme-material";

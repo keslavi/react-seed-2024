@@ -1,67 +1,77 @@
-import React, { useCallback, useMemo } from "react";
+
+import { useCallback, memo } from "react";
 import {
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   Radio as MuiRadio,
+  FormControl,
+  FormLabel,
   RadioGroup,
+  FormControlLabel,
+  FormHelperText
 } from "@mui/material";
+ 
 import { cleanParentProps, colProps } from "./helper";
-
+import { Info } from "./info";
 import { useFormField } from "./form-provider";
-
-import { ColPadded } from "components/grid";
-
-export const Radio = React.memo((props) => {
+ 
+import { ColPadded } from "@/components/grid";
+ 
+export const Radio = memo((props) => {
+  const label = props.label || '';
   const options = props.optionsRadio;
-  
-  // Memoize placeholder function to prevent recreation on every render
-  const placeholder = useCallback((e) => {
-    return;
-  }, []);
-  
-  // Memoize event handler to prevent recreation on every render
-  const onChange = useCallback(props.onChange || placeholder, [props.onChange, placeholder]);
-
-  const { field, error } = useFormField(props);
-
-  // Memoize options rendering to prevent recalculation on every render
-  const renderedOptions = useMemo(() => {
-    return options?.map((x) => (
-      <FormControlLabel
-        key={x.key}
-        value={x.value}
-        control={<MuiRadio />}
-        label={<>{x.text}&nbsp;&nbsp;&nbsp;&nbsp;</>}
-      />
-    )) || [];
-  }, [options]);
-
-  // Memoize event handler to prevent recreation on every render
-  const handleChange = useCallback((e) => {
+ 
+  const {
+    field,
+    error,
+    //errorMui,
+    valueProp
+  } = useFormField(props/*might be {...props}*/);
+ 
+  // Memoize event handlers to prevent recreation on every render
+  const onBlur = useCallback((e) => {
+    field.onBlur(e.target.value);
+    props.onBlur?.(e);
+  }, [field]);
+ 
+  const onChange = useCallback((e) => {
     field.onChange(e.target.value);
-    onChange(e);
-  }, [field, onChange]);
-
+    props.onChange?.(e);
+  }, [field]);
+  //TODO: Get select-autocomplete working and switch out.
   return (
     <ColPadded {...colProps(props)}>
       <FormControl>
-        {props.label && <FormLabel>{props.label}</FormLabel>}
+        <FormLabel>{label}</FormLabel>
+        {/* {errorMui && <FormHelperText className="Mui-error">{errorMui.message}</FormHelperText>} */}
+        {error && <FormHelperText className="Mui-error">{error.message}</FormHelperText>}
+ 
+        {/* {props.helperText && <FormHelperText className="Mui-error">{props.helperText}</FormHelperText>} */}
         <RadioGroup
+          row={props.row}
           id={field.name}
           name={field.name}
-          row={props.row}
-          label={props.label}
-          onBlur={field.onBlur}
-          onChange={handleChange}
-          value={field.value || ""}
+          label={props.label || ''}
+          onBlur={onBlur}
+          onChange={onChange}
+          {...valueProp}
+          {...cleanParentProps(props)}
         >
-          {renderedOptions}
+          {options.map((x) => {
+            return <FormControlLabel
+              key={x.key}
+              value={x.key}
+              control={<MuiRadio
+              />}
+              label={<>&nbsp;{x.text}&nbsp;&nbsp;&nbsp;&nbsp;</>}
+              disabled={field.disabled || false}
+            />;
+          })}
         </RadioGroup>
       </FormControl>
-    </ColPadded>
+      {props.info && <Info id={`${field.id}Info`} info={props.info} />}
+    </ColPadded >
   );
 });
+
 
 // Add display name for better debugging
 Radio.displayName = 'Radio';

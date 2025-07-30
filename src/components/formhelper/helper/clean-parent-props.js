@@ -23,6 +23,7 @@ export const cleanParentProps = (props) => {
       "options",
       "optionsMulti",
       "optionsRadio",
+      "optionsCheckbox",
       "password",
       "mask",
       "format",

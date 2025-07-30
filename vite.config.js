@@ -2,6 +2,29 @@ import path from "path";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 
+// Plugin to fix prop-types import issues
+const propTypesFixPlugin = () => {
+  return {
+    name: 'prop-types-fix',
+    resolveId(id) {
+      if (id === 'prop-types') {
+        return 'prop-types';
+      }
+      return null;
+    },
+    load(id) {
+      if (id === 'prop-types') {
+        return `
+          import * as PropTypes from 'prop-types';
+          export default PropTypes;
+          export * from 'prop-types';
+        `;
+      }
+      return null;
+    }
+  };
+};
+
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -49,19 +72,30 @@ export default defineConfig({
       "pages": path.resolve(__dirname, "./src/pages"),
       "store": path.resolve(__dirname, "./src/store"),
       //"assets": path.resolve(__dirname, "./src/assets"),
-      
     },
+    dedupe: ['react', 'react-dom', 'react-is', 'prop-types'],
   },
-  plugins: [react()],
+  plugins: [react(), propTypesFixPlugin()],
   optimizeDeps:{
     include: [
       '@emotion/react',
       '@emotion/styled',
       '@mui/material/Tooltip',
-      '@mui/material/styles/createTheme',
       '@mui/material/Box',
-      '@mui/icons-material',
-    ]
+      'react-is',
+      '@mui/utils',
+      '@mui/system',
+      '@mui/private-theming',
+      'prop-types',
+    ],
+    exclude: [
+      '@mui/icons-material'
+    ],
+    esbuildOptions: {
+      // Ensure React 19 compatibility
+      jsx: 'automatic',
+      jsxImportSource: 'react',
+    }
   },
   envDir: '.',
   envPrefix: 'VITE_',

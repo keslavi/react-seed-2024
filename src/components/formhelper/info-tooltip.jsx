@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import Tooltip,{tooltipClasses} from '@mui/material/Tooltip'
-import {Help as IconMui} from "@mui/icons-material";
+import IconHelp from "@mui/icons-material/Help";
 import { Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import ClearIcon from '@mui/icons-material/Clear';

@@ -1,6 +1,7 @@
 import { memo, useCallback, useMemo, useState, useEffect, useRef } from "react";
 import { TextField as MuiTextField, IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import IconVisibility from "@mui/icons-material/Visibility";
+import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
 import { Info } from "./info";
@@ -247,7 +248,7 @@ export const TextMask = memo((props) => {
     }
     
     field.onChange(newValue);
-    props.onChange?.(e);
+    props.onChange?.(newValue);
     
     // Reset the auto-mask timer when user types (only if not persistent)
     if (showValue && !isPersistent) {
@@ -261,7 +262,7 @@ export const TextMask = memo((props) => {
   }, [field, props, maskPattern, formatPattern, showValue, isPersistent]);
 
   // Handle show/hide toggle (only if not persistent)
-  const handleClickShowValue = useCallback(() => {
+  const onClickShowValue = useCallback(() => {
     if (isPersistent) return; // No toggle for persistent fields
     
     const newShowValue = !showValue;
@@ -284,12 +285,12 @@ export const TextMask = memo((props) => {
     }
   }, [showValue, isPersistent]);
 
-  const handleMouseDownShowValue = useCallback((event) => {
+  const onMouseDownShowValue = useCallback((event) => {
     event.preventDefault();
   }, []);
 
   // Prevent keyboard input when field is masked
-  const handleKeyDown = useCallback((event) => {
+  const onKeyDown = useCallback((event) => {
     const hasValue = field.value && String(field.value).trim() !== '';
     const isMasked = hasValue && !showValue && !isPersistent;
     
@@ -327,7 +328,7 @@ export const TextMask = memo((props) => {
         inputRef={field.ref}
         onBlur={onBlur}
         onChange={onChange}
-        onKeyDown={handleKeyDown}
+        onKeyDown={onKeyDown}
         value={displayValue}
         {...cleanParentProps(props)}
         {...errorMui}
@@ -336,11 +337,11 @@ export const TextMask = memo((props) => {
             <InputAdornment position="end">
               <IconButton
                 aria-label="toggle value visibility"
-                onClick={handleClickShowValue}
-                onMouseDown={handleMouseDownShowValue}
+                onClick={onClickShowValue}
+                onMouseDown={onMouseDownShowValue}
                 edge="end"
               >
-                {showValue ? <VisibilityOff /> : <Visibility />}
+                {showValue ? <IconVisibilityOff /> : <IconVisibility />}
               </IconButton>
             </InputAdornment>
           ) : undefined,
@@ -351,7 +352,7 @@ export const TextMask = memo((props) => {
   );
 });
 
-// Add display name for better debugging
+
 TextMask.displayName = 'TextMask';
 
 export default TextMask; 

@@ -8,17 +8,9 @@ import { ColPadded } from "@/components/grid";
 
 export const Select = React.memo((props) => {
   // Memoize placeholder function to prevent recreation on every render
-  const fnPlaceholder = useCallback((e) => {
-    return;
-  }, []);
-
-  // Memoize event handlers to prevent recreation on every render
-  const onBlur = useCallback(props.onBlur || fnPlaceholder, [props.onBlur, fnPlaceholder]);
-  const onChange = useCallback(props.onChange || fnPlaceholder, [props.onChange, fnPlaceholder]);
 
   const { field, error } = useFormField(props);
 
-  // Memoize options rendering to prevent recalculation on every render
   const renderedOptions = useMemo(() => {
     return props.options?.map((x) => (
       <MenuItem key={x.key} value={x.key}>
@@ -28,15 +20,15 @@ export const Select = React.memo((props) => {
   }, [props.options]);
 
   // Memoize event handlers to prevent recreation on every render
-  const handleBlur = useCallback((e) => {
+  const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
-    onBlur(e);
-  }, [field, onBlur]);
+    props.onBlur?.(e);
+  }, []);
 
-  const handleChange = useCallback((e) => {
+  const onChange = useCallback((e) => {
     field.onChange(e.target.value);
-    onChange(e);
-  }, [field, onChange]);
+    props.onChange?.(e);
+  }, []);
 
   // Memoize error props to prevent object recreation
   const errorProps = useMemo(() => {
@@ -59,12 +51,13 @@ export const Select = React.memo((props) => {
           id={field.name}
           name={field.name}
           label={props.label}
-          onBlur={handleBlur}
-          onChange={handleChange}
+          onBlur={onBlur}
+          onChange={onChange}
           value={field.value || ""}
           displayEmpty
           renderValue={(selected) => {
             if (!selected || selected === "") {
+              // Use the provided placeholder or fall back to a generic one
               return <span style={{ color: '#666' }}>{props.placeholder || "Please Select"}</span>;
             }
             const selectedOption = props.options?.find(option => 
@@ -72,6 +65,10 @@ export const Select = React.memo((props) => {
             );
             return selectedOption ? selectedOption.text : selected;
           }}
+          // Add aria-label to the popup indicator for testing
+          IconComponent={(props) => (
+            <span {...props} aria-label="open" />
+          )}
           {...cleanParentProps(props)}
         >
           {renderedOptions}

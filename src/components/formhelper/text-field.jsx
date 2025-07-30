@@ -17,12 +17,38 @@ export const TextField = memo((props) => {
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
     props.onBlur?.(e);
-  }, [field]);
+  }, []);
 
   const onChange = useCallback((e) => {
     field.onChange(e.target.value);
     props.onChange?.(e);
-  }, [field]);
+  }, []);
+
+  // Extract input-specific props that need to be passed to the input element
+  const inputProps = useMemo(() => {
+    const {
+      readOnly,
+      maxLength,
+      minLength,
+      pattern,
+      autoFocus,
+      spellCheck,
+      inputMode,
+      autoComplete,
+      ...restProps
+    } = props;
+
+    return {
+      readOnly,
+      maxLength,
+      minLength,
+      pattern,
+      spellCheck,
+      inputMode,
+      autoComplete,
+      autoFocus: props.autoFocus,
+    };
+  }, [props]);
 
   return (
     <ColPadded {...colProps(props)}>
@@ -31,12 +57,15 @@ export const TextField = memo((props) => {
         id={field.name}
         name={field.name}
         label={props.label}
+        {...(props.placeholder && { placeholder: props.placeholder })}
         inputRef={field.ref}
         onBlur={onBlur}
         onChange={onChange}
+        autoFocus={props.autoFocus}
         {...cleanParentProps(props)}
         {...valueProp}
         {...errorMui}
+        inputProps={inputProps}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
     </ColPadded>

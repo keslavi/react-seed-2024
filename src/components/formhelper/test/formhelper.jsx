@@ -1,12 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { isEmpty } from "lodash";
-import { useForm } from "react-hook-form";
-import { processChildren } from "./formhelper.utility";
+import { TestHarness } from "./testHarness";
+
+//THIS IS NOT THE PATTERN FOR A FORM, USE TASK.JSX PATTERN.
+//THIS IS FOR TESTING ONLY.
+import {
+  yup,
+  yupResolver,
+  //regex,
+} from '@/helpers/form-validation';
+
+export * from '@/helpers/form-validation/errorNotification';
+
+const schema = yup.object().shape({
+  id: yup.string().required("id is required"),
+  subject: yup.string().required("please provide a subject"),
+  body: yup.string().required("please provide a body"),
+  address: yup.object().shape({
+    line1: yup.string().required("address line 1 required"),
+    line2: yup.string().required("address line 2 required"),
+    line3: yup.string().required("address line 3 required"),
+  })
+})
+
 
 
 
 //prettier-ignore
-import { 
+import {
   Input,
   Row,
   Col,
@@ -15,12 +34,11 @@ import {
 } from "components";
 
 //prettier-ignore
-import { 
-  resolver, 
-  errorNotification 
+import {
+  errorNotification
 } from "./formhelpertestValidation";
 
-const option0 = {
+const option = {
   task: {
 
     names: [
@@ -81,7 +99,7 @@ const option0 = {
   },
 };
 
-const item0 = {
+const item = {
   id: "2",
   subject: "Subject b",
   names: [1, 2],
@@ -120,14 +138,19 @@ const item0 = {
   customPartial: "12345678",
 };
 
-const chidrenDefault = () => {
+const ChildrenDefault = () => {
   return (
     <>
+      <Row><Col size={12}>
+        <br /><br /><h4>formhelper tester</h4>
+        <br /><div style={{ color: 'red' }}>THIS IS NOT THE PATTERN FOR A FORM, USE TASK.JSX PATTERN. THIS IS FOR BENCH TESTING ONLY.</div>
+        <br /><div style={{ color: 'red' }}>yup validation in particular is not the correct pattern for a form</div>
+      </Col></Row>
       <Row>
-        <Input 
-          name="subject" 
-          label="Subject" 
-          placeholder="Enter subject" 
+        <Input
+          name="subject"
+          label="Subject"
+          placeholder="Enter subject"
           info="header1|body1"
         />
       </Row>
@@ -138,29 +161,30 @@ const chidrenDefault = () => {
         <Input
           name="names"
           label="Names (checkbox)"
-          optionscheckbox={option0.task.names}
+          optionsCheckbox={option.task.names}
           info="header1|body1"
+        //error={{ message: "Some error" }}
         />
         <Input
-          size={{xs:6}}        
+          size={{ xs: 6 }}
           name="names2"
           label="Names2 (multiselect)"
-          optionsMulti={option0.task.names}
+          optionsMulti={option.task.names}
         />
       </Row>
       <Row>
-        <Input 
-          name="status" 
+        <Input
+          name="status"
           label="Status (select)"
-          select 
-          options={option0.task.status} 
-//          placeholder="Select a status" 
+          select
+          options={option.task.status}
+          //          placeholder="Select a status" 
           info="header2|body2"
         />
-        <Input 
-          name="result" 
-          label="Result (autocomplete)" 
-          options={option0.task.result} 
+        <Input
+          name="result"
+          label="Result (autocomplete)"
+          options={option.task.result}
           info="header3|body3"
         />
       </Row>
@@ -168,32 +192,32 @@ const chidrenDefault = () => {
         <h3>Masked Input Examples</h3>
       </Row>
       <Row>
-        <Input 
-          name="ssn" 
-          label="SSN" 
+        <Input
+          name="ssn"
+          label="SSN"
           mask={inputMask.ssn}
           info="Enter your 9-digit SSN in format XXX-XX-XXXX"
         />
-        <Input 
-          name="ssn2" 
-          label="SSN2" 
+        <Input
+          name="ssn2"
+          label="SSN2"
           mask={inputMask.ssn}
           info="Enter your 9-digit SSN in format XXX-XX-XXXX"
         />
       </Row>
       <Row>
-        <Input 
-          name="ssnPartial" 
-          label="SSN (Partial Mask)" 
+        <Input
+          name="ssnPartial"
+          label="SSN (Partial Mask)"
           mask={inputMask.ssn}
           showLast={4}
           info="SSN with partial masking - shows last 4 digits when masked"
         />
       </Row>
       <Row>
-        <Input 
-          name="licensePlate" 
-          label="License Plate" 
+        <Input
+          name="licensePlate"
+          label="License Plate"
           mask={inputMask.licensePlate}
           info="Enter license plate in format AAA-1234 (3 letters, dash, 4 numbers)"
         />
@@ -203,44 +227,44 @@ const chidrenDefault = () => {
         <h3>Label Mask Examples</h3>
       </Row>
       <Row>
-        <Col xs={6}>
+        <Col size={6}>
           <h4>SSN Label Mask (Children)</h4>
           <LabelMask mask={inputMask.ssn}>123456789</LabelMask>
         </Col>
-        <Col xs={6}>
+        <Col size={6}>
           <h4>SSN Label Mask (Text Prop)</h4>
           <LabelMask mask={inputMask.ssn} text="123456789" />
         </Col>
       </Row>
       <Row>
-        <Col xs={6}>
+        <Col size={6}>
           <h4>Phone Number Label Mask</h4>
           <LabelMask mask={inputMask.phone}>5551234567</LabelMask>
         </Col>
-        <Col xs={6}>
+        <Col size={6}>
           <h4>License Plate Label Mask</h4>
           <LabelMask mask={inputMask.licensePlate}>ABC1234</LabelMask>
         </Col>
       </Row>
       <Row>
-        <Col xs={6}>
+        <Col size={6}>
           <h4>Partial Mask (Last 4 digits)</h4>
           <LabelMask mask={inputMask.ssn} showLast={4}>123456789</LabelMask>
         </Col>
-        <Col xs={6}>
+        <Col size={6}>
           <h4>Persistent (Always Visible)</h4>
           <LabelMask mask={inputMask.ssn} persistent>123456789</LabelMask>
         </Col>
       </Row>
       <Row>
-        <Col xs={6}>
+        <Col size={6}>
           <h4>With Label Heading Variant (h1)</h4>
           <LabelMask mask={inputMask.ssn} variant="h1">123456789</LabelMask>
         </Col>
-        <Col xs={6}>
+        <Col size={6}>
           <h4>With Custom Style</h4>
-          <LabelMask 
-            mask={inputMask.ssn} 
+          <LabelMask
+            mask={inputMask.ssn}
             style={{ color: 'blue', fontWeight: 'bold', fontSize: '18px' }}
           >
             123456789
@@ -252,98 +276,41 @@ const chidrenDefault = () => {
         <h3>Password Input Examples</h3>
       </Row>
       <Row>
-        <Input 
-          name="password" 
-          label="Password" 
+        <Input
+          name="password"
+          label="Password"
           password
           info="Enter your password (with show/hide toggle)"
         />
-        <Input 
-          name="confirmPassword" 
-          label="Confirm Password" 
+        <Input
+          name="confirmPassword"
+          label="Confirm Password"
           password
           info="Confirm your password"
         />
       </Row>
-      
 
 
-      
 
 
-      
 
- 
-      
+
+
+
+
+
     </>
   );
 };
+
 
 export const Formhelper = (props) => {
-  const [submitValues, setSubmitValues] = useState({});
-
-  const item = props.item || item0;
-  const option = props.option || option0;
-  const TestComponent = props.TestComponent || null;
-  const children = props.children || chidrenDefault();
-
-  // React hook form and validation***********************
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    reset,
-    setValue,
-  } = useForm({
-    resolver,
-    defaultValues: item,
-    mode: "onChange"
-  });
-  const attributes = { control, errors };
-  useEffect(() => {
-    if (errors) {
-      errorNotification(errors);
-    }
-  }, [errors]);
-  // end React hook form and validation***********************
-
-  const onSubmitSuccess = (values) => {
-    setSubmitValues(values);
-  };
-
   return (
-    <>
-      <br />
-      <br />
-      <br/>
-      <h1>formhelper tester</h1>
-      <ul>
-        <li>
-          this is a test <b>staging area</b> for the formhelper components
-        </li>
-        <li>allow for developer to look at tests visually</li>
-        <li>tests are in formhelper/*.test.jsx</li>
-      </ul>
-      <form onSubmit={handleSubmit(onSubmitSuccess)}>
-        {/* don't install components in here, use childrenDefault() */}
-        {processChildren(children, attributes)}
-        <Row>
-          <Col>
-            <input name="btnSubmit" type="submit" value="Submit" />
-          </Col>
-        </Row>
-      </form>
-      <label>submitValues</label>
-      <br />
-      <textarea
-        data-testid="elSubmitValues"
-        rows={20}
-        cols={50}
-        value={JSON.stringify(submitValues, null, 2)}
-        readOnly
-      />
-    </>
+    <TestHarness {...{ item, schema }} noRow={true}>
+      <ChildrenDefault />
+    </TestHarness>
   );
-};
+}
+
 
 export default Formhelper;

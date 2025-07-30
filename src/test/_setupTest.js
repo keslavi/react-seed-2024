@@ -8,6 +8,8 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { isEmpty } from "lodash";
+import { isTruthy } from "@/helpers";
 
 global.act = act;
 global.fireEvent = fireEvent;
@@ -16,6 +18,19 @@ global.screen = screen;
 global.userEvent = userEvent;
 global.waitFor = waitFor;
 global.within = within;
+global.isEmpty = isEmpty;
+global.isTruthy = isTruthy;
+global.isFalsey = (value) => !isTruthy(value);
+
+// Mock store for testing
+global.store = {
+  use: {
+    errorsClear: () => {},
+    errorsList: () => [],
+    errorAdd: () => {},
+    errorDel: () => {},
+  }
+};
 
 //import "@testing-library/user-event"; //maybe add here? 
 

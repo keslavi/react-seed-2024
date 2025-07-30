@@ -15,6 +15,7 @@ import protectedRoutes from './routes/protected.js';
 import utilsRoutes from './routes/utils.js';
 import taskRoutes from './routes/tasks.js';
 import optionsRoutes from './routes/options.js';
+import badRequestRoutes from './routes/badRequest.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = new Koa();
@@ -45,6 +46,8 @@ apiRouter.get('/', (ctx) => {
   ctx.body = 'Hello World (api)';
 });
 
+
+
 // Mount public routes
 publicRouter.get('/', (ctx) => {
   ctx.body = 'Hello World (api/public)';
@@ -52,6 +55,7 @@ publicRouter.get('/', (ctx) => {
 
 publicRouter.use('/tasks', taskRoutes.routes());
 publicRouter.use('/options', optionsRoutes.routes());
+publicRouter.use('/badRequest', badRequestRoutes.routes());
 
 // Mount all API routes
 app.use(apiRouter.routes());

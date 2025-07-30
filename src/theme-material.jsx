@@ -11,7 +11,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import { AccordionSummary } from '@mui/material';
 import { styled } from "@mui/system";
-import { Padding } from "@mui/icons-material";
+import IconPadding from "@mui/icons-material/Padding";
 
 /*************************************************
  

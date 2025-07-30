@@ -116,7 +116,7 @@ describe("Formhelper-Radio", () => {
 
   it("calls onChange prop if provided", async () => {
     const data = testData();
-    const handleChange = vi.fn();
+    const onChange = vi.fn();
     render(
       <Formhelper item={{}} option={data.options}>
         <Radio
@@ -124,7 +124,7 @@ describe("Formhelper-Radio", () => {
           label="Status"
           optionsRadio={data.options.task.status}
           data-testid="status-radio"
-          onChange={handleChange}
+          onChange={onChange}
         />
       </Formhelper>
     );
@@ -133,7 +133,7 @@ describe("Formhelper-Radio", () => {
     const completedRadio = screen.getByLabelText(/completed/i);
     fireEvent.click(completedRadio);
     
-    expect(handleChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalled();
   });
 
   it("renders with label", () => {

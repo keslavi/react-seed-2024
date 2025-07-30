@@ -4,7 +4,7 @@ import { color } from "@/theme-material";
 export const Navbar = ({ alignRight, style, children }) => {
     <>
         <Box
-            xs={{ flexGrow: 1 }}
+            sx={{ flexGrow: 1 }}
             style={style || {}}>
             <Toolbar
                 disableGutters

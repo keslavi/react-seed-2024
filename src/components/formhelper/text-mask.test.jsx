@@ -1,5 +1,4 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
 import { FormProvider, useFormProvider } from './form-provider';
 import { TextMask } from './text-mask';
 
@@ -14,6 +13,12 @@ const TestWrapper = ({ children, formOptions = {} }) => {
 };
 
 describe('TextMask Component', () => {
+  let user;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   test('renders with SSN mask', () => {
     render(
       <TestWrapper>
@@ -29,7 +34,7 @@ describe('TextMask Component', () => {
     expect(input).toBeInTheDocument();
   });
 
-  test('starts unmasked when no initial value is provided', () => {
+  test('starts unmasked when no initial value is provided', async () => {
     render(
       <TestWrapper>
         <TextMask 
@@ -41,7 +46,7 @@ describe('TextMask Component', () => {
     );
     
     const input = screen.getByLabelText('SSN');
-    fireEvent.change(input, { target: { value: '123456789' } });
+    await user.type(input, '123456789');
     
     // Should show formatted value initially when user types (no initial value)
     expect(input.value).toBe('123-45-6789');
@@ -64,7 +69,7 @@ describe('TextMask Component', () => {
     expect(input.value).toBe('***-**-****');
   });
 
-  test('prevents keyboard input when masked', () => {
+  test('prevents keyboard input when masked', async () => {
     render(
       <TestWrapper formOptions={{ defaultValues: { ssn: '123456789' } }}>
         <TextMask 
@@ -81,14 +86,13 @@ describe('TextMask Component', () => {
     expect(input.value).toBe('***-**-****');
     
     // Try to type - should not change the value
-    fireEvent.keyDown(input, { key: '1' });
-    fireEvent.change(input, { target: { value: '***-**-****1' } });
+    await user.keyboard('1');
     
     // Value should remain masked
     expect(input.value).toBe('***-**-****');
   });
 
-  test('allows keyboard input when unmasked', () => {
+  test('allows keyboard input when unmasked', async () => {
     render(
       <TestWrapper>
         <TextMask 
@@ -102,7 +106,7 @@ describe('TextMask Component', () => {
     const input = screen.getByLabelText('SSN');
     
     // Type a value - should be allowed
-    fireEvent.change(input, { target: { value: '123456789' } });
+    await user.type(input, '123456789');
     
     // Value should be formatted
     expect(input.value).toBe('123-45-6789');
@@ -139,7 +143,7 @@ describe('TextMask Component', () => {
     expect(helpIcon).not.toBeInTheDocument();
   });
 
-  test('shows info popover when info icon is clicked', () => {
+  test('shows info popover when info icon is clicked', async () => {
     render(
       <TestWrapper>
         <TextMask 
@@ -152,12 +156,12 @@ describe('TextMask Component', () => {
     );
     
     const helpIcon = screen.getByTestId('HelpRoundedIcon');
-    fireEvent.click(helpIcon);
+    await user.click(helpIcon);
     
     expect(screen.getByText('Enter your 9-digit SSN')).toBeInTheDocument();
   });
 
-  test('handles info with header and body separated by pipe', () => {
+  test('handles info with header and body separated by pipe', async () => {
     render(
       <TestWrapper>
         <TextMask 
@@ -170,7 +174,7 @@ describe('TextMask Component', () => {
     );
     
     const helpIcon = screen.getByTestId('HelpRoundedIcon');
-    fireEvent.click(helpIcon);
+    await user.click(helpIcon);
     
     expect(screen.getByText('SSN Information')).toBeInTheDocument();
     expect(screen.getByText('Enter your 9-digit Social Security Number')).toBeInTheDocument();

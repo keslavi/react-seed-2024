@@ -17,7 +17,7 @@ import { TextField } from "./text-field";
  * - select options={} select
  * - optionsMulti={} multi-select
  * - allowFreeText options={} autocomplete that allows free text
- *  * - xs={4} number of columns (optional, default 4)
+ *  * - size={4} number of columns (optional, default 4)
  *  @param control required for react-hook-form
  *  @param name required
  *  @param value default filled from form defaultValues
@@ -25,7 +25,7 @@ import { TextField } from "./text-field";
  *  @param multioptions returns multiselect
  *  @param datepicker returns date control
  *  @param textarea returns textarea
- *  @param xs={4} number of columns (optional, default 4)
+ *  @param size={4} number of columns (optional, default 4)
  *  @returns {wrapped Form Input}
  */
 /*eslint react/prop-types: 0 */

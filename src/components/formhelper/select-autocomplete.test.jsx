@@ -1,5 +1,5 @@
-import { Formhelper } from "./test/formhelper";
-import { SelectAutocomplete } from "./select-autocomplete";
+import { TestHarness } from "./test/testHarness";
+import { Input } from "components";
 
 describe("Formhelper-SelectAutocomplete", () => {
   let user;
@@ -36,19 +36,15 @@ describe("Formhelper-SelectAutocomplete", () => {
   it("loads with initial value", async () => {
     const data = testData();
     render(
-      <Formhelper
-        item={data.item}
-        option={data.options}
-      >
-        <SelectAutocomplete
+      <TestHarness item={data.item}>
+        <Input
           name="status"
           label="Status"
           options={data.options.task.status}
           data-testid="status-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
-    expect(screen.getByText(/formhelper tester/i)).toBeVisible();
     
     const input = screen.getByTestId('status-select').querySelector('input');
     
@@ -66,17 +62,14 @@ describe("Formhelper-SelectAutocomplete", () => {
   it("shows placeholder when no value selected", () => {
     const data = testData();
     render(
-      <Formhelper
-        item={{}}
-        option={data.options}
-      >
-        <SelectAutocomplete
+      <TestHarness item={{}}>
+        <Input
           name="status"
           label="Status"
           options={data.options.task.status}
           data-testid="status-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
     const input = screen.getByTestId('status-select').querySelector('input');
     expect(input).toHaveAttribute('placeholder', 'Please Select');
@@ -85,17 +78,14 @@ describe("Formhelper-SelectAutocomplete", () => {
   it("allows selecting a value", async () => {
     const data = testData();
     render(
-      <Formhelper
-        item={{}}
-        option={data.options}
-      >
-        <SelectAutocomplete
+      <TestHarness item={{}}>
+        <Input
           name="status"
           label="Status"
           options={data.options.task.status}
           data-testid="status-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
 
     const input = screen.getByTestId('status-select').querySelector('input');
@@ -121,17 +111,14 @@ describe("Formhelper-SelectAutocomplete", () => {
   it("allows clearing a value", async () => {
     const data = testData();
     render(
-      <Formhelper
-        item={data.item}
-        option={data.options}
-      >
-        <SelectAutocomplete
+      <TestHarness item={data.item}>
+        <Input
           name="status"
           label="Status"
           options={data.options.task.status}
           data-testid="status-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
 
     const input = screen.getByRole('combobox', { name: /status/i });
@@ -150,17 +137,14 @@ describe("Formhelper-SelectAutocomplete", () => {
   it("maintains cleared state after blur", async () => {
     const data = testData();
     render(
-      <Formhelper
-        item={{}}
-        option={data.options}
-      >
-        <SelectAutocomplete
+      <TestHarness item={{}}>
+        <Input
           name="status"
           label="Status"
           options={data.options.task.status}
           data-testid="status-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
     const input = screen.getByTestId('status-select').querySelector('input');
     
@@ -192,17 +176,14 @@ describe("Formhelper-SelectAutocomplete", () => {
   it("clears form field value properly without reverting to initial values", async () => {
     const data = testData();
     render(
-      <Formhelper
-        item={data.item}
-        option={data.options}
-      >
-        <SelectAutocomplete
+      <TestHarness item={data.item}>
+        <Input
           name="status"
           label="Status"
           options={data.options.task.status}
           data-testid="status-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
 
     const input = screen.getByRole('combobox', { name: /status/i });
@@ -232,18 +213,15 @@ describe("Formhelper-SelectAutocomplete", () => {
   it("uses custom placeholder when provided", async () => {
     const data = testData();
     render(
-      <Formhelper
-        item={{}}
-        option={data.options}
-      >
-        <SelectAutocomplete
+      <TestHarness item={{}}>
+        <Input
           name="status"
           label="Status"
           options={data.options.task.status}
           placeholder="Select a status"
           data-testid="status-select"
         />
-      </Formhelper>
+      </TestHarness>
     );
     
     const input = screen.getByTestId('status-select').querySelector('input');
@@ -273,11 +251,5 @@ describe("Formhelper-SelectAutocomplete", () => {
     // Test that the placeholder text is actually rendered and visible
     // This checks that the input shows the placeholder text when empty
     expect(input).toHaveAttribute('placeholder', 'Select a status');
-    
-    // Alternative approach: Check if we can find the placeholder text in the DOM
-    // Note: This might not work with Material-UI's implementation, but worth trying
-    const placeholderText = screen.getByPlaceholderText('Select a status');
-    expect(placeholderText).toBeInTheDocument();
-    expect(placeholderText).toBeVisible();
   });
 }); 

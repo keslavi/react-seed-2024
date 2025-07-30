@@ -1,5 +1,4 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
 import { FormProvider, useFormProvider } from './form-provider';
 import { TextMask } from './text-mask';
 
@@ -13,6 +12,12 @@ const TestWrapper = ({ children, formOptions = {} }) => {
 };
 
 describe('TextMask Partial Masking (showLast)', () => {
+  let user;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   // test('shows only last 4 characters for credit card when masked', () => {
   //   render(
   //     <TestWrapper>
@@ -39,7 +44,7 @@ describe('TextMask Partial Masking (showLast)', () => {
   //   expect(input.value).toBe('**** **** **** 3456');
   // });
 
-  test('starts unmasked and shows partial mask when toggled (no initial value)', () => {
+  test('starts unmasked and shows partial mask when toggled (no initial value)', async () => {
     render(
       <TestWrapper>
         <TextMask 
@@ -52,12 +57,12 @@ describe('TextMask Partial Masking (showLast)', () => {
     );
     
     const input = screen.getByLabelText('SSN');
-    fireEvent.change(input, { target: { value: '123456789' } });
+    await user.type(input, '123456789');
     
     expect(input.value).toBe('123-45-6789');
     
     const toggleButton = screen.getByLabelText('toggle value visibility');
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
     
     expect(input.value).toBe('***-**-6789');
   });

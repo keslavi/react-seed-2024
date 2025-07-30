@@ -1,96 +1,88 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { TextField, Autocomplete } from "@mui/material";
+
+import { memo, useCallback, useMemo, useState } from "react";
+import { TextField, Autocomplete as MuiAutocomplete } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { cleanParentProps, colProps } from "./helper";
-import { Info } from "./info";
 import { useFormField } from "./form-provider";
+import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
 
-
-export const SelectMulti = React.memo((props) => {
-  const {
-    optionsMulti: options,
-    unbound = props.unbound === "true",
-    label,
-    info,
-    defaultvalue,
-    ...restProps
-  } = props;
-
-  const fnPlaceholder = useCallback((e) => {
-    return;
-  }, []);
-
-  const onBlur = props.onBlur || fnPlaceholder;
-  const onChange = props.onChange || fnPlaceholder;
-
-  const { field, error } = useFormField(props);
-
-  const placeholder = props.placeholder === undefined ? "Please Select" : props.placeholder;
+export const SelectMulti = memo((props) => {
+  const { field, errorMui, valueProp } = useFormField(props);
 
   const [inputValue, setInputValue] = useState("");
 
+  // Handle placeholder logic like select-autocomplete
+  const placeholder = props.placeholder === undefined ? "Please Select" : props.placeholder;
+
   const selectedOptions = useMemo(() => {
     return Array.isArray(field.value)
-      ? options.filter((opt) => field.value.includes(opt.key))
+      ? props.optionsMulti.filter((opt) => field.value.includes(opt.key))
       : [];
-  }, [field.value, options]);
+  }, [field.value, props.optionsMulti]);
 
+  // Filter out already selected options from dropdown
   const filteredOptions = useMemo(() => {
-    const keys = field.value ? field.value.map(val => val.key) : [];
-    
-    return options.filter(option => 
-      !keys.includes(option.key)
-    );
-  }, [field.value, options]);
+    const selectedKeys = Array.isArray(field.value) ? field.value : [];
+    return props.optionsMulti.filter(option => !selectedKeys.includes(option.key));
+  }, [field.value, props.optionsMulti]);
 
-  const handleBlur = useCallback(() => {
+  const onBlur = useCallback((e) => {
     field.onBlur();
-    onBlur();
-  }, [field, onBlur]);
+    props.onBlur?.(e);
+  }, [field, props]);
 
-  const handleChange = useCallback((e, newValue) => {
+  const onChange = useCallback((e, newValue) => {
     const selectedValues = Array.isArray(newValue)
       ? newValue.map((item) => item.key)
       : [];
     field.onChange(selectedValues);
-    onChange(selectedValues);
-  }, [field, onChange]);
+    props.onChange?.(selectedValues);
+  }, [field, props]);
 
-  const handleInputChange = useCallback((event, newInputValue) => {
+  // Handle input change to manage placeholder visibility
+  const onInputChange = useCallback((event, newInputValue) => {
     setInputValue(newInputValue);
   }, []);
 
+  // Show placeholder when no options are selected and input is empty
   const shouldShowPlaceholder = selectedOptions.length === 0 && inputValue === "";
 
   return (
     <ColPadded {...colProps(props)}>
-      <Autocomplete
+      <MuiAutocomplete
         id={field.name}
+        name={field.name}
         multiple
-        onBlur={handleBlur}
-        onChange={handleChange}
-        onInputChange={handleInputChange}
+        onBlur={onBlur}
+        onChange={onChange}
+        onInputChange={onInputChange}
         inputValue={inputValue}
         options={filteredOptions}
         getOptionLabel={(option) => option?.text || ""}
-        isOptionEqualToValue={(option, value) => option?.key == value?.key}
+        isOptionEqualToValue={(option, value) => option?.key === value?.key}
+        popupIcon={<KeyboardArrowDownIcon />}
+        value={selectedOptions}
+        data-testid={props['data-testid']}
+        {...cleanParentProps(props)}
         renderInput={(params) => (
           <TextField
             {...params}
             inputRef={field.ref}
-            label={label}
+            label={props.label}
             placeholder={shouldShowPlaceholder ? placeholder : ""}
             variant="outlined"
-            error={Boolean(error)}
-            helperText={error?.message || ""}
+            fullWidth
+            {...errorMui}
           />
         )}
-        value={selectedOptions}
-        {...cleanParentProps(restProps)}
       />
-      {info && <Info id={`${field.id}Info`} info={info} />}
+      {props.info && <Info id={`${field.id}Info`} info={props.info} />}
     </ColPadded>
   );
 });
 
+// Add display name for better debugging
 SelectMulti.displayName = 'SelectMulti';
+ 
+

@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { yupResolver } from '@/helpers/form-validation';
+import React from "react";
 
 import {
   FormProvider,
@@ -6,10 +8,23 @@ import {
   useFormProvider,
 } from "components";
 
-export const TestHarness = ({ item = {}, schema, children }) => {
+const hasRowComponent = (children) => {
+  return React.Children.toArray(children).some(child => {
+    if (child?.type === Row) return true;
+    if (React.isValidElement(child) && child.props.children) {
+      return hasRowComponent(child.props.children);
+    }
+    return false;
+  });
+};
+
+export const TestHarness = ({ item = {}, schema, children, noRow = false }) => {
+  // Create resolver from schema if provided
+  const resolver = schema ? yupResolver(schema) : undefined;
+  
   // React hook form and validation
   const formMethods = useFormProvider({
-    resolver: schema,
+    resolver,
     defaultValues: item,
   });
   const { reset } = formMethods;
@@ -32,7 +47,7 @@ export const TestHarness = ({ item = {}, schema, children }) => {
 
   return (
     <FormProvider {...{ formMethods, onSubmit }}>
-        {children}
+        {!noRow ? <Row>{children}</Row> : children}
       <button
         type="submit"
       >

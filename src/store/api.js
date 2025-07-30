@@ -1,50 +1,95 @@
 import axios from "axios";
-import config from "../config";
-
-//import { actSpinner } from "../";
 import validatedResponse, { messageHttpError } from './axios-validator';
+// import {clone} from 'helpers';
+import { isEmpty } from 'lodash';
+import config from "@/config";
+import { useStoreDirectly } from "@/store";
+import { getAuthToken, signinSilent } from "helpers/authentication/authManager";
 
-const setCount=(count)=>{
-  let currentCount=sessionStorage.getItem("httpRequestCount",count) || 0;
-  currentCount=currentCount+ count;
-  if (currentCount<0) currentCount=0;
-  sessionStorage.setItem("httpRequestCount",currentCount)
-}
+/*
+ * API Configuration with automatic spinner management
+ * 
+ * Usage:
+ * - Default behavior: Shows spinner for all requests (unless blockUi===true)
+ * - To disable spinner: Set blockUi: true in the request config
+ *   Example: api.get('/endpoint', { blockUi: true })
+ * 
+ * Timeout: 30 seconds default for all requests
+ */
 
-// import httpAdapter from 'axios/lib/adapters/http';
-// axios.defaults.adapter = httpAdapter;
+axios.defaults.baseURL = config.api;
 
 //task: put the global request headers for endpoint calls here
-axios.defaults.headers.common = {
-  "Content-Type": "application/json"
+const headers = {
+  "Content-Type": "application/json",
 };
+axios.defaults.headers.common = { ...axios.defaults.headers.common, ...headers };
 
-// Add a request interceptor
+axios.defaults.withCredentials = true;
+
+axios.defaults.timeout = 30000;
+
 axios.interceptors.request.use(
-  function (config) {
-    // Do something before request is sent
-    setCount(1);
-    return config;
-  } /*, function (error) { 
-    // Do something with request error
-    return Promise.reject(error);
-  }*/
+  async function (req) {
+
+    if (req.blockUi !== true) {
+      useStoreDirectly.getState().apiBeginRequest();
+    }
+
+    if (config.debug) {
+      const display = {
+        method: req.method,
+        url: req.url,
+        data: req.data,
+      };
+      console.log(JSON.stringify(display));
+    }
+
+    const user = await getAuthToken();
+
+    const store_user = useStoreDirectly.getState().user;
+    const updateReq = (user) => {
+      req = {
+        ...req,
+        headers: {
+          ...headers,
+          'X-BOA-User-ID': store_user?.userDetail?.userId || '',
+          'X-BOA-BOSS-ID': store_user?.userDetail?.bossId || '',
+          // 'userId': store_user?.userDetail?.userId || '',
+          Authorization: import.meta.env.VITE_JWT || `Bearer ${user?.access_token}`
+        }
+      };
+      return req;
+    };
+
+    if (user && !user.expired) {
+      updateReq(user);
+    }
+    else {
+      const user = await signinSilent();
+      updateReq(user);
+    }
+
+    return req;
+  }
 );
 
-// Add a response interceptor
 axios.interceptors.response.use(
   function (res) {
-    setCount(-1);
-    return validatedResponse(res); //return response or Promise.reject
+    if (res.config?.blockUi !== true) {
+      useStoreDirectly.getState().apiEndRequest();
+    }
+    return validatedResponse(res);
   }, function (error) {
-    setCount(-1);    
+    const config = error.response?.config || error.config;
+    if (config?.blockUi !== true) {
+      useStoreDirectly.getState().apiEndRequest();
+    }
     messageHttpError(error);
+
     return Promise.reject(error);
   }
 );
 
-export const api=axios.create({
-  baseURL: config.api,
-})
+export default axios;
 
-export default api;

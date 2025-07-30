@@ -50,7 +50,7 @@ export const TestHarnessExample = () => {
         <Input 
           name="categories" 
           label="Categories" 
-          optionscheckbox={exampleOptions.categories}
+          optionsCheckbox={exampleOptions.categories}
           info="Select one or more categories"
         />
       </TestHarness>

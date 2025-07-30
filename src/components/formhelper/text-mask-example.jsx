@@ -31,7 +31,7 @@ export const TextMaskExample = () => {
             label="Social Security Number"
             mask={inputMask.ssn}
             info="Enter your 9-digit SSN"
-            xs={6}
+            size={6}
           />
           
           <TextMask
@@ -39,7 +39,7 @@ export const TextMaskExample = () => {
             label="Social Security Number 2"
             mask={inputMask.ssn}
             info="Enter your 9-digit SSN"
-            xs={6}
+            size={6}
           />
         </div>
 
@@ -51,7 +51,7 @@ export const TextMaskExample = () => {
             label="License Plate"
             mask={inputMask.licensePlate}
             info="Enter license plate in format AAA-1234 (3 letters, dash, 4 numbers)"
-            xs={6}
+            size={6}
           />
         </div>
 

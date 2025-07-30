@@ -1,4 +1,4 @@
-import { Grid2 as Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
 export const Row = (props) => {
   const { children, columns, ...rest } = props;

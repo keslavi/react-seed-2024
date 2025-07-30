@@ -117,7 +117,7 @@ export const Task = () => {
       <br /> {/* account for navSticky */}
       <br /> {/* account for navSticky */}
       <Row>
-        <Col xs={12}>
+        <Col size={12}>
           <h4>Task</h4>
         </Col>
       </Row>
@@ -136,7 +136,7 @@ export const Task = () => {
           <Row>
             <div className="hidden"> Col is INSIDE Input</div>
             <Input
-              //size={{xs:4,xm:7}} //size={4} muiv6 Grid2 uses size
+              //size={{xs:4,xm:7}} //size={4} muiv7 Grid uses size
               name="subject"
               label="Subject"
               info="header|body"
@@ -151,7 +151,7 @@ export const Task = () => {
             <Input
               name="names"
               label="Names"
-              optionscheckbox={
+              optionsCheckbox={
                 option.task.status /*["steve","cindy", "riley", "whatever"]*/
               }
             />

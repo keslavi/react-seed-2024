@@ -1,6 +1,7 @@
 import { memo, useCallback, useMemo, useState, useEffect, useRef } from "react";
 import { IconButton } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import IconVisibility from "@mui/icons-material/Visibility";
+import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
 import { LabelHeading, labelHeadingVariant } from "../label-heading";
 import { inputMask } from "components";
 
@@ -151,7 +152,7 @@ export const LabelMask = memo((props) => {
   }, [textValue, maskPattern, showValue, isPersistent, props.showLast]);
 
   // Handle show/hide toggle (only if not persistent)
-  const handleClickShowValue = useCallback(() => {
+  const onClickShowValue = useCallback(() => {
     if (isPersistent) return; // No toggle for persistent fields
     
     const newShowValue = !showValue;
@@ -174,7 +175,7 @@ export const LabelMask = memo((props) => {
     }
   }, [showValue, isPersistent]);
 
-  const handleMouseDownShowValue = useCallback((event) => {
+  const onMouseDownShowValue = useCallback((event) => {
     event.preventDefault();
   }, []);
 
@@ -197,8 +198,8 @@ export const LabelMask = memo((props) => {
       {!isPersistent && textValue && (
         <IconButton
           aria-label="toggle value visibility"
-          onClick={handleClickShowValue}
-          onMouseDown={handleMouseDownShowValue}
+          onClick={onClickShowValue}
+          onMouseDown={onMouseDownShowValue}
           size="small"
           style={{ marginLeft: "8px" }}
           sx={{
@@ -208,7 +209,7 @@ export const LabelMask = memo((props) => {
             }
           }}
         >
-          {showValue ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+          {showValue ? <IconVisibilityOff fontSize="small" /> : <IconVisibility fontSize="small" />}
         </IconButton>
       )}
     </span>

@@ -11,7 +11,7 @@ import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
 
 import { ColPadded } from "@/components/grid";
-import { KeyboardArrowDown } from "@mui/icons-material";
+import IconKeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
 export const SelectAutocompleteFreesolo = (props) => {
   const [inputValue, setInputValue] = useState('');
@@ -62,7 +62,7 @@ export const SelectAutocompleteFreesolo = (props) => {
         onBlur={field.onBlur}
         value={field.value || ''}
         fullWidth
-        popupIcon={<KeyboardArrowDown />}
+        popupIcon={<IconKeyboardArrowDown />}
         renderInput={(params) => {
           return (
             <Box sx={{position:'relative'}}>
