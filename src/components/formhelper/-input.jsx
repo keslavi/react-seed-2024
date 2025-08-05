@@ -2,6 +2,7 @@ import { isEmpty } from "lodash";
 
 import { Checkbox } from "./checkbox";
 import { Datepicker } from "./datepicker";
+import { DateMask } from "./date-mask";
 import { SelectMulti } from "./select-multi";
 import { Select } from "./select";
 import { Radio } from "./radio";
@@ -52,7 +53,9 @@ export const Input = (props) => {
     textarea,
   } = props;
 
-  const Ctl = datepicker
+  const Ctl = mask 
+    ? TextMask 
+    : datepicker
     ? Datepicker
     : checkbox
     ? Checkbox
@@ -70,8 +73,6 @@ export const Input = (props) => {
     ? SelectCheckbox
     : textarea
     ? Textarea
-    : mask
-    ? TextMask
     : TextField;
 
   //const Ctl = TextField;

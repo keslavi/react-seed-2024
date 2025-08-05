@@ -44,6 +44,13 @@ export const Datepicker = memo((props) => {
         {...valueProp}
         {...errorMui}
         {...attributes}
+        inputProps={{
+          ...attributes.inputProps,
+          style: { 
+            cursor: 'pointer',
+            ...attributes.inputProps?.style 
+          }
+        }}
       />
     </ColPadded>
   )

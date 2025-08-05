@@ -1,5 +1,5 @@
 import { TestHarness } from "./testHarness";
-
+import dayjs from "dayjs";
 //THIS IS NOT THE PATTERN FOR A FORM, USE TASK.JSX PATTERN.
 //THIS IS FOR TESTING ONLY.
 import {
@@ -123,7 +123,6 @@ const item = {
   creditCardExpiry: "1225",
   zipCode: "12345",
   zipCodePlus4: "123456789",
-  dateOfBirth: "01011990",
   appointmentTime: "1430",
   currency: "1234567",
   percentage: "85",
@@ -136,6 +135,10 @@ const item = {
   ssnPartial: "123456789",
   phonePartial: "5551234567",
   customPartial: "12345678",
+  // Sample data for DateMask examples
+  dob: "2025-07-26",
+  dob2:"2025-07-26",
+  dobEmpty: "",
 };
 
 const ChildrenDefault = () => {
@@ -192,6 +195,29 @@ const ChildrenDefault = () => {
         <h3>Masked Input Examples</h3>
       </Row>
       <Row>
+        <h4>Date Mask Examples</h4>
+      </Row>
+      <Row>
+        <Input
+          name="dob"
+          label="Date of Birth (MM/DD/YYYY)"
+          mask={inputMask.date}
+          info="Enter your date of birth in MM/DD/YYYY format"
+        />
+        <Input
+          name="dobEmpty"
+          label="Date of Birth (Empty)"
+          mask={inputMask.date}
+          info="Empty date field with MM/DD/YYYY format"
+        />
+        <Input 
+          datepicker
+          name="dob2"
+          label="Date of Birth (Datepicker)"
+          info="Empty date field with MM/DD/YYYY format"
+        />
+      </Row>      
+      <Row>
         <Input
           name="ssn"
           label="SSN"
@@ -222,6 +248,8 @@ const ChildrenDefault = () => {
           info="Enter license plate in format AAA-1234 (3 letters, dash, 4 numbers)"
         />
       </Row>
+
+ 
 
       <Row>
         <h3>Label Mask Examples</h3>
@@ -289,16 +317,6 @@ const ChildrenDefault = () => {
           info="Confirm your password"
         />
       </Row>
-
-
-
-
-
-
-
-
-
-
     </>
   );
 };

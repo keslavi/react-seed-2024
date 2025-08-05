@@ -27,6 +27,7 @@ in a new terminal (if in windows, use command prompt, not bash. it formats outpu
 ## current features
 - tasks section to demonstrate end to end usage (tasks=todo, but who wants a million 'todo' files and references???
 - full unit tests for task section... redux and component
+- **FormHelper components** - Comprehensive form input library with masking, validation, and advanced features
 - form validation 
 
 - api error handling and notification for errors
@@ -81,6 +82,33 @@ by default the project comes with the following backends that have a simple ToDo
  use the following postman public link to test the api independantly of front end:
  https://www.getpostman.com/collections/6a24df4d7cc7984ac429
   
+
+## FormHelper Components
+
+The project includes a comprehensive form input library with advanced features:
+
+### Documentation
+- **[Usage Examples](src/components/formhelper/USAGE_EXAMPLES.md)** - Comprehensive examples for all components
+- **[Quick Reference](src/components/formhelper/QUICK_REFERENCE.md)** - Most common patterns and props
+- **[Text Mask Specifications](src/components/formhelper/text-mask-specifications.md)** - Technical specifications
+
+### Key Features
+- **Text masking** (SSN, phone, credit card, etc.)
+- **Date masking** with range validation
+- **Partial masking** for sensitive data
+- **Select components** (dropdown, autocomplete, multi-select)
+- **Grid layout** support
+- **Form validation** integration
+
+### Quick Start
+```jsx
+import { Input } from '@/components/formhelper';
+
+// Basic usage
+<Input name="ssn" label="SSN" mask="ssn" />
+<Input name="phone" label="Phone" mask="phone" />
+<Input name="date" label="Date" mask="MM/DD/YYYY" />
+```
 
 ## jest unit testing
 

@@ -18,31 +18,34 @@ describe('TextMask Partial Masking (showLast)', () => {
     user = userEvent.setup();
   });
 
-  // test('shows only last 4 characters for credit card when masked', () => {
-  //   render(
-  //     <TestWrapper>
-  //       <TextMask 
-  //         name="card" 
-  //         label="Credit Card" 
-  //         mask="creditCard"
-  //         showLast={4}
-  //       />
-  //     </TestWrapper>
-  //   );
-  //   
-  //   const input = screen.getByLabelText('Credit Card');
-  //   fireEvent.change(input, { target: { value: '1234567890123456' } });
-  //   
-  //   // When visible, should show full formatted value
-  //   expect(input.value).toBe('1234 5678 9012 3456');
-  //   
-  //   // Simulate hiding the value (click the visibility toggle)
-  //   const toggleButton = screen.getByLabelText('toggle value visibility');
-  //   fireEvent.click(toggleButton);
-  //   
-  //   // When hidden, should show asterisks with last 4 characters
-  //   expect(input.value).toBe('**** **** **** 3456');
-  // });
+  test('shows only last 4 characters for credit card when masked', async () => {
+    render(
+      <TestWrapper>
+        <TextMask 
+          name="card" 
+          label="Credit Card" 
+          mask="creditCard"
+          showLast={4}
+        />
+      </TestWrapper>
+    );
+    
+    const input = screen.getByLabelText('Credit Card');
+    await user.type(input, '1234567890123456');
+    
+    // When visible, should show full formatted value
+    expect(input.value).toBe('1234 5678 9012 3456');
+    
+    // Focus the input to show the helper text
+    await user.click(input);
+    
+    // Click the Show/Hide helper text
+    const helperText = screen.getByText('Hide');
+    await user.click(helperText);
+    
+    // When hidden, should show asterisks with last 4 characters
+    expect(input.value).toBe('**** **** **** 3456');
+  });
 
   test('starts unmasked and shows partial mask when toggled (no initial value)', async () => {
     render(
@@ -61,8 +64,12 @@ describe('TextMask Partial Masking (showLast)', () => {
     
     expect(input.value).toBe('123-45-6789');
     
-    const toggleButton = screen.getByLabelText('toggle value visibility');
-    await user.click(toggleButton);
+    // Focus the input to show the helper text
+    await user.click(input);
+    
+    // Click the Show/Hide helper text
+    const helperText = screen.getByText('Hide');
+    await user.click(helperText);
     
     expect(input.value).toBe('***-**-6789');
   });
@@ -84,104 +91,113 @@ describe('TextMask Partial Masking (showLast)', () => {
     expect(input.value).toBe('***-**-6789');
   });
 
-  // test('shows only last 3 characters for custom pattern when masked', () => {
-  //   render(
-  //     <TestWrapper>
-  //       <TextMask 
-  //         name="custom" 
-  //         label="Custom" 
-  //         mask="##-##-####"
-  //         showLast={3}
-  //       />
-  //     </TestWrapper>
-  //   );
-  //   
-  //   const input = screen.getByLabelText('Custom');
-  //   fireEvent.change(input, { target: { value: '12345678' } });
-  //   
-  //   // When visible, should show full formatted value
-  //   expect(input.value).toBe('12-34-5678');
-  //   
-  //   // Simulate hiding the value
-  //   const toggleButton = screen.getByLabelText('toggle value visibility');
-  //   fireEvent.click(toggleButton);
-  //   
-  //   // When hidden, should show asterisks with last 3 characters
-  //   expect(input.value).toBe('**-**-678');
-  // });
+  test('shows only last 3 characters for custom pattern when masked', async () => {
+    render(
+      <TestWrapper>
+        <TextMask 
+          name="custom" 
+          label="Custom" 
+          mask="##-##-####"
+          showLast={3}
+        />
+      </TestWrapper>
+    );
+    
+    const input = screen.getByLabelText('Custom');
+    await user.type(input, '12345678');
+    
+    // When visible, should show full formatted value
+    expect(input.value).toBe('12-34-5678');
+    
+    // Focus the input to show the helper text
+    await user.click(input);
+    
+    // Click the Show/Hide helper text
+    const helperText = screen.getByText('Hide');
+    await user.click(helperText);
+    
+    // When hidden, should show asterisks with last 3 characters
+    expect(input.value).toBe('**-**-*678');
+  });
 
-  // test('shows only last 4 characters for phone when masked', () => {
-  //   render(
-  //     <TestWrapper>
-  //       <TextMask 
-  //         name="phone" 
-  //         label="Phone" 
-  //         mask="phone"
-  //         showLast={4}
-  //       />
-  //     </TestWrapper>
-  //   );
-  //   
-  //   const input = screen.getByLabelText('Phone');
-  //   fireEvent.change(input, { target: { value: '5551234567' } });
-  //   
-  //   // When visible, should show full formatted value
-  //   expect(input.value).toBe('(555) 123-4567');
-  //   
-  //   // Simulate hiding the value
-  //   const toggleButton = screen.getByLabelText('toggle value visibility');
-  //   fireEvent.click(toggleButton);
-  //   
-  //   // When hidden, should show asterisks with last 4 characters
-  //   expect(input.value).toBe('(***) ***-4567');
-  // });
+  test('shows only last 4 characters for phone when masked', async () => {
+    render(
+      <TestWrapper>
+        <TextMask 
+          name="phone" 
+          label="Phone" 
+          mask="phone"
+          showLast={4}
+        />
+      </TestWrapper>
+    );
+    
+    const input = screen.getByLabelText('Phone');
+    await user.type(input, '5551234567');
+    
+    // When visible, should show full formatted value
+    expect(input.value).toBe('(555) 123-4567');
+    
+    // Focus the input to show the helper text
+    await user.click(input);
+    
+    // Click the Show/Hide helper text
+    const helperText = screen.getByText('Hide');
+    await user.click(helperText);
+    
+    // When hidden, should show asterisks with last 4 characters
+    expect(input.value).toBe('(***) ***-4567');
+  });
 
-  // test('handles short values correctly', () => {
-  //   render(
-  //     <TestWrapper>
-  //       <TextMask 
-  //         name="short" 
-  //         label="Short" 
-  //         mask="####"
-  //         showLast={4}
-  //       />
-  //     </TestWrapper>
-  //   );
-  //   
-  //   const input = screen.getByLabelText('Short');
-  //   fireEvent.change(input, { target: { value: '123' } });
-  //   
-  //   // When visible, should show full formatted value
-  //   expect(input.value).toBe('123');
-  //   
-  //   // Simulate hiding the value
-  //   const toggleButton = screen.getByLabelText('toggle value visibility');
-  //   fireEvent.click(toggleButton);
-  //   
-  //   // When hidden, should show all characters since value is shorter than showLast
-  //   expect(input.value).toBe('123');
-  // });
+  test('handles short values correctly', async () => {
+    render(
+      <TestWrapper>
+        <TextMask 
+          name="short" 
+          label="Short" 
+          mask="####"
+          showLast={4}
+        />
+      </TestWrapper>
+    );
+    
+    const input = screen.getByLabelText('Short');
+    await user.type(input, '123');
+    
+    // When visible, should show full formatted value
+    expect(input.value).toBe('123');
+    
+    // Focus the input to show the helper text
+    await user.click(input);
+    
+    // Click the Show/Hide helper text
+    const helperText = screen.getByText('Hide');
+    await user.click(helperText);
+    
+    // When hidden, should show all characters since value is shorter than showLast
+    expect(input.value).toBe('123');
+  });
 
-  // test('persistent fields ignore showLast prop', () => {
-  //   render(
-  //     <TestWrapper>
-  //       <TextMask 
-  //         name="persistent" 
-  //         label="Persistent" 
-  //         mask="creditCard"
-  //         showLast={4}
-  //         persistent
-  //       />
-  //     </TestWrapper>
-  //   );
-  //   
-  //   const input = screen.getByLabelText('Persistent');
-  //   fireEvent.change(input, { target: { value: '1234567890123456' } });
-  //   
-  //   // Should always show full formatted value when persistent
-  //   expect(input.value).toBe('1234 5678 9012 3456');
-  //   
-  //   // No visibility toggle should be present
-  //   expect(screen.queryByLabelText('toggle value visibility')).not.toBeInTheDocument();
-  // });
+  test('persistent fields ignore showLast prop', async () => {
+    render(
+      <TestWrapper>
+        <TextMask 
+          name="persistent" 
+          label="Persistent" 
+          mask="creditCard"
+          showLast={4}
+          persistent
+        />
+      </TestWrapper>
+    );
+    
+    const input = screen.getByLabelText('Persistent');
+    await user.type(input, '1234567890123456');
+    
+    // Should always show full formatted value when persistent
+    expect(input.value).toBe('1234 5678 9012 3456');
+    
+    // No helper text should be present when persistent
+    expect(screen.queryByText('Hide')).not.toBeInTheDocument();
+  });
 }); 

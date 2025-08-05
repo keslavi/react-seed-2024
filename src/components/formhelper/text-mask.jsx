@@ -1,12 +1,18 @@
 import { memo, useCallback, useMemo, useState, useEffect, useRef } from "react";
-import { TextField as MuiTextField, IconButton, InputAdornment } from "@mui/material";
-import IconVisibility from "@mui/icons-material/Visibility";
-import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
+import { 
+  TextField as MuiTextField, 
+  FormHelperText,
+  // IconButton, 
+  // InputAdornment 
+} from "@mui/material";
+// import IconVisibility from "@mui/icons-material/Visibility";
+// import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
 import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
-
+import { DateMask } from "./date-mask";
+import { color } from "@/theme-material";
 // Utility functions for masking and formatting
 const applyMask = (value, mask) => {
   if (!value || !mask) return value;
@@ -93,7 +99,8 @@ export const inputMask = {
   time: '##:##',
   currency: '$#,###.##',
   percentage: '##%',
-  licensePlate: 'AAA-####'
+  licensePlate: 'AAA-####',
+  date: '##/##/####',
 };
 
 // Function to create partial mask showing only last N characters
@@ -120,7 +127,8 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
   let lastChars = actualChars.slice(-showLast);
   let lastCharIndex = 0;
   
-  for (let i = 0; i < maskPattern.length; i++) {
+  // Process only up to the length of the formatted value
+  for (let i = 0; i < formattedValue.length; i++) {
     const maskChar = maskPattern[i];
     
     if (maskChar === '#' || maskChar === 'A' || maskChar === '*') {
@@ -128,10 +136,13 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
       if (actualCharIndex < actualChars.length - showLast) {
         // Mask this character
         result += '*';
-      } else {
+      } else if (lastCharIndex < lastChars.length) {
         // Show the actual character from the last N characters
-        result += lastChars[lastCharIndex] || '*';
+        result += lastChars[lastCharIndex];
         lastCharIndex++;
+      } else {
+        // No more characters to show, use asterisk
+        result += '*';
       }
       actualCharIndex++;
     } else {
@@ -144,7 +155,12 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
 };
 
 export const TextMask = memo((props) => {
+  // Check if this is a date mask pattern and redirect to DateMask
+
+  if (props.mask === inputMask.date) return <DateMask {...props} />
+
   const timeoutRef = useRef(null);
+  const helperTimeoutRef = useRef(null);
   
   const { 
     field, 
@@ -155,10 +171,7 @@ export const TextMask = memo((props) => {
   const [showValue, setShowValue] = useState(
     !(valueProp && valueProp.value && String(valueProp.value).trim() !== '')
   );
-
-  
-  // Check if masking should be disabled (always show unmasked value)
-  const isPersistent = props.persistent || props.alwaysVisible;
+  const [showHelper, setShowHelper] = useState(false);
 
   // Get mask pattern from props or predefined patterns
   const maskPattern = useMemo(() => {
@@ -193,46 +206,65 @@ export const TextMask = memo((props) => {
     if (maskPattern) {
       const formattedValue = applyMask(rawValue, maskPattern);
       
-      // If persistent or value is visible, show formatted value
-      if (isPersistent || showValue || !rawValue) {
-        return formattedValue;
+          // If value is visible, show formatted value
+    if (showValue || !rawValue) {
+      return formattedValue;
+    }
+    
+    // If value is hidden, check if partial masking is requested
+    if (props.showLast && typeof props.showLast === 'number' && props.showLast > 0) {
+      // Show partial mask with last N characters
+      return createPartialMask(rawValue, maskPattern, props.showLast);
+    }
+    
+          // If value is hidden and no partial masking, show asterisks instead
+      if (maskPattern === '##/##/####') {
+        return '**/**/****';
       }
-      
-      // If value is hidden, check if partial masking is requested
-      if (props.showLast && typeof props.showLast === 'number' && props.showLast > 0) {
-        // Show partial mask with last N characters
-        return createPartialMask(rawValue, maskPattern, props.showLast);
-      }
-      
-      // If value is hidden and no partial masking, show asterisks instead
       return maskPattern.replace(/[#A*]/g, '*');
     }
     
     if (formatPattern) {
       const formattedValue = applyFormat(rawValue, formatPattern);
       
-      // If persistent or value is visible, show formatted value
-      if (isPersistent || showValue || !rawValue) {
-        return formattedValue;
+          // If value is visible, show formatted value
+    if (showValue || !rawValue) {
+      return formattedValue;
+    }
+    
+    // If value is hidden, check if partial masking is requested for format patterns
+    if (props.showLast && typeof props.showLast === 'number' && props.showLast > 0) {
+      // Show partial mask with last N characters
+      return createPartialMask(rawValue, formatPattern, props.showLast);
+    }
+    
+          // If value is hidden and no partial masking, show asterisks instead
+      if (formatPattern === '##/##/####') {
+        return '**/**/****';
       }
-      
-      // If value is hidden, check if partial masking is requested for format patterns
-      if (props.showLast && typeof props.showLast === 'number' && props.showLast > 0) {
-        // Show partial mask with last N characters
-        return createPartialMask(rawValue, formatPattern, props.showLast);
-      }
-      
-      // If value is hidden and no partial masking, show asterisks instead
       return formatPattern.replace(/[#A*]/g, '*');
     }
     
     return rawValue;
-  }, [field.value, maskPattern, formatPattern, showValue, isPersistent, props.showLast]);
+  }, [field.value, maskPattern, formatPattern, showValue, props.showLast]);
+
+  const onFocus = useCallback((e) => {
+    setShowHelper(true);
+    props.onFocus?.(e);
+  }, []);
 
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
     props.onBlur?.(e);
-  }, [field, props]);
+    
+    // Hide helper text after 1 second to give user time to click
+    if (helperTimeoutRef.current) {
+      clearTimeout(helperTimeoutRef.current);
+    }
+    helperTimeoutRef.current = setTimeout(() => {
+      setShowHelper(false);
+    }, 1000); // 1 second
+  }, [field]);
 
   const onChange = useCallback((e) => {
     let newValue = e.target.value;
@@ -250,8 +282,8 @@ export const TextMask = memo((props) => {
     field.onChange(newValue);
     props.onChange?.(newValue);
     
-    // Reset the auto-mask timer when user types (only if not persistent)
-    if (showValue && !isPersistent) {
+    // Reset the auto-mask timer when user types
+    if (showValue) {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -259,12 +291,10 @@ export const TextMask = memo((props) => {
         setShowValue(false);
       }, 30000); // 30 seconds
     }
-  }, [field, props, maskPattern, formatPattern, showValue, isPersistent]);
+  }, [field, props, maskPattern, formatPattern, showValue]);
 
-  // Handle show/hide toggle (only if not persistent)
+  // Handle show/hide toggle
   const onClickShowValue = useCallback(() => {
-    if (isPersistent) return; // No toggle for persistent fields
-    
     const newShowValue = !showValue;
     setShowValue(newShowValue);
     
@@ -283,7 +313,7 @@ export const TextMask = memo((props) => {
         timeoutRef.current = null;
       }
     }
-  }, [showValue, isPersistent]);
+  }, [showValue]);
 
   const onMouseDownShowValue = useCallback((event) => {
     event.preventDefault();
@@ -292,7 +322,7 @@ export const TextMask = memo((props) => {
   // Prevent keyboard input when field is masked
   const onKeyDown = useCallback((event) => {
     const hasValue = field.value && String(field.value).trim() !== '';
-    const isMasked = hasValue && !showValue && !isPersistent;
+    const isMasked = hasValue && !showValue;
     
     if (isMasked) {
       // Allow only specific keys: Tab, Escape, Enter, Arrow keys, Home, End, Page Up, Page Down
@@ -307,13 +337,16 @@ export const TextMask = memo((props) => {
         return;
       }
     }
-  }, [field.value, showValue, isPersistent]);
+  }, [field.value, showValue]);
 
-  // Cleanup timeout on unmount
+  // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+      if (helperTimeoutRef.current) {
+        clearTimeout(helperTimeoutRef.current);
       }
     };
   }, []);
@@ -326,28 +359,41 @@ export const TextMask = memo((props) => {
         name={field.name}
         label={props.label}
         inputRef={field.ref}
+        onFocus={onFocus}
         onBlur={onBlur}
         onChange={onChange}
         onKeyDown={onKeyDown}
         value={displayValue}
         {...cleanParentProps(props)}
         {...errorMui}
-        InputProps={{
-          endAdornment: !isPersistent ? (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle value visibility"
-                onClick={onClickShowValue}
-                onMouseDown={onMouseDownShowValue}
-                edge="end"
-              >
-                {showValue ? <IconVisibilityOff /> : <IconVisibility />}
-              </IconButton>
-            </InputAdornment>
-          ) : undefined,
-        }}
+        // InputProps={{
+        //   endAdornment: !isPersistent ? (
+        //     <InputAdornment position="end">
+        //       <IconButton
+        //         aria-label="toggle value visibility"
+        //         onClick={onClickShowValue}
+        //         onMouseDown={onMouseDownShowValue}
+        //         edge="end"
+        //       >
+        //         {showValue ? <IconVisibilityOff /> : <IconVisibility />}
+        //       </IconButton>
+        //     </InputAdornment>
+        //   ) : undefined,
+        // }}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
+      {showHelper && !props.persistent && (
+        <FormHelperText id={`${field.id}HelperText`}
+          style={{
+            color: color.primary.blue,
+            cursor: 'pointer',
+            fontSize: 'inherit',
+          }}
+          onClick={onClickShowValue}
+        >
+          {showValue ? 'Hide' : 'Show'}
+        </FormHelperText>
+      )}
     </ColPadded>
   );
 });
