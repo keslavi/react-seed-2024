@@ -203,6 +203,7 @@ const ChildrenDefault = () => {
           label="Date of Birth (MM/DD/YYYY)"
           mask={inputMask.date}
           info="Enter your date of birth in MM/DD/YYYY format"
+          readOnly
         />
         <Input
           name="dobEmpty"

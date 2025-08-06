@@ -88,6 +88,7 @@ const removeMask = (value, mask) => {
 
 // Predefined mask patterns
 export const inputMask = {
+  ein: '##-#######',
   ssn: '###-##-####',
   phone: '(###) ###-####',
   phoneExt: '(###) ###-#### x####',
@@ -382,7 +383,7 @@ export const TextMask = memo((props) => {
         // }}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
-      {showHelper && !props.persistent && (
+      {!props.persistent && (
         <FormHelperText id={`${field.id}HelperText`}
           style={{
             color: color.primary.blue,

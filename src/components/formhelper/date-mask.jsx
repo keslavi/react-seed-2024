@@ -105,7 +105,7 @@ export const DateMask = memo((props) => {
         }}
       />
       <MuiTextField
-        className={masked ? 'hidden' : ''}
+        className={masked ? 'hidden' : (props.readOnly ? 'hidden' : '')}
         fullWidth
         type="date"
         id={field.name}
@@ -127,7 +127,29 @@ export const DateMask = memo((props) => {
           }
         }}
       />
-      {showHelper && (
+      <MuiTextField
+        className={masked ? 'hidden' : (props.readOnly ? '' : 'hidden')}
+        fullWidth
+        readOnly
+        id={field.name}
+        name={field.name}
+        label={props.label}
+        inputRef={field.ref}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        {...cleanParentProps(props)}
+        value={valueProp?.value ? dayjs(valueProp.value).format('MM/DD/YYYY') : ''}
+        {...errorMui}
+        {...attributes}
+        inputProps={{
+          ...attributes.inputProps,
+          style: { 
+            cursor: 'pointer',
+            ...attributes.inputProps?.style 
+          }
+        }}
+      />
+      {/* {showHelper && ( */}
         <FormHelperText id={`${field.id}HelperText`}
           style={{
             color: color.primary.blue,
@@ -138,7 +160,7 @@ export const DateMask = memo((props) => {
         >
           {masked ? 'Show' : 'hide'}
         </FormHelperText>
-      )}      
+      {/* )}       */}
     </ColPadded>
   )
 
