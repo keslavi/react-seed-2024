@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate, /*NavLink,*/ useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 import { store } from "store";
+import dayjs from "dayjs";
 
 //prettier-ignore
 import {
@@ -52,12 +53,13 @@ export const Task = () => {
   // });
   const frmMethods = useFormProvider({
     resolver,
-    //mode:"onChange"
+    mode: "onChange"
   });
   const { errors, handleSubmit, reset } = frmMethods;
 
   useEffect(() => {
     if (errors) {
+      console.log('Form errors:', errors);
       errorNotification(errors);
     }
   }, [errors]);
@@ -161,7 +163,13 @@ export const Task = () => {
             <Input name="status" label="Status" options={option.task.status} info="header2|body2" />
             {/* <Select name="status" label="Status" options={option.status} /> */}
             <Input name="result" label="Result" options={option.task.result} />
-            <Input datepicker name="dfrom" label="From" />
+            <Input 
+              datepicker 
+              name="dfrom" 
+              label="From" 
+              max={dayjs()}
+              //min={dayjs().subtract(125, 'year').format('YYYY-MM-DD')}
+            />
           </Row>
         </Fieldset>
         <br />
