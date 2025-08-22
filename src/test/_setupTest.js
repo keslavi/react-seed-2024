@@ -9,7 +9,12 @@ import {
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { isEmpty } from "lodash";
-import { isTruthy } from "@/helpers";
+import { isTruthy, isFalsy } from "../helpers/is-truthy";
+import { setupServer } from 'msw/node';
+import { mswAll } from './msw/mswAll';
+
+// Load global extensions as mentioned in prompt.md
+import '../helpers/extensions/global-extensions.js';
 
 global.act = act;
 global.fireEvent = fireEvent;
@@ -20,17 +25,34 @@ global.waitFor = waitFor;
 global.within = within;
 global.isEmpty = isEmpty;
 global.isTruthy = isTruthy;
+global.isFalsy = isFalsy;
 global.isFalsey = (value) => !isTruthy(value);
 
-// Mock store for testing
-global.store = {
-  use: {
-    errorsClear: () => {},
-    errorsList: () => [],
-    errorAdd: () => {},
-    errorDel: () => {},
-  }
-};
+// Set up MSW server for API mocking
+const server = setupServer(...mswAll);
+
+beforeAll(() => {
+  // Start MSW server with error handling for unhandled requests
+  server.listen({
+    onUnhandledRequest: 'error',
+    // Ensure MSW intercepts requests properly
+    serviceWorker: {
+      url: '/mockServiceWorker.js'
+    }
+  });
+  
+  //console.log('[MSW] Server started with handlers:', mswAll.length);
+});
+
+afterAll(() => {
+  server.close();
+  //console.log('[MSW] Server closed');
+});
+
+afterEach(() => {
+  server.resetHandlers();
+  //console.log('[MSW] Handlers reset');
+});
 
 //import "@testing-library/user-event"; //maybe add here? 
 

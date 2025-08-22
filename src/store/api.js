@@ -42,7 +42,7 @@ axios.interceptors.request.use(
         url: req.url,
         data: req.data,
       };
-      console.log(JSON.stringify(display));
+      console.log(["all"],JSON.stringify(display));
     }
 
     const user = await getAuthToken();

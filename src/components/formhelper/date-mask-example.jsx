@@ -13,7 +13,7 @@ export const DateMaskExample = () => {
   });
 
   const onSubmit = (data) => {
-    console.log('Form data:', data);
+    console.log(["datemask"],'Form data:', data);
   };
 
   return (

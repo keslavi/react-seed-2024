@@ -11,7 +11,7 @@ export const DateMaskVerification = () => {
   });
 
   const onSubmit = (data) => {
-    console.log('Form data:', data);
+    console.log(["mask"],'Form data:', data);
   };
 
   return (

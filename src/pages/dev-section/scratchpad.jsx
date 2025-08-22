@@ -12,9 +12,9 @@ export const Scratchpad = () => {
     setResult(null);
 
     try {
-      console.log("🚀 Making request to badRequest/noResponse (with spinner by default)...");
+      console.log(["all"],"🚀 Making request to badRequest/noResponse (with spinner by default)...");
       const response = await api.get("/public/badRequest/noResponse");
-      console.log("✅ Response received:", response);
+      console.log(["all"],"✅ Response received:", response);
       setResult({ success: true, data: response.data });
     } catch (error) {
       console.error("❌ Error from badRequest/noResponse:", error);
@@ -31,9 +31,9 @@ export const Scratchpad = () => {
     setResult(null);
 
     try {
-      console.log("🚀 Making request to badRequest/noResponse (no spinner)...");
+      console.log(["all"],"🚀 Making request to badRequest/noResponse (no spinner)...");
       const response = await api.get("/public/badRequest/noResponse", { blockUi: false });
-      console.log("✅ Response received:", response);
+      console.log(["all"],"✅ Response received:", response);
       setResult({ success: true, data: response.data });
     } catch (error) {
       console.error("❌ Error from badRequest/noResponse:", error);
@@ -50,7 +50,7 @@ export const Scratchpad = () => {
     try {
       console.log("🚀 Making request to delay...");
       const response = await api.get("/public/badRequest/delay");
-      console.log("✅ Response received:", response);
+      console.log(["all"],"✅ Response received:", response);
       setResult({ success: true, data: response.data });
     } catch (error) {
       console.error("❌ Error from badRequest/delay:", error);

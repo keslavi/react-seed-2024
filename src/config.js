@@ -7,7 +7,8 @@ export const config= {
   api:"/api",
   reduxLogger:false,
   env:"local",
-  debug:true,
+  debug: import.meta.env.VITEST ? false : true,
+  msw:true,
 }
 
 export default config;

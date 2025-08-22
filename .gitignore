@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Generated mock data files
+public/mock
+
 # Environment variables
 .env
 .env.local

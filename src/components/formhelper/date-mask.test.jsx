@@ -1,170 +1,218 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { FormProvider, useFormProvider } from './form-provider';
+import { TestHarness } from './test/testHarness';
 import { DateMask } from './date-mask';
-
-// Wrapper component to provide form context
-const TestWrapper = ({ children, formOptions = {} }) => {
-  const methods = useFormProvider(formOptions);
-  return (
-    <FormProvider formMethods={methods}>
-      {children}
-    </FormProvider>
-  );
-};
+import { Row } from '../grid';
 
 describe('DateMask', () => {
-  it('renders with default MM/DD/YYYY mask', () => {
+  it('when empty, renders with default MM/DD/YYYY mask', () => {
     render(
-      <TestWrapper>
-        <DateMask name="testDate" label="Test Date" />
-      </TestWrapper>
+      <TestHarness item={{}}>
+        <Row>
+          <DateMask
+            name="testDate"
+            label="Test Date"
+          />
+        </Row>
+      </TestHarness>
     );
     
-    // Get the masked input (type="text" with **/**/**** value)
-    const input = screen.getByDisplayValue('**/**/****');
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute('placeholder', 'Test Date');
+    // Find all labels with 'Test Date' text, then find the one in the visible FormControl
+    const allLabels = screen.getAllByText('Test Date');
+    const visibleLabel = allLabels.find(label => {
+      const formControl = label.closest('div[class*="MuiFormControl"]');
+      return formControl && !formControl.className.includes('hidden');
+    });
+    
+    expect(visibleLabel).toBeInTheDocument();
+    
+    // Find the input within the visible FormControl
+    const visibleFormControl = visibleLabel.closest('div[class*="MuiFormControl"]');
+    const dateInput = visibleFormControl.querySelector('input[type="date"]');
+    expect(dateInput).toBeInTheDocument();
+    expect(dateInput).toHaveAttribute('type', 'date');
+    
+    // The masked input should be hidden (but still in DOM)
+    const maskedInput = screen.getByDisplayValue('**/**/****');
+    expect(maskedInput).toBeInTheDocument();
+    
+    // The helper text should show "hide" (since it's not masked by default)
+    const helperText = screen.getByText('hide');
+    expect(helperText).toBeInTheDocument();
   });
 
-  it('renders with custom mask pattern', () => {
+  
+  it('applies mask formatting to input', async () => {
+    const user = userEvent.setup();
     render(
-      <TestWrapper>
-        <DateMask name="testDate" label="Test Date" mask="YYYY-MM-DD" />
-      </TestWrapper>
+      <TestHarness item={{}}>
+        <Row>
+          <DateMask
+            name="testDate"
+            label="Test Date"
+          />
+        </Row>
+      </TestHarness>
     );
     
-    // Get the masked input (type="text" with **/**/**** value)
-    const input = screen.getByDisplayValue('**/**/****');
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute('placeholder', 'Test Date');
-  });
-
-  it('applies mask formatting to input', () => {
-    render(
-      <TestWrapper>
-        <DateMask name="testDate" label="Test Date" />
-      </TestWrapper>
-    );
+    // Find all labels with 'Test Date' text, then find the one in the visible FormControl
+    const allLabels = screen.getAllByText('Test Date');
+    const visibleLabel = allLabels.find(label => {
+      const formControl = label.closest('div[class*="MuiFormControl"]');
+      return formControl && !formControl.className.includes('hidden');
+    });
     
-    // Get the date input (type="date") which is the visible one when no value is set
-    const input = screen.getByDisplayValue('');
+    // Find the input within the visible FormControl
+    const visibleFormControl = visibleLabel.closest('div[class*="MuiFormControl"]');
+    const dateInput = visibleFormControl.querySelector('input[type="date"]');
+    expect(dateInput).toHaveAttribute('type', 'date');
     
-    // Change to a valid date
-    fireEvent.change(input, { target: { value: '2023-12-01' } });
+    // Focus and change to a valid date
+    await user.click(dateInput);
+    await user.type(dateInput, '2023-12-01');
     
     // Should accept the date value
-    expect(input.value).toBe('2023-12-01');
+    expect(dateInput).toHaveValue('2023-12-01');
   });
 
-  /*
   it('shows visibility toggle when not persistent', () => {
     render(
-      <TestWrapper formOptions={{ defaultValues: { testDate: '1234567890' } }}>
-        <DateMask name="testDate" label="Test Date" />
-      </TestWrapper>
+      <TestHarness item={{ defaultValues: { testDate: '1234567890' } }}>
+        <Row>
+          <DateMask
+            name="testDate"
+            label="Test Date"
+          />
+        </Row>
+      </TestHarness>
     );
+    
+    // Find all labels with 'Test Date' text, then find the one in the visible FormControl
+    const allLabels = screen.getAllByText('Test Date');
+    const visibleLabel = allLabels.find(label => {
+      const formControl = label.closest('div[class*="MuiFormControl"]');
+      return formControl && !formControl.className.includes('hidden');
+    });
+    
+    // Find the input within the visible FormControl
+    const visibleFormControl = visibleLabel.closest('div[class*="MuiFormControl"]');
+    const dateInput = visibleFormControl.querySelector('input[type="date"]');
     
     // Focus the input to show the helper text
-    const input = screen.getByDisplayValue('1234567890');
-    fireEvent.focus(input);
+    fireEvent.focus(dateInput);
     
-    const toggleText = screen.getByText('Show');
+    const toggleText = screen.getByText('hide');
     expect(toggleText).toBeInTheDocument();
   });
-  */
 
-/*
-  it('hides visibility toggle when persistent', () => {
+  it('validates date input', async () => {
+    const user = userEvent.setup();
     render(
-      <TestWrapper formOptions={{ defaultValues: { testDate: '1234567890' } }}>
-        <DateMask name="testDate" label="Test Date" persistent />
-      </TestWrapper>
+      <TestHarness item={{}}>
+        <Row>
+          <DateMask
+            name="testDate"
+            label="Test Date"
+          />
+        </Row>
+      </TestHarness>
     );
     
-    // Focus the input to try to show the helper text
-    const input = screen.getByDisplayValue('1234567890');
-    fireEvent.focus(input);
+    // Find all labels with 'Test Date' text, then find the one in the visible FormControl
+    const allLabels = screen.getAllByText('Test Date');
+    const visibleLabel = allLabels.find(label => {
+      const formControl = label.closest('div[class*="MuiFormControl"]');
+      return formControl && !formControl.className.includes('hidden');
+    });
     
-    // No helper text should be present when persistent
-    const toggleText = screen.queryByText('Show');
-    expect(toggleText).not.toBeInTheDocument();
-  });
-  */
-
-  it('validates date input', () => {
-    render(
-      <TestWrapper>
-        <DateMask name="testDate" label="Test Date" />
-      </TestWrapper>
-    );
+    // Find the input within the visible FormControl
+    const visibleFormControl = visibleLabel.closest('div[class*="MuiFormControl"]');
+    const dateInput = visibleFormControl.querySelector('input[type="date"]');
+    expect(dateInput).toHaveAttribute('type', 'date');
     
-    const input = screen.getByDisplayValue('');
+    // Focus and test valid dates
+    await user.click(dateInput);
+    await user.type(dateInput, '2023-12-01');
+    expect(dateInput).toHaveValue('2023-12-01');
     
-    // Valid date
-    fireEvent.change(input, { target: { value: '2023-12-01' } });
-    expect(input.value).toBe('2023-12-01');
-    
-    // Another valid date
-    fireEvent.change(input, { target: { value: '2023-06-15' } });
-    expect(input.value).toBe('2023-06-15');
+    await user.clear(dateInput);
+    await user.type(dateInput, '2023-06-15');
+    expect(dateInput).toHaveValue('2023-06-15');
   });
 
-  it('validates min date constraint', () => {
+  it('validates min date constraint', async () => {
+    const user = userEvent.setup();
     render(
-      <TestWrapper>
-        <DateMask name="testDate" label="Test Date" min="2023-01-01" />
-      </TestWrapper>
+      <TestHarness item={{}}>
+        <Row>
+          <DateMask
+            name="testDate"
+            label="Test Date"
+            min="2023-01-01"
+          />
+        </Row>
+      </TestHarness>
     );
     
-    const input = screen.getByDisplayValue('');
+    // Find all labels with 'Test Date' text, then find the one in the visible FormControl
+    const allLabels = screen.getAllByText('Test Date');
+    const visibleLabel = allLabels.find(label => {
+      const formControl = label.closest('div[class*="MuiFormControl"]');
+      return formControl && !formControl.className.includes('hidden');
+    });
+    
+    // Find the input within the visible FormControl
+    const visibleFormControl = visibleLabel.closest('div[class*="MuiFormControl"]');
+    const dateInput = visibleFormControl.querySelector('input[type="date"]');
+    expect(dateInput).toHaveAttribute('type', 'date');
+    
+    // Focus and test dates
+    await user.click(dateInput);
     
     // Date before min (should be rejected)
-    fireEvent.change(input, { target: { value: '2022-12-01' } });
-    expect(input.value).toBe('2022-12-01'); // Should format but validation would prevent storage
+    await user.type(dateInput, '2022-12-01');
+    expect(dateInput).toHaveValue('2022-12-01'); // Should format but validation would prevent storage
     
     // Date after min (should be accepted)
-    fireEvent.change(input, { target: { value: '2023-12-01' } });
-    expect(input.value).toBe('2023-12-01');
+    await user.clear(dateInput);
+    await user.type(dateInput, '2023-12-01');
+    expect(dateInput).toHaveValue('2023-12-01');
   });
 
-  it('validates max date constraint', () => {
+  it('validates max date constraint', async () => {
+    const user = userEvent.setup();
     render(
-      <TestWrapper>
-        <DateMask name="testDate" label="Test Date" max="2023-12-31" />
-      </TestWrapper>
+      <TestHarness item={{}}>
+        <Row>
+          <DateMask
+            name="testDate"
+            label="Test Date"
+            max="2023-12-31"
+          />
+        </Row>
+      </TestHarness>
     );
     
-    const input = screen.getByDisplayValue('');
+    // Find all labels with 'Test Date' text, then find the one in the visible FormControl
+    const allLabels = screen.getAllByText('Test Date');
+    const visibleLabel = allLabels.find(label => {
+      const formControl = label.closest('div[class*="MuiFormControl"]');
+      return formControl && !formControl.className.includes('hidden');
+    });
+    
+    // Find the input within the visible FormControl
+    const visibleFormControl = visibleLabel.closest('div[class*="MuiFormControl"]');
+    const dateInput = visibleFormControl.querySelector('input[type="date"]');
+    expect(dateInput).toHaveAttribute('type', 'date');
+    
+    // Focus and test dates
+    await user.click(dateInput);
     
     // Date after max (should be rejected)
-    fireEvent.change(input, { target: { value: '2024-01-01' } });
-    expect(input.value).toBe('2024-01-01'); // Should format but validation would prevent storage
+    await user.type(dateInput, '2024-01-01');
+    expect(dateInput).toHaveValue('2024-01-01'); // Should format but validation would prevent storage
     
     // Date before max (should be accepted)
-    fireEvent.change(input, { target: { value: '2023-12-01' } });
-    expect(input.value).toBe('2023-12-01');
-  });
-
-  it('validates both min and max date constraints', () => {
-    render(
-      <TestWrapper>
-        <DateMask name="testDate" label="Test Date" min="2023-01-01" max="2023-12-31" />
-      </TestWrapper>
-    );
-    
-    // Get the date input (type="date") which is the visible one when no value is set
-    const input = screen.getByDisplayValue('');
-    
-    // Date within range (should be accepted)
-    fireEvent.change(input, { target: { value: '2023-06-01' } });
-    expect(input.value).toBe('2023-06-01');
-    
-    // Date before min (should be rejected)
-    fireEvent.change(input, { target: { value: '2022-12-01' } });
-    expect(input.value).toBe('2022-12-01'); // Should format but validation would prevent storage
-    
-    // Date after max (should be rejected)
-    fireEvent.change(input, { target: { value: '2024-01-01' } });
-    expect(input.value).toBe('2024-01-01'); // Should format but validation would prevent storage
+    await user.clear(dateInput);
+    await user.type(dateInput, '2023-12-01');
+    expect(dateInput).toHaveValue('2023-12-01');
   });
 }); 

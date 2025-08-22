@@ -6,14 +6,14 @@ This document explains how to use the date validation functionality in the form 
 
 The system includes a reusable date validation method that ensures:
 - **Max date**: Cannot be in the future (must be less than present date)
-- **Min date**: Cannot be more than 100 years ago (must be greater than present -100 years)
+- **Min date**: Cannot be earlier than 125 years ago (must be greater than January 1st of 125 years ago)
 
 ## Usage
 
 ### Using the `validDateRange` method
 
 The `validDateRange` method accepts optional parameters:
-- `min`: minimum allowed date (defaults to 100 years ago)
+- `min`: minimum allowed date (defaults to January 1st of 125 years ago)
 - `max`: maximum allowed date (defaults to present date)
 - `message`: custom error message (optional)
 
@@ -22,7 +22,7 @@ import { yup } from '@/helpers/form-validation';
 import dayjs from 'dayjs';
 
 const schema = yup.object().shape({
-  // Using defaults (100 years ago to present)
+  // Using defaults (125 years ago to present)
   birthDate: yup.date()
     .validDateRange()
     .required("Birth date is required"),
@@ -55,7 +55,7 @@ import dayjs from 'dayjs';
 const schema = yup.object().shape({
   customDate: yup.date()
     .max(dayjs(), "Date cannot be in the future")
-    .min(dayjs().subtract(100, 'year'), "Date cannot be more than 100 years ago")
+    .min(dayjs().subtract(125, 'year').startOf('year'), "Date cannot be earlier than 125 years ago")
     .required("Date is required"),
 });
 ```
@@ -63,7 +63,7 @@ const schema = yup.object().shape({
 ## Validation Rules
 
 1. **Future dates**: Automatically rejected with message "Date cannot be in the future"
-2. **Dates earlier than minimum**: Automatically rejected with message showing the actual earliest allowed date (e.g., "Date cannot be earlier than 01/01/1924")
+2. **Dates earlier than minimum**: Automatically rejected with message showing the actual earliest allowed date (e.g., "Date cannot be earlier than 01/01/1899")
 3. **Required validation**: Date field must be provided
 4. **Date format**: Accepts any valid date format that dayjs can parse
 5. **Custom ranges**: Can specify custom min/max dates when needed
@@ -72,7 +72,7 @@ const schema = yup.object().shape({
 
 ### Using defaults:
 ```javascript
-yup.date().validDateRange() // 100 years ago to present
+yup.date().validDateRange() // January 1st of 125 years ago to present
 ```
 
 ### Custom age validation:
@@ -89,11 +89,11 @@ yup.date().validDateRange(dayjs('2020-01-01'), dayjs('2025-12-31'), "Date must b
 - Today's date
 - Yesterday
 - 50 years ago
-- 99 years ago
+- 124 years ago
 
 ### Invalid dates (with defaults):
 - Tomorrow (future date)
-- 101 years ago (too old)
+- Dates earlier than January 1st of 125 years ago (e.g., "Date cannot be earlier than 01/01/1899")
 - Empty/null values (if required)
 
 ## Integration with Form Components
@@ -109,8 +109,8 @@ import dayjs from 'dayjs';
   name="dfrom" 
   label="From Date" 
   max={dayjs()}
-  min={dayjs().subtract(100, 'year')}
+  min={dayjs().subtract(125, 'year').startOf('year')}
 />
 ```
 
-The `max` and `min` props on the datepicker component provide client-side validation, while the yup schema provides server-side validation. 
+The `max` and `min` props on the datepicker component provide client-side validation, while the yup schema provides server-side validation.

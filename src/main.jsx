@@ -1,5 +1,6 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
+// JSX Runtime fallback for compatibility
+import "./jsx-runtime-fallback.js";
 //import App from "./app"; //loaded in router
 import Router from "./router";
 //import { useStore } from "./store";
@@ -12,6 +13,12 @@ import { ThemeProvider } from "./theme-material";
 
 import "./helpers/extensions/console-extension";
 import "./helpers/extensions/global-extensions";
+
+// Load MSW browser setup (it handles conditional logic internally)
+import('./test/msw/mswBrowser.js').catch(error => {
+  console.warn('[MSW] Failed to load browser MSW:', error);
+});
+
 //console.logGroup.test(); //works in any *.js, *.jsx file/*
  
 ReactDOM.createRoot(document.getElementById("root")).render(

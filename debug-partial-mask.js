@@ -47,7 +47,7 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
   
   // Apply the mask first to get the formatted value
   const formattedValue = applyMask(value, maskPattern);
-  console.log('formattedValue:', formattedValue);
+  console.log(["mask"],'formattedValue:', formattedValue);
   
   if (formattedValue.length <= showLast) {
     return formattedValue; // If value is shorter than showLast, show all
@@ -55,7 +55,7 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
   
   // Count the actual characters (excluding mask characters)
   const actualChars = value.replace(/[^a-zA-Z0-9]/g, '');
-  console.log('actualChars:', actualChars);
+  console.log(["mask"],'actualChars:', actualChars);
   
   if (actualChars.length <= showLast) {
     return formattedValue; // If actual characters are fewer than showLast, show all
@@ -67,33 +67,33 @@ const createPartialMask = (value, maskPattern, showLast = 4) => {
   let lastChars = actualChars.slice(-showLast);
   let lastCharIndex = 0;
   
-  console.log('lastChars:', lastChars);
-  console.log('maskPattern:', maskPattern);
-  console.log('actualChars.length:', actualChars.length);
-  console.log('showLast:', showLast);
-  console.log('actualChars.length - showLast:', actualChars.length - showLast);
+  console.log(["mask"],'lastChars:', lastChars);
+  console.log(["mask"],'maskPattern:', maskPattern);
+  console.log(["mask"],'actualChars.length:', actualChars.length);
+  console.log(["mask"],'showLast:', showLast);
+  console.log(["mask"],'actualChars.length - showLast:', actualChars.length - showLast);
   
   for (let i = 0; i < maskPattern.length; i++) {
     const maskChar = maskPattern[i];
     
     if (maskChar === '#' || maskChar === 'A' || maskChar === '*') {
       // This is a character position
-      console.log(`Position ${i}: maskChar=${maskChar}, actualCharIndex=${actualCharIndex}, condition=${actualCharIndex < actualChars.length - showLast}`);
+      console.log(["mask"],`Position ${i}: maskChar=${maskChar}, actualCharIndex=${actualCharIndex}, condition=${actualCharIndex < actualChars.length - showLast}`);
       if (actualCharIndex < actualChars.length - showLast) {
         // Mask this character
         result += '*';
-        console.log(`  -> masked with *`);
+        console.log(["mask"],`  -> masked with *`);
       } else {
         // Show the actual character from the last N characters
         result += lastChars[lastCharIndex] || '*';
-        console.log(`  -> showing ${lastChars[lastCharIndex] || '*'}`);
+        console.log(["mask"],`  -> showing ${lastChars[lastCharIndex] || '*'}`);
         lastCharIndex++;
       }
       actualCharIndex++;
     } else {
       // Static character from mask
       result += maskChar;
-      console.log(`Position ${i}: static char ${maskChar} -> ${maskChar}`);
+      console.log(["mask"],`Position ${i}: static char ${maskChar} -> ${maskChar}`);
     }
   }
   
@@ -105,12 +105,12 @@ const value = '12345678';
 const maskPattern = '##-##-####';
 const showLast = 3;
 
-console.log('Input value:', value);
-console.log('Mask pattern:', maskPattern);
-console.log('Show last:', showLast);
-console.log('---');
+console.log(["mask"],'Input value:', value);
+console.log(["mask"],'Mask pattern:', maskPattern);
+console.log(["mask"],'Show last:', showLast);
+console.log(["mask"],'---');
 
 const result = createPartialMask(value, maskPattern, showLast);
-console.log('---');
-console.log('Result:', result);
-console.log('Expected: **-**-678'); 
+console.log(["mask"],'---');
+console.log(["mask"],'Result:', result);
+console.log(["mask"],'Expected: **-**-678'); 

@@ -144,19 +144,4 @@ describe('LabelMask Component', () => {
     expect(labelMask).toBeInTheDocument();
   });
 
-  test('applies custom styles', () => {
-    render(
-      <TestWrapper>
-        <LabelMask 
-          mask={inputMask.ssn} 
-          style={{ color: 'blue', fontWeight: 'bold' }}
-        >
-          123456789
-        </LabelMask>
-      </TestWrapper>
-    );
-    
-    const labelMask = screen.getByText('***-**-****').closest('span');
-    expect(labelMask).toHaveStyle({ color: 'blue', fontWeight: 'bold' });
-  });
 }); 

@@ -126,8 +126,9 @@ describe("Formhelper-SelectAutocomplete", () => {
     // Focus the field
     await user.click(input);
     
-    // Look for the clear button
-    const clearButton = screen.getByRole('button', { name: /clear/i });
+    // Find the clear button directly - MUI sets visibility: hidden but button is still clickable
+    const clearButton = input.closest('.MuiAutocomplete-root').querySelector('button[title="Clear"]');
+    expect(clearButton).toBeTruthy();
     await user.click(clearButton);
 
     // Verify the value was cleared
@@ -162,11 +163,10 @@ describe("Formhelper-SelectAutocomplete", () => {
     
     // Now try to clear it
     await user.click(input);
-    await waitFor(() => {
-      const clearButton = screen.getByRole('button', { name: /clear/i });
-    });
     
-    const clearButton = screen.getByRole('button', { name: /clear/i });
+    // Find the clear button directly - MUI sets visibility: hidden but button is still clickable
+    const clearButton = input.closest('.MuiAutocomplete-root').querySelector('button[title="Clear"]');
+    expect(clearButton).toBeTruthy();
     await user.click(clearButton);
     
     await user.tab(); // This will blur the input
@@ -195,7 +195,10 @@ describe("Formhelper-SelectAutocomplete", () => {
     
     // Focus the field and clear it
     await user.click(input);
-    const clearButton = screen.getByRole('button', { name: /clear/i });
+    
+    // Find the clear button directly - MUI sets visibility: hidden but button is still clickable
+    const clearButton = input.closest('.MuiAutocomplete-root').querySelector('button[title="Clear"]');
+    expect(clearButton).toBeTruthy();
     await user.click(clearButton);
 
     // Verify the value was cleared

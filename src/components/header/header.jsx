@@ -126,6 +126,7 @@ export const Header = (props) => {
   };
 
   return (
+    <>
     <ThemeProvider theme={headerTheme}>
       <AppBar
         position="fixed"
@@ -248,6 +249,8 @@ export const Header = (props) => {
         </Container>
       </AppBar>
     </ThemeProvider>
+    <br/><br/>
+    </>    
   );
 };
 export default Header;

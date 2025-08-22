@@ -23,7 +23,7 @@ const val={i:0};
 */
 yup.addMethod(yup.date, "validDateRange", function(min = null, max = null, message = "Date must be within valid range") {
   const maxDate = max || dayjs();
-  const minDate = min || dayjs().subtract(100, 'year');
+  const minDate = min || dayjs().subtract(125, 'year').startOf('year');
   
   return this
     .max(maxDate, `Date cannot be later than ${maxDate.format('MM/DD/YYYY')}`)
