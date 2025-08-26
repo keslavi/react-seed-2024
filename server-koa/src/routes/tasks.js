@@ -11,52 +11,45 @@ const __dirname = path.dirname(__filename);
 
 // Define data directory path
 const DATA_DIR = path.join(__dirname, '..', '..', 'data');
-const TASK_FILE = path.join(DATA_DIR, 'task.json');
-const OPTIONS_FILE = path.join(DATA_DIR, 'options.json');
 
-// Ensure data directory exists and has proper permissions
-const ensureDataDirectory = () => {
-    if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true, mode: 0o755 });
-    }
-    // Ensure files exist with proper permissions
-    if (!fs.existsSync(TASK_FILE)) {
-        fs.writeFileSync(TASK_FILE, JSON.stringify([], null, 2), { mode: 0o644 });
-    }
-    if (!fs.existsSync(OPTIONS_FILE)) {
-        fs.writeFileSync(OPTIONS_FILE, JSON.stringify({}, null, 2), { mode: 0o644 });
+// In-memory task data storage
+let taskData = [];
+
+// Load task data from IIFE file
+const loadData = () => {
+    try {
+        // Load task data
+        const taskFilePath = path.join(DATA_DIR, 'task.js');
+        const taskFileContent = fs.readFileSync(taskFilePath, 'utf8');
+        taskData = eval(taskFileContent);
+        
+        console.log('Task data loaded from IIFE file');
+    } catch (error) {
+        console.error('Error loading task data from IIFE file:', error);
+        // Fallback to empty data
+        taskData = [];
     }
 };
 
-// Initialize data directory
-ensureDataDirectory();
+// Initialize data on startup
+loadData();
 
 const readData = () => {
-    try {
-        const x = fs.readFileSync(TASK_FILE, 'utf8');
-        return JSON.parse(x);
-    } catch (error) {
-        console.error('Error reading task data:', error);
-        return [];
-    }
+    return taskData;
 }
 
 const writeData = (data) => {
+    taskData = data;
+    
+    // Write data back to IIFE file format
     try {
-        fs.writeFileSync(TASK_FILE, JSON.stringify(data, null, 2), { mode: 0o644 });
+        const taskFilePath = path.join(DATA_DIR, 'task.js');
+        const iifeContent = `(() => ${JSON.stringify(data, null, 2)})()`;
+        fs.writeFileSync(taskFilePath, iifeContent, 'utf8');
+        console.log('Task data persisted to IIFE file');
     } catch (error) {
-        console.error('Error writing task data:', error);
-        throw new Error('Failed to write task data');
-    }
-}
-
-const readOptions = () => {
-    try {
-        const x = fs.readFileSync(OPTIONS_FILE, 'utf8');
-        return JSON.parse(x);
-    } catch (error) {
-        console.error('Error reading options:', error);
-        return {};
+        console.error('Error writing task data to IIFE file:', error);
+        throw new Error('Failed to persist task data');
     }
 }
 

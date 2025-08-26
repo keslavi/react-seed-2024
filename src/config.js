@@ -8,7 +8,7 @@ export const config= {
   reduxLogger:false,
   env:"local",
   debug: import.meta.env.VITEST ? false : true,
-  msw:true,
+  msw:false,
 }
 
 export default config;

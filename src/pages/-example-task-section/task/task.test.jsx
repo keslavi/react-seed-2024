@@ -35,8 +35,6 @@ describe('Task Component Integration Tests', () => {
     expect(screen.getByDisplayValue('in progress')).toBeInTheDocument();
   });
 
-
-
   it('should call taskUpsert when continue button is clicked', async () => {
     // Import the store to spy on taskUpsert
     const { store } = await import('../../../store');

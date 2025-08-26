@@ -11,38 +11,43 @@ const __dirname = path.dirname(__filename);
 
 // Define data directory path
 const DATA_DIR = path.join(__dirname, '..', '..', 'data');
-const OPTIONS_FILE = path.join(DATA_DIR, 'options.json');
 
-// Ensure data directory exists and has proper permissions
-const ensureDataDirectory = () => {
-    if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true, mode: 0o755 });
-    }
-    // Ensure options file exists with proper permissions
-    if (!fs.existsSync(OPTIONS_FILE)) {
-        fs.writeFileSync(OPTIONS_FILE, JSON.stringify({}, null, 2), { mode: 0o644 });
+// In-memory options storage
+let optionsData = {};
+
+// Load options from IIFE file
+const loadOptions = () => {
+    try {
+        const optionsFilePath = path.join(DATA_DIR, 'options.js');
+        const optionsFileContent = fs.readFileSync(optionsFilePath, 'utf8');
+        optionsData = eval(optionsFileContent);
+        console.log('Options loaded from IIFE file');
+    } catch (error) {
+        console.error('Error loading options from IIFE file:', error);
+        // Fallback to empty options
+        optionsData = {};
     }
 };
 
-// Initialize data directory
-ensureDataDirectory();
+// Initialize options on startup
+loadOptions();
 
 const readOptions = () => {
-    try {
-        const x = fs.readFileSync(OPTIONS_FILE, 'utf8');
-        return JSON.parse(x);
-    } catch (error) {
-        console.error('Error reading options:', error);
-        return {};
-    }
+    return optionsData;
 }
 
 const writeOptions = (data) => {
+    optionsData = data;
+    
+    // Write data back to IIFE file format
     try {
-        fs.writeFileSync(OPTIONS_FILE, JSON.stringify(data, null, 2), { mode: 0o644 });
+        const optionsFilePath = path.join(DATA_DIR, 'options.js');
+        const iifeContent = `(() => (${JSON.stringify(data, null, 4)})()`;
+        fs.writeFileSync(optionsFilePath, iifeContent, 'utf8');
+        console.log('Options persisted to IIFE file');
     } catch (error) {
-        console.error('Error writing options:', error);
-        throw new Error('Failed to write options data');
+        console.error('Error writing options to IIFE file:', error);
+        throw new Error('Failed to persist options');
     }
 }
 

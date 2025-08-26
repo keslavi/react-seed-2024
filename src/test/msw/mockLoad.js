@@ -1,54 +1,58 @@
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
 export const mockLoad = async (url) => {
-  // Always use Node.js file reading in test environment
-  // Check if we're in a test environment by looking for vitest or test-related globals
-  const isTestEnvironment = process.env.NODE_ENV === 'test' || 
-                           process.env.VITEST || 
-                           typeof global !== 'undefined' && global.vitest;
+  // Simple and reliable Node.js detection
+  const isNode = typeof process !== 'undefined' && process.versions && process.versions.node;
   
-  if (isTestEnvironment || typeof window === 'undefined') {
-    // Running in Node.js (test environment) - read directly from server-koa/data
+//  console.log(["all"], `[MSW] mockLoad called for ${url}, isNode: ${isNode}`);
+  
+  if (isNode) {
+    // Running in Node.js (test environment) - read and eval IIFE files
     try {
+      // Dynamic imports for Node.js modules
+      const { readFileSync } = await import('fs');
+      const { fileURLToPath } = await import('url');
+      const { dirname, join } = await import('path');
+      
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = dirname(__filename);
       
-      // Try multiple possible paths for the data files
-      const possiblePaths = [
-        join(__dirname, '..', '..', '..', 'server-koa', 'data', `${url}.json`),
-        join(process.cwd(), 'server-koa', 'data', `${url}.json`),
-        join(__dirname, '..', '..', '..', '..', 'server-koa', 'data', `${url}.json`)
-      ];
+      // Path to the data directory
+      const dataPath = join(__dirname, '..', '..', '..', 'server-koa', 'data', `${url}.js`);
       
-      let data = null;
-      let usedPath = null;
+      // Read the IIFE file content
+      const fileContent = readFileSync(dataPath, 'utf8');
       
-      for (const dataPath of possiblePaths) {
-        try {
-          //console.log(["all","msw"]`[MSW] Attempting to load mock data from: ${dataPath}`);
-          data = readFileSync(dataPath, 'utf8');
-          usedPath = dataPath;
-          break;
-        } catch (pathError) {
-          console.log(["all","msw"]`[MSW] Path ${dataPath} not accessible: ${pathError.message}`);
-        }
-      }
+      // Execute the IIFE and return the result
+      const data = eval(fileContent);
       
-      if (data) {
-        const parsedData = JSON.parse(data);
-        //console.log(["all","msw"]`[MSW] Successfully loaded mock data for ${url} from ${usedPath}:`, parsedData);
-        return parsedData;
-      } else {
-        throw new Error('No accessible data file found');
-      }
+     //console.log(["all"], `[MSW] Successfully loaded mock data for ${url} from ${dataPath}`);
+      return data;
       
     } catch (error) {
-      throw error;
+      console.error(["all"], `[MSW] Error loading mock data for ${url}:`, error.message);
+      throw new Error(`Failed to load mock data for ${url}: ${error.message}`);
     }
   } else {
-    // Running in browser - fetch from mock endpoint
-    return fetch(`/mock/${url}.json`).then(res => res.json());
+    // Running in browser - fetch and eval IIFE files
+    try {
+     // console.log(["all"], `[MSW] Attempting to fetch /mock/${url}.js from browser`);
+      
+      const response = await fetch(`/mock/${url}.js`);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const fileContent = await response.text();
+      //console.log(["all"], `[MSW] Successfully fetched /mock/${url}.js, content length: ${fileContent.length}`);
+      
+      // Execute the IIFE and return the result
+      const data = eval(fileContent);
+      
+      // console.log(["all"], `[MSW] Successfully loaded mock data for ${url} from browser`);
+      return data;
+      
+    } catch (error) {
+      console.error(["all"], `[MSW] Error loading mock data for ${url} from browser:`, error.message);
+      throw new Error(`Failed to load mock data for ${url} from browser: ${error.message}`);
+    }
   }
 };

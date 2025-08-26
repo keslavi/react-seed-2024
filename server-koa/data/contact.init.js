@@ -1,4 +1,4 @@
-[
+(() => [
     {
       "id": 1,
       "nameLast": "Doe",
@@ -15,4 +15,4 @@
       "typeContact": "2",
       "comments": "lorem ipsum orum"
     }
-  ]
+  ])()

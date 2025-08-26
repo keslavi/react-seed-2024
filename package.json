@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "npm run dev",
-    "dev": "vite --port 3000 --host",
+    "dev": "npm run copy:mock && vite --port 3000 --host",
     "devWithConsoleDebug": "vite port 3000 --host --inspect --debug",
     "test": "vitest --ui --watch",
     "test:commit": "vitest run",
@@ -15,7 +15,6 @@
     "build:all": "npm run build && npm run build:server",
     "postbuild": "node copy-mock-data.js",
     "copy:mock": "node copy-mock-data.js",
-    "dev:with-copy": "npm run copy:mock && npm run dev",
     "start:prod": "cd server-koa && npm run start:prod",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",

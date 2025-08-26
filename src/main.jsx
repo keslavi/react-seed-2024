@@ -15,8 +15,10 @@ import "./helpers/extensions/console-extension";
 import "./helpers/extensions/global-extensions";
 
 // Load MSW browser setup (it handles conditional logic internally)
-import('./test/msw/mswBrowser.js').catch(error => {
-  console.warn('[MSW] Failed to load browser MSW:', error);
+import('./test/msw/mswBrowser.js').then(() => {
+  //console.log(["all"], "[MSW] Successfully imported mswBrowser.js");
+}).catch(error => {
+  console.error("[MSW] Failed to load browser MSW:", error);
 });
 
 //console.logGroup.test(); //works in any *.js, *.jsx file/*

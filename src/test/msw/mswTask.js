@@ -1,4 +1,4 @@
-import { mockLoad } from "./mockLoadBrowser";
+import { mockLoad } from "./mockLoad";
 import { http } from "msw";
 
 export const mswTask = [

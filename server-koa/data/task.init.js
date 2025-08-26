@@ -1,4 +1,4 @@
-[
+(() => [
     {
         "id": 1,
         "subject": "subject a",
@@ -20,4 +20,4 @@
         "status": 2,
         "result": 2
     }
-]
+])()
