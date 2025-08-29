@@ -1,5 +1,3 @@
-import { vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
 import { Task } from './task';
 
 // Mock react-router-dom to simulate URL parameters
@@ -35,10 +33,12 @@ describe('Task Component Integration Tests', () => {
     expect(screen.getByDisplayValue('in progress')).toBeInTheDocument();
   });
 
-  it('should call taskUpsert when continue button is clicked', async () => {
-    // Import the store to spy on taskUpsert
-    const { store } = await import('../../../store');
-    const taskUpsertSpy = vi.spyOn(store.getState(), 'taskUpsert');
+  it('should save task data', async () => {
+    // Import the MSW spy
+    const { mswTaskSpy } = await import('@/test/msw/mswTask');
+    
+    // Reset the spy before test
+    mswTaskSpy.reset();
     
     render(<Task />);
     
@@ -53,16 +53,15 @@ describe('Task Component Integration Tests', () => {
     
     await userEvent.click(continueButton);
     
-    // Verify that taskUpsert was called
-    await waitFor(() => {
-      expect(taskUpsertSpy).toHaveBeenCalled();
-    });
+    // Verify the data that was sent to MSW
+    expect(mswTaskSpy.postData).toHaveProperty('id');
+    expect(mswTaskSpy.postData).toHaveProperty('subject');
     
-    // Clean up the spy
-    taskUpsertSpy.mockRestore();
+    // Clean up
+    mswTaskSpy.reset();
   });
-/*  
 
+/*  
   it('should show validation message for empty subject and not call onSubmit', async () => {
     render(<Task />);
     

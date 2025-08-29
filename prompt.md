@@ -19,16 +19,50 @@ When reviewing or implementing code, always:
 ### Global Extensions
 - `isEmpty`, `isTruthy`, `isFalsy` are available as global functions
 - Use these instead of creating new utility functions
+- **Console Logging**: Use `console.log(["all"], "message")` format for test/debug logging
+- Console extension filters logs based on log groups, with `["all"]` ensuring visibility
 
 ### Testing Setup
-- Vitest is configured with global functions of most common testing items: `screen`, `render`, `userEvent`, etc.
+- Vitest is configured with global functions of most common testing items: `screen`, `render`, `userEvent`, `waitFor`, `within`, `fireEvent`, `act`
+- **Global Testing Utilities Available**:
+  - `vi` - Vitest mocking and spying utilities (no import needed)
+  - `screen` - Testing library screen queries
+  - `render` - Component rendering
+  - `userEvent` - User interaction simulation
+  - `waitFor` - Async assertions
+  - `within` - Scoped queries
+  - `fireEvent` - DOM event firing
+  - `act` - React state updates
 - Use these directly without importing
 - if you feel the need to add an import for testing, verify it with me.
-- use test:commit instead of test; it runs once and stops. 
+- use test:commit instead of test; it runs once and stops.
+- **MSW Testing Patterns**:
+  - MSW is configured for both browser and Node.js environments
+  - Use MSW spies (e.g., `mswTaskSpy`) to verify handler execution
+  - Test MSW integration by verifying actual request interception, not just function calls
+  - MSW intercepts requests before they reach fetch, so mocking fetch won't work for MSW verification
 
-### Component Patterns
+### Component, store and test Patterns
 - Follow the `task*` slices and components as the guiding pattern
 - Maintain consistency with existing component structure
+- when <Input> is involved, look at /components/formhelper test patterns to look at or apply values.
+  -promptFormhelper.md has additional <Input > information to apply
+
+### MSW and Mock Data Patterns
+- **MSW Configuration**: 
+  - Browser MSW setup in `src/test/msw/mswBrowser.js`
+  - Node.js MSW setup in `src/test/_setupTest.js`
+  - Conditional loading based on `config.msw` setting
+- **Mock Data Loading**:
+  - Use `mockLoad()` function for both browser and Node.js environments
+  - Data files are IIFE (Immediately Invoked Function Expression) format in `server-koa/data/*.js`
+  - Browser environment fetches from `/mock/*.js` endpoints
+  - Node.js environment reads directly from `server-koa/data/*.js` files
+- **MSW Testing Best Practices**:
+  - Create MSW spies (e.g., `mswTaskSpy`) to track handler execution
+  - Verify actual MSW interception, not just function calls
+  - Use `mockLoad()` for consistent data loading across environments
+  - Avoid mocking `fetch` when testing MSW integration
 
 ## Critical Analysis Framework
 
@@ -73,8 +107,10 @@ When reviewing or implementing code, always:
 
 - [ ] Follows `noun + modifier` naming convention
 - [ ] Uses global extensions (`isEmpty`, `isTruthy`, `isFalsy`)
-- [ ] Leverages global testing functions (`screen`, `render`, `userEvent`)
+- [ ] Leverages global testing functions (`vi`, `screen`, `render`, `userEvent`, `waitFor`, `within`, `fireEvent`, `act`)
 - [ ] Consistent with `task*` component patterns
+- [ ] **MSW Testing**: Uses MSW spies for handler verification, avoids fetch mocking for MSW tests
+- [ ] **Mock Data**: Uses `mockLoad()` for consistent data loading across environments
 - [ ] No unnecessary side effects
 - [ ] Clear documentation and comments
 - [ ] Appropriate error handling

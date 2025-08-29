@@ -1,6 +1,16 @@
 import { mockLoad } from "./mockLoad";
 import { http } from "msw";
 
+// Create a spy to track handler calls
+export const mswTaskSpy = {
+  postCalled: false,
+  postData: null,
+  reset() {
+    this.postCalled = false;
+    this.postData = null;
+  }
+};
+
 export const mswTask = [
   // GET all tasks (filter out ID 0) - matches the component's call to "public/tasks"
   http.get('/api/public/tasks', async ({ request }) => {
@@ -35,7 +45,12 @@ export const mswTask = [
   // POST task (create/update/delete)
   http.post('/api/public/tasks', async ({ request }) => {
     try {
+      // Track that this handler was called
+      mswTaskSpy.postCalled = true;
+      
       const requestBody = await request.json();
+      mswTaskSpy.postData = requestBody;
+      
       const data = await mockLoad('task');
       
       if (requestBody.delete) {

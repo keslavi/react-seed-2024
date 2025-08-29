@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
 import { useNavigate, /*NavLink,*/ useParams } from "react-router-dom";
-import { Button } from "@mui/material";
 import { store } from "store";
 import dayjs from "dayjs";
 
@@ -12,7 +11,6 @@ import {
   FormProvider,
   useFormProvider,
   Input,
-  NavSticky,
   Row,
   TextareaDebug,
   Fieldset,
@@ -38,31 +36,11 @@ export const Task = () => {
     taskRetrieve(id);
   }, []);
 
-  // React hook form and validation***********************
-  // const {
-  //   control,
-  //   formState: { errors },
-  //   //getValues,
-  //   handleSubmit,
-  //   reset,
-  //   setValue,
-  //   //watch,
-  // } = useFormProvider({
-  //   resolver,
-  //   //mode:"onChange"
-  // });
   const frmMethods = useFormProvider({
     resolver,
     mode: "onChange"
   });
-  const { errors, handleSubmit, reset } = frmMethods;
-
-  useEffect(() => {
-    if (errors) {
-      console.log('Form errors:', errors);
-      errorNotification(errors);
-    }
-  }, [errors]);
+  const { reset } = frmMethods;
   // end React hook form and validation***********************
 
   useEffect(() => {
@@ -72,6 +50,7 @@ export const Task = () => {
   }, [item]);
 
   // DO NOT SUBMIT HERE; it's done in BtnContinueSave
+  // you can also check window.isDraft to see if continue or save (isDraft=true) was clicked
   const onClickContinueSave = (e) => {
     const id = e.currentTarget.id;
     switch (id) {
@@ -185,7 +164,6 @@ export const Task = () => {
           </Row>
         </Fieldset>
       </FormProvider>
-      <Row><Col>zzzzzzzzzzzzzzzz</Col></Row>      
       <TextareaDebug value={{ item, option }} />
     </>
   );

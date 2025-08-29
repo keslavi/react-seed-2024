@@ -12,6 +12,7 @@ import { isEmpty } from "lodash";
 import { isTruthy, isFalsy } from "../helpers/is-truthy";
 import { setupServer } from 'msw/node';
 import { mswAll } from './msw/mswAll';
+import { vi } from 'vitest';
 
 // Load global extensions as mentioned in prompt.md
 import '../helpers/extensions/global-extensions.js';
@@ -27,6 +28,7 @@ global.isEmpty = isEmpty;
 global.isTruthy = isTruthy;
 global.isFalsy = isFalsy;
 global.isFalsey = (value) => !isTruthy(value);
+global.vi = vi;
 
 // Set up MSW server for API mocking
 const server = setupServer(...mswAll);
