@@ -8,7 +8,7 @@ const propTypesFixPlugin = () => {
     name: 'prop-types-fix',
     resolveId(id) {
       if (id === 'prop-types') {
-        return 'prop-types';
+        return 'prop-types'; 
       }
       return null;
     },
