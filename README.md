@@ -1,6 +1,6 @@
 # react seed 2024
 straight javascript seed starter project with zustand, notifications, form validation
-
+#small update to test copy.ps1
 ## quickstart !important  
 
 you need to run both the api backend as well as the main app in order to get data

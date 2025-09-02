@@ -3,7 +3,7 @@
 # make a powershell script that will
 # -ask for the source (src) directory 
 #   -remember the src as default for next time
-# -using robocopy, copy only newer files to target (trg)... this file's location.
+# -using robocopy, copy only newer files that also exist in src to target (trg)... this file's location.
 #   -use .gitignore to exclude files from the copy
 #   -only need the summary of the copy, not the detailed output
 # -once complete, copy files that exist in src and trg, but are newer in trg to ./trg/../$(Split-Path $trgPath -Leaf)-unedited

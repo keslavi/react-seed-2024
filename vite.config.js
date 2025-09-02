@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 
 // Plugin to fix prop-types import issues
-const propTypesFixPlugin = () => {
+const propTypesFixPlugin = () => { 
   return {
     name: 'prop-types-fix',
     resolveId(id) {

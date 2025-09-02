@@ -2,7 +2,7 @@
 import { Outlet as RouterOutlet } from "react-router-dom";
 import { ContainerFullWidth } from "@/components";
 import { Header } from "./components/header";
-
+//this should copy with copy-seed.ps1
 export const App = (props) => {
   const { menu } = props;
 
