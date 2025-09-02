@@ -18,7 +18,7 @@ let optionsData = {};
 // Load options from IIFE file
 const loadOptions = () => {
     try {
-        const optionsFilePath = path.join(DATA_DIR, 'options.js');
+        const optionsFilePath = path.join(DATA_DIR, 'options.iife.js');
         const optionsFileContent = fs.readFileSync(optionsFilePath, 'utf8');
         optionsData = eval(optionsFileContent);
         console.log('Options loaded from IIFE file');
@@ -41,7 +41,7 @@ const writeOptions = (data) => {
     
     // Write data back to IIFE file format
     try {
-        const optionsFilePath = path.join(DATA_DIR, 'options.js');
+        const optionsFilePath = path.join(DATA_DIR, 'options.iife.js');
         const iifeContent = `(() => (${JSON.stringify(data, null, 4)})()`;
         fs.writeFileSync(optionsFilePath, iifeContent, 'utf8');
         console.log('Options persisted to IIFE file');

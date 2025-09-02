@@ -16,7 +16,7 @@ export const mockLoad = async (url) => {
       const __dirname = dirname(__filename);
       
       // Path to the data directory
-      const dataPath = join(__dirname, '..', '..', '..', 'server-koa', 'data', `${url}.js`);
+      const dataPath = join(__dirname, '..', '..', '..', 'server-koa', 'data', `${url}.iife.js`);
       
       // Read the IIFE file content
       const fileContent = readFileSync(dataPath, 'utf8');
@@ -34,15 +34,15 @@ export const mockLoad = async (url) => {
   } else {
     // Running in browser - fetch and eval IIFE files
     try {
-     // console.log(["all"], `[MSW] Attempting to fetch /mock/${url}.js from browser`);
+     // console.log(["all"], `[MSW] Attempting to fetch /mock/${url}.iife.js from browser`);
       
-      const response = await fetch(`/mock/${url}.js`);
+      const response = await fetch(`/mock/${url}.iife.js`);
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
       const fileContent = await response.text();
-      //console.log(["all"], `[MSW] Successfully fetched /mock/${url}.js, content length: ${fileContent.length}`);
+      //console.log(["all"], `[MSW] Successfully fetched /mock/${url}.iife.js, content length: ${fileContent.length}`);
       
       // Execute the IIFE and return the result
       const data = eval(fileContent);

@@ -4,15 +4,7 @@ import { Task } from './task';
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
-  useParams: () => ({ id: '2' })
-}));
-
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
-    info: vi.fn(),
-    error: vi.fn()
-  }
+  useParams: () => ({ id: '1' })
 }));
 
 describe('Task Component Integration Tests', () => {
@@ -22,14 +14,14 @@ describe('Task Component Integration Tests', () => {
   });
 
   it('should load data and display with option text on form', async () => {
-    render(<Task />); //url: /dev/tasks/2 set in mockNavigate
+    render(<Task />); //url: /dev/tasks/1 set in mockNavigate
 
     // First wait for loading to disappear and Task title to appear
     await waitFor(() => {
       expect(screen.getByText('Task')).toBeVisible();
     }, { timeout: 5000 });
 
-    expect(screen.getByDisplayValue('Subject b')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('DO NOT EDIT')).toBeInTheDocument();
     expect(screen.getByDisplayValue('in progress')).toBeInTheDocument();
   });
 
@@ -44,7 +36,7 @@ describe('Task Component Integration Tests', () => {
     
     // Wait for form to load
     await waitFor(() => {
-      expect(screen.getByDisplayValue('Subject b')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('DO NOT EDIT')).toBeInTheDocument();
     });
     
     // Find and click the continue button
@@ -61,30 +53,34 @@ describe('Task Component Integration Tests', () => {
     mswTaskSpy.reset();
   });
 
-/*  
-  it('should show validation message for empty subject and not call onSubmit', async () => {
+
+  it('should show validation message for empty body and not call onSubmit', async () => {
     render(<Task />);
-    
-    // Wait for form to load
+    let bodyInput = null;
+
     await waitFor(() => {
-      expect(screen.getByDisplayValue('subject a')).toBeInTheDocument();
-    });
+      expect(screen.getByDisplayValue('in progress')).toBeInTheDocument();
+      bodyInput = screen.getByDisplayValue('USED FOR TESTING');
+    }, { timeout: 5000 });
     
-    // Clear the subject field
-    const subjectInput = screen.getByDisplayValue('subject a');
-    await userEvent.clear(subjectInput);
     
-    // Try to submit the form
-    const continueButton = screen.getByText('Continue');
-    await userEvent.click(continueButton);
-    
-    // Verify validation message appears
-    await waitFor(() => {
-      expect(screen.getByText('please provide a subject')).toBeInTheDocument();
-    });
-    
-    // Verify the toast with form data is NOT shown due to validation failure
-    expect(screen.queryByText('Submit clicked')).not.toBeInTheDocument();
+    // !IMPORTANT: for validation to work, you need to focus and blur
+    await userEvent.click(bodyInput);
+    await userEvent.clear(bodyInput);
+    await userEvent.tab();
+
+    expect(screen.getByText('please provide a body')).toBeInTheDocument();
+    expect(screen.getByText('Continue')).toBeDisabled();
+
+    // !IMPORTANT: for validation to work, you need to focus and blur
+    await userEvent.click(bodyInput);
+    await userEvent.type(bodyInput, 'USED FOR TESTING');
+    await userEvent.tab();
+
+    expect(screen.queryByText('please provide a body')).not.toBeInTheDocument();
+    expect(screen.getByText('Continue')).not.toBeDisabled();
+
+    //you've already tested on submit, no need to test here
   });
-  */
+
 }); 

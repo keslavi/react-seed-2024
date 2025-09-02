@@ -10,12 +10,12 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 
 import config from './config.js';
-import authRoutes from './routes/auth.js';
-import protectedRoutes from './routes/protected.js';
-import utilsRoutes from './routes/utils.js';
-import taskRoutes from './routes/tasks.js';
-import optionsRoutes from './routes/options.js';
-import badRequestRoutes from './routes/badRequest.js';
+import authRoutes from './routes/auth.routes.js';
+import protectedRoutes from './routes/protected.routes.js';
+import utilsRoutes from './routes/utils.routes.js';
+import taskRoutes from './routes/tasks.routes.js';
+import optionsRoutes from './routes/options.routes.js';
+import badRequestRoutes from './routes/badRequest.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = new Koa();
@@ -45,8 +45,6 @@ app.use(cors({
 apiRouter.get('/', (ctx) => {
   ctx.body = 'Hello World (api)';
 });
-
-
 
 // Mount public routes
 publicRouter.get('/', (ctx) => {

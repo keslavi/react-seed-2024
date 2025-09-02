@@ -9,6 +9,7 @@ import { getAuthToken, signinSilent } from "helpers/authentication/authManager";
 /*
  * API Configuration with automatic spinner management
  * 
+ * 
  * Usage:
  * - Default behavior: Shows spinner for all requests (unless blockUi===true)
  * - To disable spinner: Set blockUi: true in the request config

@@ -12,11 +12,12 @@
     }
   },
   {
-    "id": 1,
-    "subject": "subject a",
-    "body": "body a",
-    "status": 0,
-    "result": 0,
+    "id": "1",
+    "subject": "DO NOT EDIT",
+    "body": "USED FOR TESTING",
+    "dfrom": "2024-01-01T05:00:00.000Z",
+    "status": 1,
+    "result": 1,
     "address": {
       "line1": "line 1",
       "line2": "line 2",
@@ -29,6 +30,7 @@
     "body": "Body b",
     "status": "1",
     "result": 1,
+    "dfrom": "2015-01-01T05:00:00.000Z",
     "address": {
       "line1": "bb",
       "line2": "A2L2",
@@ -39,8 +41,7 @@
     "names": [
       0,
       2
-    ],
-    "dfrom": "2015-01-01T05:00:00.000Z"
+    ]
   },
   {
     "id": 3,

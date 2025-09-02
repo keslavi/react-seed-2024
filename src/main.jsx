@@ -20,7 +20,7 @@ import('./test/msw/mswBrowser.js').then(() => {
 }).catch(error => {
   console.error("[MSW] Failed to load browser MSW:", error);
 });
-
+//main should copy to ./trg/../src-unedited
 //console.logGroup.test(); //works in any *.js, *.jsx file/*
  
 ReactDOM.createRoot(document.getElementById("root")).render(

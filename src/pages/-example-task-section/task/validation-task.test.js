@@ -1,4 +1,4 @@
-import { schema } from './validation.js';
+import { schema } from './validation-task.js';
 import dayjs from 'dayjs';
 
 describe('Task Validation - Date Validation', () => {

@@ -21,7 +21,7 @@ import {
 import {
   resolver,
   errorNotification
-} from "./validation";
+} from "./validation-task";
 
 export const Task = () => {
   const item = store.use.task();

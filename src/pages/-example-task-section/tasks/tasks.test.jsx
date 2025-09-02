@@ -18,7 +18,16 @@ describe("Tasks Component", () => {
     const task1Link = screen.getByRole("link", { name: "1" });
     expect(task1Link).toBeInTheDocument();
     expect(task1Link).toHaveAttribute("href", "/dev/tasks/1");
-    //option task.status displays
-    expect(screen.getByText("pending")).toBeInTheDocument();
+    
+    // Check that row 1 (ID=1) shows "in progress" status
+    const task1Row = task1Link.closest('tr');
+    expect(task1Row).toBeInTheDocument();
+    
+    // Get the status cell (4th column) for task ID 1
+    const statusCell = task1Row.querySelector('td:nth-child(4)');
+    expect(statusCell).toBeInTheDocument();
+    
+    // Verify that row 1 shows "in progress" status
+    expect(statusCell).toHaveTextContent('in progress');
   });
 });

@@ -19,7 +19,7 @@ let taskData = [];
 const loadData = () => {
     try {
         // Load task data
-        const taskFilePath = path.join(DATA_DIR, 'task.js');
+        const taskFilePath = path.join(DATA_DIR, 'task.iife.js');
         const taskFileContent = fs.readFileSync(taskFilePath, 'utf8');
         taskData = eval(taskFileContent);
         
@@ -43,7 +43,7 @@ const writeData = (data) => {
     
     // Write data back to IIFE file format
     try {
-        const taskFilePath = path.join(DATA_DIR, 'task.js');
+        const taskFilePath = path.join(DATA_DIR, 'task.iife.js');
         const iifeContent = `(() => ${JSON.stringify(data, null, 2)})()`;
         fs.writeFileSync(taskFilePath, iifeContent, 'utf8');
         console.log('Task data persisted to IIFE file');
