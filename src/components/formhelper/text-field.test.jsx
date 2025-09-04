@@ -233,13 +233,14 @@ describe("TextField", () => {
   });
 
   it("renders with defaultvalue prop", () => {
+    const pass="Default Name";
     render(
       <TestHarness item={{}}>
         <Row>
           <Input
             name="name"
             label="Name"
-            defaultvalue="Default Name"
+            defaultValue={pass}
             data-testid="name-field"
           />
         </Row>
@@ -247,7 +248,7 @@ describe("TextField", () => {
     );
     
     const input = screen.getByTestId('name-field').querySelector('input');
-    expect(input).toBeVisible();
+    expect(input.value).toBe(pass);
   });
 
   it("handles empty string values correctly", () => {

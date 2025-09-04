@@ -195,12 +195,16 @@ export const useFormField = (props) => {
   }
 
   // handle unbound field values
-  if (!props.defaultvalue) {
+  if (!props.defaultValue) {
     if (!isTruthy(props.unbound)) {
       valueProp = {
         value: field.value || props.value || "",
       };
     }
+  } else {
+    valueProp = {
+      defaultValue: props.defaultValue,
+    };
   }
 
   return { field, error, errorMui, valueProp };

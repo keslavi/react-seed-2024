@@ -27,9 +27,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Database connection
-mongoose.connect(config.mongodb.uri, config.mongodb.options)
-  .then(() => console.log('🗄️  Connected to MongoDB'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+if (config.mongodb.uri) {
+  mongoose.connect(config.mongodb?.uri, config.mongodb?.options)
+    .then(() => console.log('🗄️  Connected to MongoDB'))
+    .catch(err => console.error('❌ MongoDB connection error:', err));
+} else {
+  console.log('❌ MongoDB connection error: No MongoDB URI provided via .env.local');
+}
 
 // Middleware
 app.use(errorHandler);
