@@ -69,11 +69,7 @@ describe('Task Component Integration Tests', () => {
     await userEvent.clear(bodyInput);
     await userEvent.tab();
 
-    // Wait for validation to complete
-    await waitFor(() => {
-      expect(screen.getByText('please provide a body')).toBeInTheDocument();
-    }, { timeout: 3000 });
-
+    expect(screen.getByText('please provide a body')).toBeInTheDocument();
     expect(screen.getByText('Continue')).toBeDisabled();
 
     // !IMPORTANT: for validation to work, you need to focus and blur
@@ -81,11 +77,7 @@ describe('Task Component Integration Tests', () => {
     await userEvent.type(bodyInput, 'USED FOR TESTING');
     await userEvent.tab();
 
-    // Wait for validation to clear
-    await waitFor(() => {
-      expect(screen.queryByText('please provide a body')).not.toBeInTheDocument();
-    }, { timeout: 3000 });
-
+    expect(screen.queryByText('please provide a body')).not.toBeInTheDocument();
     expect(screen.getByText('Continue')).not.toBeDisabled();
 
     //you've already tested on submit, no need to test here
