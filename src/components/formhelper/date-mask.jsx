@@ -84,8 +84,8 @@ export const DateMask = memo((props) => {
         className={masked ? '' : 'hidden'}
         fullWidth
         readOnly
-        // id={field.name}
-        // name={field.name}
+        id={`${field.name}-masked`}
+        name={field.name}
         label={props.label}
         inputRef={field.ref}
         onFocus={onFocus}
@@ -131,7 +131,7 @@ export const DateMask = memo((props) => {
         className={masked ? 'hidden' : (props.readOnly ? '' : 'hidden')}
         fullWidth
         readOnly
-        id={field.name}
+        id={`${field.name}-readonly`}
         name={field.name}
         label={props.label}
         inputRef={field.ref}

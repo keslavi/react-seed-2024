@@ -7,6 +7,7 @@ export const cleanParentProps = (props) => {
     const exclude = [
       'name',
       "id",
+      "charCount",
       "checkbox",
       "datepicker",
       "defaultvalue",
@@ -32,6 +33,7 @@ export const cleanParentProps = (props) => {
       "select",
       "showLast",
       "size",
+      "textarea",
       "sm",
       "xl",
       "xs",

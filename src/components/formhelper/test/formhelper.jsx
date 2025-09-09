@@ -151,15 +151,21 @@ const ChildrenDefault = () => {
         <br /><div style={{ color: 'red' }}>yup validation in particular is not the correct pattern for a form</div>
       </Col></Row>
       <Row>
-        <Input
+        <Input 
+          textarea  
+          minRows={5}
+          charCount={10} 
+          name="subject" 
+          label="Char Count" 
+        />
+
+        {/* <Input
           name="subject"
           label="Subject"
           placeholder="Enter subject"
           info="header1|body1"
-        />
-      </Row>
-      <Row>
-        <Input name="body" label="Body" />
+        /> */}
+        <Input charCount={10} name="body" label="Body" />
       </Row>
       <Row>
         <Input

@@ -12,6 +12,7 @@ import { Textarea } from "./textarea";
 import { TextField } from "./text-field";
 import { TextMask } from "./text-mask";
 import { Password } from "./password";
+import { CharCount } from "./char-Count";
 
 /**
  * @property {react-hook Form Input} multitype Input control (default TextField)
@@ -41,6 +42,7 @@ import { Password } from "./password";
 
 export const Input = (props) => {
   const {
+    charCount,
     checkbox,
     datepicker,
     mask,
@@ -73,6 +75,8 @@ export const Input = (props) => {
     ? SelectCheckbox
     : textarea
     ? Textarea
+    : charCount
+    ? CharCount    
     : TextField;
 
   //const Ctl = TextField;

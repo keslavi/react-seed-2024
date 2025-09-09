@@ -1,16 +1,15 @@
-import { memo, useCallback, useEffect } from "react";
-import { useFormField } from "./form-provider";
+import { memo, useCallback, useMemo, useEffect } from "react";
 import {
-  TextareaAutosize,
-  InputLabel,
   FormHelperText,
+  TextField as MuiTextField
 } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
+import { useFormField } from "./form-provider";
 import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
 import { color } from "@/theme-material";
 
-export const Textarea = memo((props) => {
+export const CharCount = memo((props) => {
   const {
     field,
     errorMui,
@@ -20,22 +19,46 @@ export const Textarea = memo((props) => {
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
     props.onBlur?.(e);
-  }, [field, props]);
+  }, []);
 
   const onChange = useCallback((e) => {
     field.onChange(e.target.value);
     props.onChange?.(e);
-  }, [field, props]);
+  }, []);
 
-  // Character count logic (only if charCount prop is provided)
+  // Extract input-specific props that need to be passed to the input element
+  const inputProps = useMemo(() => {
+    const {
+      readOnly,
+      maxLength,
+      minLength,
+      pattern,
+      autoFocus,
+      spellCheck,
+      inputMode,
+      autoComplete,
+      ...restProps
+    } = props;
+
+    return {
+      readOnly,
+      maxLength,
+      minLength,
+      pattern,
+      spellCheck,
+      inputMode,
+      autoComplete,
+      autoFocus: props.autoFocus,
+    };
+  }, [props]);
+
+  // Calculate character count and determine styling
   const currentLength = field.value?.length || 0;
-  const isWithinLimit = props.charCount ? currentLength <= props.charCount : true;
-  const className = props.charCount ? (isWithinLimit ? "primaryText" : "Mui-error") : "";
+  const isWithinLimit = currentLength <= props.charCount;
+  const className = isWithinLimit ? "primaryText" : "Mui-error";
 
   // Watch for form submission and prevent if character limit exceeded
   useEffect(() => {
-    if (!props.charCount) return; // Only apply if charCount is provided
-
     const handleFormSubmit = (event) => {
       if (!isWithinLimit) {
         event.preventDefault();
@@ -60,42 +83,44 @@ export const Textarea = memo((props) => {
 
     if (formElement) {
       formElement.addEventListener('submit', handleFormSubmit, true); // Use capture phase
+      //console.log(["all"], "Form submit listener attached");
+
       return () => {
         formElement.removeEventListener('submit', handleFormSubmit, true);
+        //console.log(["all"], "Form submit listener removed");
       };
     } else {
-      console.warning(" textarea: No form element found for submit listener");
+      console.warning(" charCount: No form element found for submit listener");
     }
   }, [isWithinLimit, currentLength, props.charCount, field.ref]);
 
   return (
     <ColPadded {...colProps(props)}>
-      <InputLabel htmlFor={field.name}>{props.label}</InputLabel>
-      <TextareaAutosize
-        style={{
-          width: "100%",
-          ...(!isWithinLimit && { color: color.primary.red }),
-          ...(errorMui?.error && { border: `1px solid ${color.primary.red}` })
-        }}
+      <MuiTextField
+        fullWidth
         id={field.name}
         name={field.name}
-        {...(props.minRows && { minRows: props.minRows })}
-        ref={field.ref}
+        label={props.label}
+        {...(props.placeholder && { placeholder: props.placeholder })}
+        inputRef={field.ref}
         onBlur={onBlur}
         onChange={onChange}
+        autoFocus={props.autoFocus}
         {...cleanParentProps(props)}
         {...valueProp}
+        inputProps={inputProps}
+        error={errorMui?.error}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
-      {props.charCount && (
-        <FormHelperText className={className}>
-          {currentLength} / {props.charCount} characters
-        </FormHelperText>
-      )}
+      <FormHelperText
+        className={className}
+      >
+        {currentLength} / {props.charCount} characters
+      </FormHelperText>
       {errorMui && <FormHelperText className="Mui-error">{errorMui.helperText}</FormHelperText>}
     </ColPadded>
   );
-
 });
 
-Textarea.displayName = 'Textarea';
+// Add display name for better debugging
+CharCount.displayName = 'CharCount';
