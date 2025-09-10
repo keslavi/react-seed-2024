@@ -13,7 +13,13 @@ export * from '@/helpers/form-validation/errorNotification';
 const schema = yup.object().shape({
   id: yup.string().required("id is required"),
   subject: yup.string().required("please provide a subject"),
-  body: yup.string().required("please provide a body"),
+  body: yup.string()
+    .required("please provide a body")
+    .test('contains-g', 'The body must contain the letter g', function(value) {
+      return value && value.includes('g');
+    })
+    ,
+  result: yup.number().required("please provide a result"),
   address: yup.object().shape({
     line1: yup.string().required("address line 1 required"),
     line2: yup.string().required("address line 2 required"),
@@ -147,13 +153,13 @@ const ChildrenDefault = () => {
       <Row><Col size={12}>
         {/* <br /><br /> */}
         <h4>formhelper tester</h4>
-        <br /><div style={{ color: 'red' }}>THIS IS NOT THE PATTERN FOR A FORM, USE TASK.JSX PATTERN. THIS IS FOR BENCH TESTING ONLY.</div>
-        <br /><div style={{ color: 'red' }}>yup validation in particular is not the correct pattern for a form</div>
+        {/* <br /><div style={{ color: 'red' }}>THIS IS NOT THE PATTERN FOR A FORM, USE TASK.JSX PATTERN. THIS IS FOR BENCH TESTING ONLY.</div>
+        <br /><div style={{ color: 'red' }}>yup validation in particular is not the correct pattern for a form</div> */}
       </Col></Row>
       <Row>
         <Input 
           textarea  
-          minRows={5}
+          //minRows={5}
           charCount={10} 
           name="subject" 
           label="Char Count" 

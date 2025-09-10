@@ -30,6 +30,7 @@ export const Textarea = memo((props) => {
   // Character count logic (only if charCount prop is provided)
   const currentLength = field.value?.length || 0;
   const isWithinLimit = props.charCount ? currentLength <= props.charCount : true;
+  const msgChars = `${currentLength} / ${props.charCount} characters`;
   const className = props.charCount ? (isWithinLimit ? "primaryText" : "Mui-error") : "";
 
   // Watch for form submission and prevent if character limit exceeded
@@ -40,7 +41,7 @@ export const Textarea = memo((props) => {
       if (!isWithinLimit) {
         event.preventDefault();
         event.stopPropagation();
-        console.log(["all"], `Form submission blocked: Character count ${currentLength} exceeds limit of ${props.charCount}`);
+        //console.log(["wsc"], `Form submission blocked: Character count ${currentLength} exceeds limit of ${props.charCount}`);
         return false;
       }
     };
@@ -68,14 +69,33 @@ export const Textarea = memo((props) => {
     }
   }, [isWithinLimit, currentLength, props.charCount, field.ref]);
 
+  // Determine label styling based on error state and character count
+  const getLabelStyle = () => {
+    if (errorMui?.error || (props.charCount && !isWithinLimit)) {
+      return { color: color.primary.red };
+    }
+    return {};
+  };
+
   return (
     <ColPadded {...colProps(props)}>
-      <InputLabel htmlFor={field.name}>{props.label}</InputLabel>
+      <InputLabel htmlFor={field.name} style={getLabelStyle()}>{props.label}</InputLabel>
       <TextareaAutosize
         style={{
           width: "100%",
-          ...(!isWithinLimit && { color: color.primary.red }),
-          ...(errorMui?.error && { border: `1px solid ${color.primary.red}` })
+          border: errorMui?.error || (props.charCount && !isWithinLimit)
+            ? `1px solid ${color.primary.red}`
+            : `1px solid ${color.cobe1.grey}`,
+          borderRadius: '4px',
+          padding: '8px',
+          outline: 'none',
+          resize: 'vertical',
+          fontFamily: 'inherit',
+          fontSize: '14px',
+          lineHeight: '1.5',
+          color: errorMui?.error || (props.charCount && !isWithinLimit)
+            ? color.primary.red
+            : 'inherit',
         }}
         id={field.name}
         name={field.name}
@@ -88,11 +108,20 @@ export const Textarea = memo((props) => {
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
       {props.charCount && (
-        <FormHelperText className={className}>
-          {currentLength} / {props.charCount} characters
+        <FormHelperText
+          className={className}
+          style={{ marginTop: '-2px' }}
+        >
+          {msgChars}
         </FormHelperText>
       )}
-      {errorMui && <FormHelperText className="Mui-error">{errorMui.helperText}</FormHelperText>}
+      {errorMui &&
+        <FormHelperText
+          className="Mui-error"
+          style={{ marginTop: '-5px' }}
+        >
+          {errorMui.helperText}
+        </FormHelperText>}
     </ColPadded>
   );
 

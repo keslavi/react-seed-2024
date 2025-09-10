@@ -42,7 +42,7 @@ export const TestHarness = ({ item = {}, schema, children, noRow = false }) => {
     if (textarea) {
       textarea.value = JSON.stringify(values, null, 2);
     }
-    props.onSubmit?.(values);
+    // Note: onSubmit prop is handled by FormProvider
   };
 
   return (

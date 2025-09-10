@@ -42,6 +42,7 @@ export const color = {
     gray: "#757575",
     grey: "#757575",
     disabled: "#EEEEEE",
+    text: "#333",
   },
   secondary: {
     blue300: "#CEE0EA",
@@ -535,6 +536,13 @@ export const theme = createTheme({
           color: color.primary.blue,
           //  backgroundColor: color.primary.red,
           opacity: 1
+        }
+      }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          marginLeft: "-1px",
         }
       }
     }

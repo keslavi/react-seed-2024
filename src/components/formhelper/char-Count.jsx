@@ -9,6 +9,18 @@ import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
 import { color } from "@/theme-material";
 
+const CharMessage = ({ msg, withinLimit, children }) => {
+
+  return (
+    <>
+      <span style={{ color: withinLimit ? color.primary.text : color.primary.red }}>
+        {msg}
+      </span>
+      {children && <><br/>{children}</>}
+    </>
+  );
+};
+
 export const CharCount = memo((props) => {
   const {
     field,
@@ -55,6 +67,7 @@ export const CharCount = memo((props) => {
   // Calculate character count and determine styling
   const currentLength = field.value?.length || 0;
   const isWithinLimit = currentLength <= props.charCount;
+  const msgChars = `${currentLength} / ${props.charCount} characters`;
   const className = isWithinLimit ? "primaryText" : "Mui-error";
 
   // Watch for form submission and prevent if character limit exceeded
@@ -63,7 +76,7 @@ export const CharCount = memo((props) => {
       if (!isWithinLimit) {
         event.preventDefault();
         event.stopPropagation();
-        console.log(["all"], `Form submission blocked: Character count ${currentLength} exceeds limit of ${props.charCount}`);
+        //console.log(["wsc"], `Form submission blocked: Character count ${currentLength} exceeds limit of ${props.charCount}`);
         return false;
       }
     };
@@ -109,15 +122,30 @@ export const CharCount = memo((props) => {
         {...cleanParentProps(props)}
         {...valueProp}
         inputProps={inputProps}
-        error={errorMui?.error}
+        {...(errorMui?.error || !isWithinLimit ? { error: true } : {})}
+        helperText={
+          <CharMessage
+            msg={msgChars}
+            withinLimit={isWithinLimit}
+            children={errorMui.helperText}
+          >
+          </CharMessage>
+        }
+
+        // helperText={<>
+        //   {msgChars}
+        //   {errorMui?.helperText && <>
+        //     <br />{errorMui.helperText}
+        //   </>}
+        // </>}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
-      <FormHelperText
+      {/* <FormHelperText
         className={className}
       >
         {currentLength} / {props.charCount} characters
       </FormHelperText>
-      {errorMui && <FormHelperText className="Mui-error">{errorMui.helperText}</FormHelperText>}
+      {errorMui && <FormHelperText className="Mui-error">{errorMui.helperText}</FormHelperText>} */}
     </ColPadded>
   );
 });
