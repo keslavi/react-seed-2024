@@ -65,7 +65,7 @@ export const TextField = memo((props) => {
         {...cleanParentProps(props)}
         {...valueProp}
         {...errorMui}
-        inputProps={inputProps}
+        slotProps={{ htmlInput: inputProps }}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
     </ColPadded>

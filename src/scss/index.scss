@@ -1,6 +1,10 @@
-@use './global.scss';
+@import './variables.scss';
+@import './global.scss';
+@import './headings.scss';
+@import './labelheadings.scss';
+@import './toast/index.scss'; //toastify styles
+@import './table-cobe.scss';
 
-// add scss as needed for styling frameworks... bootstrap, tailwind, material, etc
-@use './toast/index.scss' as toast; //allow override of default $rt-color-success
 
-//@use './zNoFramework/index.scss';
+
+

@@ -1,4 +1,4 @@
-import InfoPopover from './info-popover';
+import { InfoPopover } from './info-popover';
 import { Info } from "./formhelper/info";
 
 /**
@@ -6,6 +6,9 @@ import { Info } from "./formhelper/info";
  * @param h1 large blue font
  * @param h2 medium blue font
  * @param h3 small blue font
+ * @param h4 small blue font
+ * @param h5 small blue font
+ * @param h6 small blue font
  */
 export const labelHeadingVariant = {
   h1: "h1",
@@ -18,21 +21,45 @@ export const labelHeadingVariant = {
  * @param variant h1,h2, h3... use string or enum labelHeadingVariant
  * @returns {label formatted by variant}
  */
-export const LabelHeading = ({ props }) => {
+export const LabelHeading = (props) => {
   const id = new Date().getTime().toString();
-  const variant = "labelHeadingRoot labelHeading" + (props.variant || "").toUpperCase();
+  
+  // Build class names based on props
+  const classNames = ["labelHeadingRoot", `labelHeading${(props.variant || "").toUpperCase()}`];
+  
+  // Add styling classes
+  if (props.light) classNames.push("light");
+  if (props.bold) classNames.push("bold");
+  if (props.boldish) classNames.push("boldish");
+  if (props.regular) classNames.push("regular");
+  if (props.dark) classNames.push("dark");
+  if (props.errorColor) classNames.push("errorColor");
+  if (props.disabled) classNames.push("disabled");
+  
+  const className = classNames.join(" ");
   const color = props.headingColor;
+  
+  // Build inline styles
+  const inlineStyle = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "8px",
+    ...(color && { color }),
+  };
+  
+  // Add link styling if link prop is present
+  if (props.link && !props.disabled) {
+    inlineStyle.cursor = "pointer";
+    inlineStyle.color = inlineStyle.color || "var(--color-link)";
+    inlineStyle.textDecoration = "underline";
+  }
 
   return (
     <>
       <span 
-        className={variant}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          color: color || "black",
-          gap: "8px"
-        }}
+        className={className}
+        style={inlineStyle}
+        onClick={props.onClick}
       >
         {props.children}
         {props.info && <InfoPopover info={props.info} id={id} />}

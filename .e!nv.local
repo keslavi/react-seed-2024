@@ -1,0 +1,7 @@
+
+#VITE_JWT= jwt from the authenticated browser
+#VITE_PROXY_TARGET
+
+VITE_APP_DEBUG=1
+
+#VITE_FORMHELPER_DEFAULT=steve #for formhelper defaults-*

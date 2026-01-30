@@ -31,6 +31,7 @@ export const Tasks = () => {
         <td>{item.body}</td>
         <td>{optionText(option.task.status, item.status)}</td>
         <td>{optionText(option.task.result, item.result)}</td>
+        <td>{item.userAssigned || 'Unassigned'}</td>
       </tr>
     ));
   };
@@ -51,6 +52,7 @@ export const Tasks = () => {
               <th>Body</th>
               <th>Status</th>
               <th>Result</th>
+              <th>Assigned To</th>
             </tr>
           </thead>
           <tbody>{renderItems(items)}</tbody>

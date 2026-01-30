@@ -9,7 +9,7 @@ import { ColPadded } from "@/components/grid";
 export const Select = React.memo((props) => {
   // Memoize placeholder function to prevent recreation on every render
 
-  const { field, error } = useFormField(props);
+  const { field, error,valueProp } = useFormField(props);
 
   const renderedOptions = useMemo(() => {
     return props.options?.map((x) => (
@@ -50,10 +50,10 @@ export const Select = React.memo((props) => {
           labelId={`${field.name}-label`}
           id={field.name}
           name={field.name}
-          label={props.label}
+          label={props.label || ""}
           onBlur={onBlur}
           onChange={onChange}
-          value={field.value || ""}
+          {...valueProp}
           displayEmpty
           renderValue={(selected) => {
             if (!selected || selected === "") {

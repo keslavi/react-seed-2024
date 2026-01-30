@@ -12,5 +12,10 @@ export * from './modal';
 export * from './label-heading';
 export * from './label-mask';
 export * from './info-popover'; 
+export * from './alert-inline';
+export * from './icon/icon';
+
+
+
 
 

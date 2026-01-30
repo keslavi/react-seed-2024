@@ -9,7 +9,6 @@ import {
   Home, 
   About 
 } from "./pages";
-
 /*
   some codesplitting examples... 
   prevent overly large page loads from happening up front
@@ -18,13 +17,15 @@ import {
 */
 const Tasks = lazy(() => import("./pages/-example-task-section/tasks/tasks"));
 const Task = lazy(() => import("./pages/-example-task-section/task/task"));
+
 // prettier-ignore
 //const Contacts = lazy(() => import("./pages/-example-contact/contacts/contacts"));
 //const Contact = lazy(() => import("./pages/-example-contact/contact/contact"));
 const Scratchpad = lazy(() => import("./pages/dev-section/scratchpad"));
-const Formhelper = lazy(() =>
-  import("./components/formhelper/test/formhelper")
-);
+//const Formhelper = lazy(() => import("./components/formhelper/test/formhelper"));
+import { Formhelper } from "./components/formhelper/test/formhelper";
+const Kanban = lazy(() => import("./pages/-example-task-section/kanban/kanban"));
+
 //not introducing jwt and private routes yet
 const menu = [
   { text: "Home", link: "/" },
@@ -33,6 +34,7 @@ const menu = [
     text: "Dev",
     items: [
       //example of creating submenu (low css doesn't support it)
+      { text: "Kanban", link: "/dev/kanban" },
       { text: "Tasks", link: "/dev/tasks" },
       //{ text: "Contacts", link: "/dev/contacts" },
       { text: "Scratchpad", link: "/dev/scratchpad" },
@@ -59,6 +61,14 @@ const router = createBrowserRouter([
       {
         path: "dev",
         children: [
+          {
+            path: "kanban",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Kanban />
+              </Suspense>
+            ),
+          },
           {
             path: "formhelper",
             element: (

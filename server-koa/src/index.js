@@ -6,7 +6,6 @@ import serve from 'koa-static';
 import logger from 'koa-logger';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import mongoose from 'mongoose';
 import fs from 'fs';
 
 import config from './config.js';
@@ -25,15 +24,6 @@ const apiRouter = new Router({ prefix: '/api' });
 // Get current file directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Database connection
-if (config.mongodb.uri) {
-  mongoose.connect(config.mongodb?.uri, config.mongodb?.options)
-    .then(() => console.log('🗄️  Connected to MongoDB'))
-    .catch(err => console.error('❌ MongoDB connection error:', err));
-} else {
-  console.log('❌ MongoDB connection error: No MongoDB URI provided via .env.local');
-}
 
 // Middleware
 app.use(errorHandler);

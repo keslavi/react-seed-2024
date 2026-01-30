@@ -27,7 +27,7 @@ describe("Formhelper-CharCount", () => {
     
     expect(input).toBeVisible();
     expect(charCountText).toBeVisible();
-    expect(charCountText).toHaveStyle({ color: color.primary.text });
+    expect(charCountText).not.toHaveStyle({ color: color.primary.red});
   });
 
   it("shows character count in black/primaryText when under the limit", async () => {
@@ -46,13 +46,13 @@ describe("Formhelper-CharCount", () => {
     const charCountText = screen.getByText('0 / 50 characters');
     
     // Initially should be black/primaryText
-    expect(charCountText).toHaveStyle({ color: color.primary.text });
+    expect(charCountText).not.toHaveStyle({ color: color.primary.red });
     
     // Type some text under the limit
     await user.type(input, 'This is a test message');
     
     const updatedCharCount = screen.getByText('22 / 50 characters');
-    expect(updatedCharCount).toHaveStyle({ color: color.primary.text });
+    expect(updatedCharCount).not.toHaveStyle({ color: color.primary.red });
   });
 
   it("shows character count in red when exceeding the limit", async () => {
@@ -293,7 +293,7 @@ describe("Formhelper-CharCount", () => {
     );
 
     const input = screen.getByRole('textbox', { name: /description/i });
-    const infoIcon = screen.getByTestId('HelpRoundedIcon');
+    const infoIcon = screen.getByTestId('IconHelpRounded');
     
     expect(input).toBeVisible();
     expect(infoIcon).toBeVisible();

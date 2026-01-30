@@ -49,6 +49,7 @@ export default defineConfig({
       "helpers": path.resolve(__dirname, "./src/helpers"),
       "pages": path.resolve(__dirname, "./src/pages"),
       "store": path.resolve(__dirname, "./src/store"),
+      "theme-material": path.resolve(__dirname, "./src/theme-material.jsx"),
     },
     dedupe: ['react', 'react-dom', 'react-is', 'prop-types'],
   },

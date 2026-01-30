@@ -2,6 +2,7 @@ import Router from '@koa/router';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import os from 'os';
 
 const r = new Router();
 
@@ -11,21 +12,40 @@ const __dirname = path.dirname(__filename);
 
 // Define data directory path
 const DATA_DIR = path.join(__dirname, '..', '..', 'data');
+const TASK_FILE = path.join(DATA_DIR, 'tasks.json');
 
 // In-memory task data storage
 let taskData = [];
 
-// Load task data from IIFE file
+// Get username from Windows authentication or environment
+const getUsername = (ctx) => {
+    // Try to get from request headers (Windows authentication)
+    const username = ctx.headers['x-authenticated-user'] 
+        || ctx.headers['remote-user']
+        || process.env.USERNAME  // Windows environment variable
+        || process.env.USER      // Unix environment variable
+        || os.userInfo().username  // Node.js OS module
+        || 'anonymous';
+    
+    return username;
+};
+
+// Load task data from JSON file (single-line format)
 const loadData = () => {
     try {
-        // Load task data
-        const taskFilePath = path.join(DATA_DIR, 'task.iife.js');
-        const taskFileContent = fs.readFileSync(taskFilePath, 'utf8');
-        taskData = eval(taskFileContent);
+        if (!fs.existsSync(TASK_FILE)) {
+            console.log('Task file does not exist, creating empty file');
+            taskData = [];
+            return;
+        }
         
-        console.log('Task data loaded from IIFE file');
+        const fileContent = fs.readFileSync(TASK_FILE, 'utf8');
+        const lines = fileContent.trim().split('\n').filter(line => line.trim());
+        taskData = lines.map(line => JSON.parse(line));
+        
+        console.log(`Task data loaded: ${taskData.length} tasks from JSON file`);
     } catch (error) {
-        console.error('Error loading task data from IIFE file:', error);
+        console.error('Error loading task data from JSON file:', error);
         // Fallback to empty data
         taskData = [];
     }
@@ -41,14 +61,14 @@ const readData = () => {
 const writeData = (data) => {
     taskData = data;
     
-    // Write data back to IIFE file format
+    // Write data back to JSON file (single-line format)
     try {
-        const taskFilePath = path.join(DATA_DIR, 'task.iife.js');
-        const iifeContent = `(() => ${JSON.stringify(data, null, 2)})()`;
-        fs.writeFileSync(taskFilePath, iifeContent, 'utf8');
-        console.log('Task data persisted to IIFE file');
+        // Each record on its own line
+        const jsonLines = data.map(task => JSON.stringify(task)).join('\n');
+        fs.writeFileSync(TASK_FILE, jsonLines + '\n', 'utf8');
+        console.log('Task data persisted to JSON file');
     } catch (error) {
-        console.error('Error writing task data to IIFE file:', error);
+        console.error('Error writing task data to JSON file:', error);
         throw new Error('Failed to persist task data');
     }
 }
@@ -70,6 +90,7 @@ r.get('/', async (ctx, next) => {
 r.post('/', async (ctx, next) => {
     let data = readData();
     const req = ctx.request.body;
+    const username = getUsername(ctx);
 
     if (req.delete) {
         console.log('delete')
@@ -83,6 +104,9 @@ r.post('/', async (ctx, next) => {
           Object.keys(req).forEach((key) => {
             item[key] = req[key] || "";
           });
+          // Update userAssigned on edit
+          item.userAssigned = username;
+          item.updatedAt = new Date().toISOString();
         }
     }
     else {
@@ -92,6 +116,8 @@ r.post('/', async (ctx, next) => {
         req.id=idNew;
         req.status = Number(req.status ||0);
         req.result = Number(req.result ||0);
+        req.userAssigned = username;
+        req.createdAt = new Date().toISOString();
         data.push(req);
     }
 

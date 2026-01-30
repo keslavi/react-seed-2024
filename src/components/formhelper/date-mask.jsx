@@ -19,7 +19,6 @@ export const DateMask = memo((props) => {
   const [masked, setMasked]=useState(
     (valueProp && valueProp.value && String(valueProp.value).trim() !== '')
   );
-  const [showHelper, setShowHelper] = useState(false);
 
   const timeoutRef = useRef(null);
   const helperTimeoutRef = useRef(null);
@@ -38,10 +37,9 @@ export const DateMask = memo((props) => {
   const onChange = useCallback((e) => {
     field.onChange(e.target.value);
     props.onChange?.(e);
-  }, [field, props]);
+  }, []);
 
   const onFocus = useCallback((e) => {
-    setShowHelper(true);
     props.onFocus?.(e);
   }, []);
 
@@ -54,7 +52,6 @@ export const DateMask = memo((props) => {
       clearTimeout(helperTimeoutRef.current);
     }
     helperTimeoutRef.current = setTimeout(() => {
-      setShowHelper(false);
     }, 1000); // 1 second
     
     // Set timer to mask the field after blur

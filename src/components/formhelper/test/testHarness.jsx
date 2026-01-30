@@ -18,10 +18,17 @@ const hasRowComponent = (children) => {
   });
 };
 
-export const TestHarness = ({ item = {}, schema, children, noRow = false }) => {
+export const TestHarness = ({
+  item = {},
+  schema,
+  children,
+  noRow = false,
+  noResults = false,
+}) => {
+
   // Create resolver from schema if provided
   const resolver = schema ? yupResolver(schema) : undefined;
-  
+
   // React hook form and validation
   const formMethods = useFormProvider({
     resolver,
@@ -47,30 +54,32 @@ export const TestHarness = ({ item = {}, schema, children, noRow = false }) => {
 
   return (
     <FormProvider {...{ formMethods, onSubmit }}>
-        {!noRow ? <Row>{children}</Row> : children}
-      <button
-        type="submit"
-      >
-        Submit
-      </button>
-      <div>
-        <label htmlFor="submit-results">submit results</label>
-        <br />
-        <textarea
-          id="submit-results"
-          rows={10}
-          readOnly
-          placeholder="Form submission results will appear here..."
-          style={{
-            width: '100%',
-            fontFamily: 'monospace',
-            fontSize: '12px',
-            padding: '8px',
-            border: '1px solid #ccc',
-            borderRadius: '4px'
-          }}
-        />
-      </div>
+      {!noRow ? <Row>{children}</Row> : children}
+      {!noResults && <>
+        <button
+          type="submit"
+        >
+          Submit
+        </button>
+        <div>
+          <label htmlFor="submit-results">submit results</label>
+          <br />
+          <textarea
+            id="submit-results"
+            rows={10}
+            readOnly
+            placeholder="Form submission results will appear here..."
+            style={{
+              width: '100%',
+              fontFamily: 'monospace',
+              fontSize: '12px',
+              padding: '8px',
+              border: '1px solid #ccc',
+              borderRadius: '4px'
+            }}
+          />
+        </div>
+      </>}
     </FormProvider >
   );
 };

@@ -19,12 +19,12 @@ export const Password = memo((props) => {
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
     props.onBlur?.(e);
-  }, [field, props]);
+  }, []);
 
   const onChange = useCallback((e) => {
     field.onChange(e.target.value);
     props.onChange?.(e);
-  }, [field, props]);
+  }, []);
 
   const onClickShowPassword = useCallback(() => {
     setShowPassword(!showPassword);

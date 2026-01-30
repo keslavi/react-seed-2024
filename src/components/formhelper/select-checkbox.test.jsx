@@ -202,7 +202,7 @@ describe("SelectCheckbox", () => {
     );
     
     // Click the info icon to open the popover
-    const infoIcon = screen.getByTestId('HelpRoundedIcon');
+    const infoIcon = screen.getByTestId('IconHelpRounded');
     await user.click(infoIcon);
     
     // Wait for the popover to open and check for info text

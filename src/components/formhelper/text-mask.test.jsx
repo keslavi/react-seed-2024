@@ -124,7 +124,7 @@ describe('TextMask Component', () => {
       </TestWrapper>
     );
     
-    const helpIcon = screen.getByTestId('HelpRoundedIcon');
+    const helpIcon = screen.getByTestId('IconHelpRounded');
     expect(helpIcon).toBeInTheDocument();
   });
 
@@ -139,7 +139,7 @@ describe('TextMask Component', () => {
       </TestWrapper>
     );
     
-    const helpIcon = screen.queryByTestId('HelpRoundedIcon');
+    const helpIcon = screen.queryByTestId('IconHelpRounded');
     expect(helpIcon).not.toBeInTheDocument();
   });
 
@@ -155,7 +155,7 @@ describe('TextMask Component', () => {
       </TestWrapper>
     );
     
-    const helpIcon = screen.getByTestId('HelpRoundedIcon');
+    const helpIcon = screen.getByTestId('IconHelpRounded');
     await user.click(helpIcon);
     
     expect(screen.getByText('Enter your 9-digit SSN')).toBeInTheDocument();
@@ -173,7 +173,7 @@ describe('TextMask Component', () => {
       </TestWrapper>
     );
     
-    const helpIcon = screen.getByTestId('HelpRoundedIcon');
+    const helpIcon = screen.getByTestId('IconHelpRounded');
     await user.click(helpIcon);
     
     expect(screen.getByText('SSN Information')).toBeInTheDocument();

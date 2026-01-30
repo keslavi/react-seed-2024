@@ -14,7 +14,7 @@ const InfoPopover = ({ info }) => {
     setAnchorEl(null);
   };
 
-  const open = Bollean(anchorEl);
+  const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
   return (
@@ -53,7 +53,7 @@ const InfoPopover = ({ info }) => {
     </div>
   )
 }
-export default InfoPopover;
+export { InfoPopover };
 
 
 

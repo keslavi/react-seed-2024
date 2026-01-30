@@ -91,7 +91,7 @@ expect(input).toBeVisible(); // Instead of toHaveAttribute('autofocus')
 ### Info Tooltip Testing
 ```javascript
 // Info component is rendered outside FormControl, so find globally
-const infoIcon = screen.getByTestId('HelpRoundedIcon');
+const infoIcon = screen.getByTestId('IconHelpRounded');
 
 // Popover content is rendered in portal, find by role
 const popover = screen.getByRole('presentation');

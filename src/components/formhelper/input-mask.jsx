@@ -1,3 +1,4 @@
+//todo: verify and delete
 //import { TextField as MuiTextField } from "@mui/material";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
@@ -5,9 +6,6 @@ import { useFormField } from "./form-provider";
 import { Col } from "components";
 
 export const InputMask = (props) => {
-
-
-
 
   const { field, error } = useFormField(props);
   return (
@@ -27,3 +25,5 @@ export const InputMask = (props) => {
     </Col>
   );
 };
+
+InputMask.displayName = 'InputMask';

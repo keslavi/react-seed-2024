@@ -14,11 +14,7 @@ export const schema= yup.object().shape({
   dfrom: yup.date()
     .validDateRange() //(min, max)
     .required("From date is required"),
-  address: yup.object().shape({
-    line1:yup.string().required("address line 1 required"),
-    line2:yup.string().required("address line 2 required"),
-    line3:yup.string().required("address line 3 required"),
-  })
+  references: yup.array().of(yup.string()).default([])
 })
 
 export const resolver=yupResolver(schema);

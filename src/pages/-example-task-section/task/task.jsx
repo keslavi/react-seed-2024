@@ -124,6 +124,12 @@ export const Task = () => {
               //info={<font color='red'>object support</font>}
             />
             <Input name="body" label="Body" />
+            <Input 
+              name="userAssigned" 
+              label="Assigned To" 
+              disabled={true}
+              info="Auto-populated from Windows authentication"
+            />
           </Row>
         </Fieldset>
         <br />
@@ -154,13 +160,13 @@ export const Task = () => {
         <br />
         <Fieldset>
           <Row>
-            <Input name="address.line1" label="address" />
-          </Row>
-          <Row>
-            <Input name="address.line2" />
-          </Row>
-          <Row>
-            <Input name="address.line3" />
+            <Input 
+              name="references" 
+              label="References" 
+              arrayInput={true}
+              placeholder="Add a link or reference"
+              info="Add URLs or reference links (e.g., Google Maps, documentation)"
+            />
           </Row>
         </Fieldset>
       </FormProvider>

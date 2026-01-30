@@ -9,3 +9,5 @@ export const Label = (props) =>{
     </Typography>
   )
 }
+
+Label.displayName = 'Label';

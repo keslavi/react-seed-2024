@@ -15,10 +15,10 @@ import { isTruthy } from "helpers";
 export const Checkbox = memo((props) => {
   const variant = props.variant || "";
 
-  const { field, errorMui } = useFormField(props);
+  const { field, error } = useFormField(props);
 
   const isChecked = useCallback(() => {
-    const v = field.value;
+    const v = field.value || props.isChecked;
     return isTruthy(v);
   }, [field.value]);
 
@@ -67,12 +67,12 @@ export const Checkbox = memo((props) => {
   const onChange = useCallback((e) => {
     field.onChange(e.target.checked);
     props.onChange?.(e);
-  }, [field, props]);
+  }, []);
 
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.checked);
     props.onBlur?.(e);
-  }, [field, props]);
+  }, []);
 
   return (
     <ColPadded {...colProps(props)}>
@@ -88,11 +88,11 @@ export const Checkbox = memo((props) => {
             {...cleanParentProps(props)}
           />
         }
-        label={label}
+        label={<>&nbsp;{label}</>}
         style={{ marginLeft: 0 }}
       />
-      {errorMui?.helperText && (
-        <FormHelperText className="Mui-error">{errorMui.helperText}</FormHelperText>
+      {error && (
+        <FormHelperText className="Mui-error">{errorMui.message}</FormHelperText>
       )}
     </ColPadded>
   );

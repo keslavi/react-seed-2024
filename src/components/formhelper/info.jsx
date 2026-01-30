@@ -1,13 +1,11 @@
-import { useState } from "react";
-import { isEmpty } from "lodash";
+import { useState, isValidElement } from "react";
 import {
   IconButton,
-  InputAdornment,
   Popover,
   Typography,
 } from "@mui/material";
 
-import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import IconHelpRounded from '@mui/icons-material/HelpRounded';
 import IconClear from '@mui/icons-material/Clear';
 import IconHelp from '@mui/icons-material/Help';
 import { color } from "@/theme-material";
@@ -19,10 +17,31 @@ export const Info = ({ id, info }) => {
   let infoHeader = null;
   let infoSubject = info;
 
+  const tooltipInfoStyle = () => {
+    infoHeader = info.label;
+    infoSubject = (<>
+      {info.message && (<Typography variant="h5" gutterBottom>
+        {info.message}
+      </Typography>)}
+      {info.content && isValidElement(info.content) && info.content}
+      {info.messageList && (<>
+        <div>
+          <ul>
+            {info.messageList.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </>)}
+    </>)
+  };
+
   if (info && typeof info == 'string' && info.indexOf("|") > 0) {
     const arInfo = info.split("|");
     infoHeader = arInfo[0];
     infoSubject = arInfo[1];
+  } else if (isValidElement(info)) {
+    tooltipInfoStyle(info)
   }
 
   const onClickIcon = e => {
@@ -40,25 +59,15 @@ export const Info = ({ id, info }) => {
       top: 8,
       zIndex: 1
     }}>
-      <IconButton
-        onClick={onClickIcon}
-        size="small"
-        aria-label="help"
-        sx={{ 
+      <IconHelpRounded
+        data-testid="IconHelpRounded"
+        sx={{
           color: color.primary.blue,
-          padding: 0,
-          '&:hover': {
-            backgroundColor: 'transparent'
-          }
+          cursor: 'pointer',
+          fontSize: '1.2rem'
         }}
-      >
-        <HelpRoundedIcon
-          data-testid="HelpRoundedIcon"
-          sx={{ 
-            fontSize: '1.2rem'
-          }}
-        />
-      </IconButton>
+        onClick={onClickIcon}
+      />
       <Popover
         id={id}
         open={open}
@@ -75,11 +84,14 @@ export const Info = ({ id, info }) => {
         }}
       >
         {infoHeader &&
-          <Typography variant="h5" gutterBottom>
-            {infoHeader}
-          </Typography>
+          <div>
+            <b>{infoHeader}</b>
+          </div>
         }
-        {infoSubject ? String(infoSubject) : ""}
+        {infoSubject && (isValidElement(infoSubject)
+        ? infoSubject
+        : String(infoSubject)
+        )}
       </Popover>
     </div>
   );
@@ -112,7 +124,7 @@ export const InfoIcon = (props) => {
 
   const ret = (
     <>
-              <IconHelp
+      <IconHelp
         color="primary"
         fontSize="small"
         onClick={onTogglePopover}
@@ -154,6 +166,8 @@ export const InfoIcon = (props) => {
   );
   return ret;
 };
+
+Info.displayName = 'Info';
 
 export default Info;
 

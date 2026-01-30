@@ -13,6 +13,7 @@ import { ThemeProvider } from "./theme-material";
 
 import "./helpers/extensions/console-extension";
 import "./helpers/extensions/global-extensions";
+import "./helpers/extensions/env-extension.js";
 
 // Load MSW browser setup (it handles conditional logic internally)
 import('./test/msw/mswBrowser.js').then(() => {

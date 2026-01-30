@@ -27,7 +27,7 @@ export const Datepicker = memo((props) => {
   const onChange = useCallback((e) => {
     field.onChange(e.target.value);
     props.onChange?.(e);
-  }, [field, props]);
+  }, []);
 
   return (
     <ColPadded {...colProps(props)}>

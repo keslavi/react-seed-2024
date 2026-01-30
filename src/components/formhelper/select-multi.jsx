@@ -8,7 +8,7 @@ import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
 
 export const SelectMulti = memo((props) => {
-  const { field, errorMui, valueProp } = useFormField(props);
+  const { field, errorMui } = useFormField(props);
 
   const [inputValue, setInputValue] = useState("");
 
@@ -30,7 +30,7 @@ export const SelectMulti = memo((props) => {
   const onBlur = useCallback((e) => {
     field.onBlur();
     props.onBlur?.(e);
-  }, [field, props]);
+  }, []);
 
   const onChange = useCallback((e, newValue) => {
     const selectedValues = Array.isArray(newValue)
@@ -38,7 +38,7 @@ export const SelectMulti = memo((props) => {
       : [];
     field.onChange(selectedValues);
     props.onChange?.(selectedValues);
-  }, [field, props]);
+  }, []);
 
   // Handle input change to manage placeholder visibility
   const onInputChange = useCallback((event, newInputValue) => {

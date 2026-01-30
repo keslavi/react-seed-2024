@@ -1,6 +1,8 @@
-# react seed 2024
-straight javascript seed starter project with zustand, notifications, form validation
-#small update to test copy.ps1
+# Kanban Board - Repository-Based Backend
+
+A kanban solution that stores data in JSON files within the GitHub repository, designed for environments that can't easily set up a traditional backend. Team members can pull/push to sync task data.
+
+Based on [react-seed-2024](https://github.com/keslavi/react-seed-2024) with extensions for task management and kanban visualization.
 ## quickstart !important  
 
 you need to run both the api backend as well as the main app in order to get data

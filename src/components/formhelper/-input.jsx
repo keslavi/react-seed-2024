@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 
+import { ArrayInput } from "./array-input";
 import { Checkbox } from "./checkbox";
 import { Datepicker } from "./datepicker";
 import { DateMask } from "./date-mask";
@@ -20,6 +21,7 @@ import { CharCount } from "./char-Count";
  * - label="Text for label" (optional)
  *
  * add properties for different controls:
+ *  - arrayInput
  *  - datepicker
  *  - options= {[value:"",text:""]} autocomplete
  *  - select options={} select
@@ -29,6 +31,7 @@ import { CharCount } from "./char-Count";
  *  @param control required for react-hook-form
  *  @param name required
  *  @param value normally not needed, react-hook-form will fill this
+ *  @param arrayInput returns array input with add/remove
  *  @param options returns autocomplete
  *  @param optionsMulti returns multiselect
  *  @param optionsRadio returns as radio buttons
@@ -42,6 +45,7 @@ import { CharCount } from "./char-Count";
 
 export const Input = (props) => {
   const {
+    arrayInput,
     charCount,
     checkbox,
     datepicker,
@@ -55,7 +59,9 @@ export const Input = (props) => {
     textarea,
   } = props;
 
-  const Ctl = mask 
+  const Ctl = arrayInput
+    ? ArrayInput
+    : mask 
     ? TextMask 
     : datepicker
     ? Datepicker

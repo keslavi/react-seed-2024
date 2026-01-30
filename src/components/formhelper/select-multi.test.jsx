@@ -209,7 +209,7 @@ describe("Formhelper-Multiselect", () => {
     expect(screen.getByText('Some error')).toBeInTheDocument();
     
     // Check that info icon is present
-    const infoIcon = screen.getByTestId('HelpRoundedIcon');
+    const infoIcon = screen.getByTestId('IconHelpRounded');
     expect(infoIcon).toBeInTheDocument();
   });
 

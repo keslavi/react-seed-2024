@@ -1,17 +1,12 @@
-
-import React from "react";
-import { createTheme } from "@mui/material/styles";
-//import { blue, red, white } from "@mui/material/colors";
-
-import { ThemeProvider as MUIThemeProvider } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-//import { green } from "@mui/material/colors";
 //https://mui.com/material-ui/customization/theming/
 //https://mui.com/material-ui/customization/theme-components/
 
+import { createTheme, ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
 import { AccordionSummary } from '@mui/material';
-import { styled } from "@mui/system";
-import IconPadding from "@mui/icons-material/Padding";
+import { minHeight, styled } from "@mui/system";
+import { head } from "lodash";
 
 /*************************************************
  
@@ -19,65 +14,127 @@ import IconPadding from "@mui/icons-material/Padding";
  
 ***************************************************/
 
-export const ThemeProvider = (props) => {
-  return (
-    <>
-      <CssBaseline>
-        <MUIThemeProvider theme={theme}>{props.children}</MUIThemeProvider>
-      </CssBaseline>
-    </>
-  );
+const style = getComputedStyle(document.documentElement);
+const scss = (value, fallback = '#000000') => {
+  const cssValue = style.getPropertyValue(value).trim();
+  // Return fallback if CSS variable is empty or undefined
+  return cssValue || fallback;
 };
-
-export default ThemeProvider;
 
 export const color = {
   primary: {
-    blue: "#022366",
-    red: "#e31836",
-    white: "#FFFFFF",
-    header: "#0241ce", //blue600
-    backgroundColor: "#fff",
-    black: "#000000",
-    gray: "#757575",
-    grey: "#757575",
-    disabled: "#EEEEEE",
-    text: "#333",
+    blue: scss('--color-primary', '#012169'),
+    red: scss('--color-primary-light', '#0241ce'),
+    white: scss('--color-white', '#ffffff'),
+    header: scss('--color-header', '#000000'),
+    backgroundColor: scss('--color-white', '#ffffff'),
+    black: scss('--color-black', '#000000'),
+    gray: scss('--color-gray-600', '#757575'),
+    grey: scss('--color-gray-600', '#757575'),
+    disabled: scss('--color-gray-200', '#EEEEEE'),
   },
   secondary: {
-    blue300: "#CEE0EA",
-    blue600: "#0241ce",
-    blue700: "#2741A3",
-    blueShade: "#e6e9f1",
-    almostBlack: "#504f54",
-    grey500: "#EEEbe8",//"#E3ded8",
-    almostGray: "#7A7878",
-    almostGrey: "#7A7878",
-    black: "#000000",
-    shaded: "#F8F8F8",
+    blue300: scss('--color-blue-300', '#cee0ea'),
+    blue550: scss('--color-blue-550', '#0053c2'),
+    blue600: scss('--color-blue-600', '#2741a3'),
+    blue700: scss('--color-blue-700', '#0241ce'),
+    blue950: scss('--color-blue-950', '#012169'),
+    blueShade: scss('--color-blue-100', '#e6e9f1'),
+    almostBlack: scss('--color-gray-800', '#504f54'),
+    grey500: scss('--color-gray-100', '#eeebe8'),
+    almostGray: scss('--color-gray-700', '#7a7878'),
+    almostGrey: scss('--color-gray-700', '#7a7878'),
+    black: scss('--color-black', '#000000'),
+    shaded: scss('--color-gray-50', '#f8f8f8'),
   },
   cobe1: {
-    blue: "#0073cf",
-    black: "#333333",
-    white: "#FFFFFF",
-    gray: "#9d8e80", //border color on hover of input fields
-    grey: "#9d8e80",
-    red: "#d32f2f",
-    lightGray: '#d1c9c0',
-  }
+    blue: scss('--color-cobe1-blue', '#0073cf'),
+    black: scss('--color-cobe1-black', '#333333'),
+    white: scss('--color-white', '#ffffff'),
+    gray: scss('--color-cobe1-gray', '#9d8e80'), //border color on hover of input fields
+    grey: scss('--color-cobe1-gray', '#9d8e80'),
+    red: scss('--color-cobe1-red', '#e31836'),
+    lightGray: scss('--color-cobe1-lightGray', '#c1c9c0'),
+  },
+  white: scss('--color-white', '#ffffff'),
+  bodyBackGround: import.meta.env.VITE_COLOR_BODY_BACKGROUND || scss('--color-body-background', '#fafafa'),
+  gray300: scss('--color-gray-300', '#e0e0e0'),
+  headingColor: scss('--color-heading-color', '#000000'),
+  headingColorSecondary: scss('--color-header-secondary', '#000000'),
+  link:scss('--color-link', '#0053c2'),
 };
 
-const init = createTheme();
+const buttonSizes = {
+  small: {
+    fontSize: "12px",
+    minWidth: "60px",
+    minHeight: "28px",
+    padding: "6px 12px",
+  },
+  medium: {
+    fontSize: "12px",
+    minWidth: "80px",
+    minHeight: "36px",
+    padding: "8px 16px",
+  },
+  large: {
+    fontSize: "12px",
+    minWidth: "120px",
+    minHeight: "44px",
+    padding: "10px 20px",
+  },
+}
 
+const getFieldsetButtonStyles = ({ theme }) => ({
+  ...buttonSizes.small,
+  backgroundColor: 'transparent',
+  border: '1px solid rbga(9,40,111,0.8)',//`1px solid ${color.primary.blue}`,
+  color: color.primary.blue,
+  boxShadow: 'none',
+  '&:hover': {
+    backgroundColor: 'rgba(0,0,0,0.04)',
+    border: `1px solid ${color.primary.blue}`,//`1px solid ${color.primary.blue}`,
+    color: color.primary.blue,
+  },
+  '&:active': {
+    backgroundColor: 'rgba(0,0,0,0.04)',
+    border: `1px solid ${color.primary.blue}`,
+    color: color.primary.blue,
+  },
+  '&.Mui-disabled': {
+    backgroundColor: 'rgba(0,0,0,0.04)',
+    color: color.primary.disabled,
+    border: `1px solid ${color.primary.disabled}`,
+    boxShadow: 'none',
+    cursor: 'not-allowed',
+    pointerEvents: 'none',
+  },
+  '&:disabled': {
+    backgroundColor: 'rgba(0,0,0,0.04)',
+    border: `1px solid ${color.primary.blue}`,
+    color: color.primary.blue,
+  },
+});
+
+
+const init = createTheme();
 //TIP: use ctrl-k + ctrl-0 to collapse all, then expand
 export const theme = createTheme({
   //TODO: finish all the custom stuff as it comes up
+  cssVariables: true,
   typography: {
     fontFamily: "Connections, Calibri, 'sans-serif'",
     fontWeight: 400,
-    fontSize: 14,
-    lineHeight: 1.5,
+    fontSize: 16,
+    //lineHeight: 1.5,
     color: color.cobe1.black,
+    body2: {
+      fontFamily: "Connections, Calibri, 'sans-serif'",
+      fontWeight: 400,
+      fontSize: 16,
+      lineHeight: 1.5,
+      //color: color.cobe1.black,
+    },
   },
   palette: {
     primary: {
@@ -86,9 +143,13 @@ export const theme = createTheme({
     secondary: {
       main: color.primary.red,
     },
-    text: {
-      disabled: "black",//color.secondary.almostGrey
-    },
+    background: {
+      default: color.bodyBackGround,
+      paper: color.white,
+    }
+    // text: {
+    //   disabled: "black",//color.secondary.almostGrey
+    // },
   },
   zIndex: {
     appBar: 4000,
@@ -100,18 +161,22 @@ export const theme = createTheme({
   paper: {
     marginRight: init.spacing(2),
   },
-  // uncomment this if we want to use bofa's default font through out
-  // all mui components.
-  // typography: {
-  //   allVariants: {
-  //     fontFamily: [
-  //       'Connections', 'Arial', 'Calibri', 'Helvetica', 'sans-serif'
-  //     ].join(','),
-  //     textTransform: 'none',
-  //   }
-  // },
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: color.primary.blue,
+        },
+        secondary: {
+          main: color.primary.red,
+        },
+        text: {
+          disabled: color.secondary.almostGrey,
+        },
+      }
+    }
+  },
   components: {
-    //TODO: figure out how latest MUI properties work
     MuiGrid: {
       styleOverrides: {
         root: {
@@ -122,9 +187,17 @@ export const theme = createTheme({
             paddingLeft: "0px",
           },
           '>.MuiFormControl-root': {
-            paddingLeft: "16px",
+            paddingLeft: "1rem",
           }
         },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          marginTop: init.spacing(2),
+          marginBottom: init.spacing(2),
+        }
       },
     },
     MuiPaper: {
@@ -132,6 +205,9 @@ export const theme = createTheme({
         root: {
           boxShadow: "none",
           position: "relative",
+          '& > .MuiButton-root': {
+            marginRight: '1rem',
+          },
         },
       },
     },
@@ -157,7 +233,13 @@ export const theme = createTheme({
         }
       }
     },
-    MuiAppBar: {},
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: color.bodyBackGround,
+        }
+      },
+    },
     MuiAlert: {
       styleOverrides: {
         root: {
@@ -260,15 +342,61 @@ export const theme = createTheme({
     MuiButtonBase: {
       styleOverrides: {
         root: {
-          fontSize: "0rem",
+          // fontSize: "0rem",
           minWidth: "20px",
-          '&.MuiButton-root': {
-            svg: {
-              color: color.cobe1.white,
-            },
-          },
+          // '&.MuiButton-root': {
+          //   svg: {
+          //     color: color.cobe1.white,
+          //   },
+          // },
         },
       },
+    },
+    MuiButton: {
+      defaultProps: {
+        size: 'medium',
+        variant: 'text',
+        disableElevation: true,
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: '40px',
+          textTransform: 'none',
+          fontWeight: 500,
+          fontSize: '1.75rem',
+          position: 'relative',
+          boxSizing: 'border-box',
+          border: '1px solid transparent',
+          '&:hover': {
+            color: color.cobe1.blue,
+            backgroundColor: color.cobe1.blue,
+            //border: `1px solid ${color.cobe1.blue}`,
+            borderColor: color.cobe1.blue,
+            boxShadow: 'inset 0 0 0 1px white',
+          },
+        },
+        outlined: {
+          backgroundColor: 'transparent',
+          borderColor: color.secondary.blue700,
+        },
+        text: {
+          minWidth: 'auto',
+        }
+      },
+      variants: [
+        {
+          props: { pageSize: 'small' },
+          style: { fontSize: '.75rem' },
+        },
+        {
+          props: { pageSize: 'medium' },
+          style: { fontSize: '1rem' },
+        },
+        {
+          props: { pageSize: 'large' },
+          style: { fontSize: '1.5rem' },
+        },
+      ],
     },
     MuiCheckbox: {
       styleOverrides: {
@@ -276,12 +404,25 @@ export const theme = createTheme({
           width: "20px",
           height: "20px",
           color: color.cobe1.lightGray,
+          marginLeft: "-0.375rem",
           '&.Mui-checked': {
             color: color.cobe1.blue,
           },
           '&:hover': {
             color: color.cobe1.blue,
           },
+          'ul.MuiAutocomplete-listbox li.MuiAutocomplete-option &': {
+            '&:hover': { color: color.cobe1.white, }
+          },
+          'ul.MuiAutocomplete-listbox li.MuiAutocomplete-option[aria-selected="true"] &': {
+            color: color.cobe1.white,
+          },
+          'ul.MuiAutocomplete-listbox li.MuiAutocomplete-option &.Mui-checked': {
+            color: color.cobe1.blue,
+          },
+          'ul.MuiAutocomplete-listbox li.MuiAutocomplete-option &.Mui-checked[aria-selected="true"]': {
+            color: color.cobe1.white,
+          }
         },
       },
     },
@@ -292,14 +433,15 @@ export const theme = createTheme({
       //   color:color.primary.blue,
       // }
     },
-    //   MuiButton:{
-    //     styleOverrides: {
-    //       root: {
-    //         backgroundColor: color.secondary.blueShade,
-    //         color: color.primary.blue,
-    //       }
-    //   }
-    // },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          borderBottomWidth: 1,
+          paddingBottom: 0,
+          borderColor: color.gray300,
+        },
+      },
+    },
     MuiIconButton: {},
     MuiFormControl: {
       // root: { marginTop: "10px", marginBottom: "10px" },
@@ -307,15 +449,23 @@ export const theme = createTheme({
         root: {
           display: "flex",
           position: "relative",
+          '&:has(input[placeholder="No accounts left to assign])': {
+            color: color.cobe1.black,
+            backgroundColor: "#f0f0e8",
+          },
           '.MuiFormLabel-root': {
             position: "relative",
             transform: "none",
             fontFamily: "Connections, Calibri, sans-serif",
-            color: "#333",
-            fontSize: "14px",
+            // color: "#333",
+            // fontSize: "14px",
           },
           '.MuiInputBase-input': {
             padding: "8.5px 5px 8.5px 5px",
+          },
+          'MuiInputBase-input[placeholder="None Added"]::placeholder': {
+            color: color.cobe1.black,
+            opacity: 1,
           },
           '.MuiOutlinedInput-notchedOutline': {
             top: '0px',
@@ -337,6 +487,11 @@ export const theme = createTheme({
           input: {
             position: "relative",
           },
+          '&:has(.MuiRadio-root)': {
+            marginBottom: '0.5rem',
+            marginRight: '1rem',
+            gap: '0.5rem',
+          },
           '.MuiTypography-root': {
             paddingLeft: "10px",
           },
@@ -346,6 +501,15 @@ export const theme = createTheme({
           },
           '.MuiSvgIcon-root': {
 
+          },
+          '&.Mui-disabled': {
+            color: color.cobe1.lightGray,
+            '.MuiTypography-root': {
+              color: color.cobe1.lightGray,
+            },
+            '.MuiSvgIcon-root': {
+              color: color.cobe1.lightGray,
+            },
           },
         },
       },
@@ -403,10 +567,10 @@ export const theme = createTheme({
           },
         },
         listbox: {
-          borderTop: "1px solid #d1c9c0",
-          borderRight: "1px solid #d1c9c0",
-          borderBottom: "1px solid #d1c9c0",
-          borderLeft: "1px solid #d1c9c0",
+          borderTop: `1px solid ${color.cobe1.lightGray}`,
+          borderRight: `1px solid ${color.cobe1.lightGray}`,
+          borderBottom: `1px solid ${color.cobe1.lightGray}`,
+          borderLeft: `1px solid ${color.cobe1.lightGray}`,
           padding: "0px",
           background: color.cobe1.white,
           '.MuiAutocomplete-option.Mui-focused': {
@@ -426,7 +590,7 @@ export const theme = createTheme({
       // },
       styleOverrides: {
         root: {
-          color: color.cobe1.black,
+          //color: color.cobe1.black,
           zIndex: 0,
         },
       }
@@ -440,6 +604,9 @@ export const theme = createTheme({
           color: color.cobe1.lightGray,
           '&.Mui-checked': {
             color: color.cobe1.blue,
+          },
+          '&.Mui-chekced.Mui-disabled': {
+            color: color.cobe1.lightGray,
           },
           '&:hover': {
             color: color.cobe1.blue,
@@ -468,6 +635,9 @@ export const theme = createTheme({
     MuiFormLabel: {
       styleOverrides: {
         root: {
+          fontWeight: 600,
+          color: color.cobe1.black,
+          fontSize: '14px',
           '&.Mui-focused': {
             color: color.cobe1.black,
           },
@@ -510,7 +680,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&:nth-of-type(odd)': {
-            backgroundColor: "#f9f9f9",
+            backgroundColor: color.secondary.shaded,
           },
         }
       }
@@ -519,7 +689,7 @@ export const theme = createTheme({
       styleOverrides: {
         head: {
           backgroundColor: color.primary.blue,
-          color: "#fff",
+          color: color.primary.white,
         },
       }
     },
@@ -539,16 +709,45 @@ export const theme = createTheme({
         }
       }
     },
-    MuiFormHelperText: {
+    MuiListItemText: {
       styleOverrides: {
-        root: {
-          marginLeft: "-1px",
-        }
+        root: ({ ownerState }) => {
+          const fontWeight = ownerState.bold ? 700 : ownerState.boldish ? 500 : ownerState.light ? 300 : null;
+          return {
+            '& .MuiListItemText-primary': {
+              fontWeight: 400,
+            },
+            ...(ownerState.bold && {
+              '& .MuiListItemText-primary': {
+                fontWeight
+              }
+            }),
+            ...(ownerState.boldish && {
+              '& .MuiListItemText-primary': {
+                fontWeight
+              },
+            }),
+            ...(ownerState.light && {
+              '& .MuiListItemText-primary': {
+                fontWeight
+              },
+            }),
+          };
+        },
       }
-    }
-    ,
+    },
   },
 });
+
+export const ThemeProvider = ({ children }) => (
+  <MuiThemeProvider theme={theme}>
+    <CssBaseline/>
+      {children}
+  </MuiThemeProvider>
+);
+export default ThemeProvider;
+
+
 
 //const drawerWidth = 215;
 export const StyledAccordionSummary = styled(AccordionSummary)({

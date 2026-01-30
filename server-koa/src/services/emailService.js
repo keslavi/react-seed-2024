@@ -40,15 +40,15 @@ class EmailService {
    * @param {string} username - User's username
    */
   async sendWelcomeEmail(to, username) {
-    const subject = 'Welcome to Song Request!';
-    const text = `Hi ${username}!\n\nWelcome to Song Request. We're excited to have you on board.\n\nBest regards,\nThe Song Request Team`;
+    const subject = 'Welcome to Kanban!';
+    const text = `Hi ${username}!\n\nWelcome to Kanban. We're excited to have you on board.\n\nBest regards,\nThe Kanban Team`;
     const html = `
-      <h1>Welcome to Song Request!</h1>
+      <h1>Welcome to Kanban!</h1>
       <p>Hi ${username}!</p>
-      <p>Welcome to Song Request. We're excited to have you on board.</p>
+      <p>Welcome to Kanban. We're excited to have you on board.</p>
       <br>
       <p>Best regards,</p>
-      <p>The Song Request Team</p>
+      <p>The Kanban Team</p>
     `;
 
     return this.sendMail({ 
@@ -69,7 +69,7 @@ class EmailService {
   async sendPasswordResetEmail(to, resetToken, username) {
     const subject = 'Password Reset Request';
     const resetLink = `${config.clientUrl}/reset-password?token=${resetToken}`;
-    const text = `Hi ${username}!\n\nYou requested to reset your password. Click the following link to reset it:\n\n${resetLink}\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\nThe Song Request Team`;
+    const text = `Hi ${username}!\n\nYou requested to reset your password. Click the following link to reset it:\n\n${resetLink}\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\nThe Kanban Team`;
     const html = `
       <h1>Password Reset Request</h1>
       <p>Hi ${username}!</p>
@@ -78,7 +78,7 @@ class EmailService {
       <p>If you didn't request this, please ignore this email.</p>
       <br>
       <p>Best regards,</p>
-      <p>The Song Request Team</p>
+      <p>The Kanban Team</p>
     `;
 
     return this.sendMail({ to, subject, text, html });

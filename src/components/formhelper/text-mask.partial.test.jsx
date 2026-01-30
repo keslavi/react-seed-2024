@@ -39,9 +39,9 @@ describe('TextMask Partial Masking (showLast)', () => {
     // Focus the input to show the helper text
     await user.click(input);
     
-    // Click the Show/Hide helper text
-    const helperText = screen.getByText('Hide');
-    await user.click(helperText);
+    // Click the toggle visibility button
+    const toggleButton = screen.getByRole('button', { name: /toggle value visibility/i });
+    await user.click(toggleButton);
     
     // When hidden, should show asterisks with last 4 characters
     expect(input.value).toBe('**** **** **** 3456');
@@ -67,9 +67,9 @@ describe('TextMask Partial Masking (showLast)', () => {
     // Focus the input to show the helper text
     await user.click(input);
     
-    // Click the Show/Hide helper text
-    const helperText = screen.getByText('Hide');
-    await user.click(helperText);
+    // Click the toggle visibility button
+    const toggleButton = screen.getByRole('button', { name: /toggle value visibility/i });
+    await user.click(toggleButton);
     
     expect(input.value).toBe('***-**-6789');
   });
@@ -112,9 +112,9 @@ describe('TextMask Partial Masking (showLast)', () => {
     // Focus the input to show the helper text
     await user.click(input);
     
-    // Click the Show/Hide helper text
-    const helperText = screen.getByText('Hide');
-    await user.click(helperText);
+    // Click the toggle visibility button
+    const toggleButton = screen.getByRole('button', { name: /toggle value visibility/i });
+    await user.click(toggleButton);
     
     // When hidden, should show asterisks with last 3 characters
     expect(input.value).toBe('**-**-*678');
@@ -141,9 +141,9 @@ describe('TextMask Partial Masking (showLast)', () => {
     // Focus the input to show the helper text
     await user.click(input);
     
-    // Click the Show/Hide helper text
-    const helperText = screen.getByText('Hide');
-    await user.click(helperText);
+    // Click the toggle visibility button
+    const toggleButton = screen.getByRole('button', { name: /toggle value visibility/i });
+    await user.click(toggleButton);
     
     // When hidden, should show asterisks with last 4 characters
     expect(input.value).toBe('(***) ***-4567');
@@ -170,9 +170,9 @@ describe('TextMask Partial Masking (showLast)', () => {
     // Focus the input to show the helper text
     await user.click(input);
     
-    // Click the Show/Hide helper text
-    const helperText = screen.getByText('Hide');
-    await user.click(helperText);
+    // Click the toggle visibility button
+    const toggleButton = screen.getByRole('button', { name: /toggle value visibility/i });
+    await user.click(toggleButton);
     
     // When hidden, should show all characters since value is shorter than showLast
     expect(input.value).toBe('123');

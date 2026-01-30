@@ -1,18 +1,11 @@
-import { useState } from "react";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
-import { TextField as MuiTextField, Select as MuiSelect } from "@mui/material";
+import { TextField as MuiTextField } from "@mui/material";
 
 import { ColPadded } from "@/components/grid";
 
 export const Select = (props) => {
-  const placeholder = (e) => {
-    return;
-  };
-  const onBlur = props.onBlur || placeholder;
-  const onChange = props.onChange || placeholder;
   const options = props.options;
-  //const onKeyDown = props.onKeyDown || placeholder;
 
   const { field, error } = useFormField(props);
 
@@ -30,12 +23,12 @@ export const Select = (props) => {
           },
         }}
         onBlur={(e) => {
-          field.onBlue(e.target.value);
-          onBlur(e);
+          field.onBlur(e.target.value);
+          props.onBlur?.(e);
         }}
         onChange={(e) => {
           field.onChange(e.target.value);
-          onChange(e);
+          props.onChange?.(e);
         }}
         value={field.value || ""}
         {...{ error: !!error || undefined, helperText: error?.message }}
@@ -50,3 +43,5 @@ export const Select = (props) => {
     </ColPadded>
   );
 };
+
+Select.displayName = 'SelectWithPlaceholder';

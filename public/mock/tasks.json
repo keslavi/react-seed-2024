@@ -1,0 +1,4 @@
+{"id":0,"subject":"","body":"","status":0,"result":0,"userAssigned":"","references":[]}
+{"id":"1","subject":"DO NOT EDIT","body":"USED FOR TESTING","dfrom":"2024-01-01T05:00:00.000Z","status":"","result":1,"userAssigned":"msdn","references":[],"updatedAt":"2026-01-15T01:58:00.178Z"}
+{"id":"2","subject":"Setup development environment","body":"Configure local dev environment","status":"1","result":1,"dfrom":"2015-01-01T05:00:00.000Z","userAssigned":"jsmith","references":[],"success":true,"isDraft":true,"names":[0,2]}
+{"id":3,"subject":"Review pull request","body":"Code review for feature branch","status":2,"result":2,"userAssigned":"msdn","references":[],"updatedAt":"2026-01-15T01:58:03.455Z"}

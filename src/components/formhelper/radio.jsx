@@ -24,18 +24,18 @@ export const Radio = memo((props) => {
     error,
     //errorMui,
     valueProp
-  } = useFormField(props/*might be {...props}*/);
+  } = useFormField(props);
  
   // Memoize event handlers to prevent recreation on every render
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
     props.onBlur?.(e);
-  }, [field]);
+  }, []);
  
   const onChange = useCallback((e) => {
     field.onChange(e.target.value);
     props.onChange?.(e);
-  }, [field]);
+  }, []);
   //TODO: Get select-autocomplete working and switch out.
   return (
     <ColPadded {...colProps(props)}>
@@ -59,10 +59,9 @@ export const Radio = memo((props) => {
             return <FormControlLabel
               key={x.key}
               value={x.key}
-              control={<MuiRadio
-              />}
-              label={<>&nbsp;{x.text}&nbsp;&nbsp;&nbsp;&nbsp;</>}
-              disabled={field.disabled || false}
+              control={<MuiRadio/>}
+              label={x.text}
+              {...props.disabled ? {disabled: true} : {}}
             />;
           })}
         </RadioGroup>

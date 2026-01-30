@@ -20,7 +20,7 @@ export const SelectAutocomplete = memo((props) => {
     errorMui 
   } = useFormField(props);
   
-  const onBlue=useCallback((e)=>{
+  const onBlur=useCallback((e)=>{
     field.onBlur(e.target.value);
     props.onBlur?.(e);
   },[]);
@@ -55,7 +55,7 @@ export const SelectAutocomplete = memo((props) => {
         options={options}
         getOptionLabel={(option) => option?.text || ""}
         onChange={(event, newValue) => {onChange(event, newValue);}}
-        onBlur={field.onBlur}
+        onBlur={onBlur}
         value={selectedOption}
         fullWidth
         popupIcon={<IconKeyboardArrowDown />}

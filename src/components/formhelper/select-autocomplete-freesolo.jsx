@@ -10,7 +10,7 @@ import {
 import { cleanParentProps, colProps } from "./helper";
 import { Info } from "./info";
 
-import { ColPadded } from "@/components/grid";
+import { ColPadded } from "@/components";
 import IconKeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
 export const SelectAutocompleteFreesolo = (props) => {
@@ -41,14 +41,14 @@ export const SelectAutocompleteFreesolo = (props) => {
           if (typeof option === 'string') {
             return option;
           }
-          return option.text || option.songname || "";
+          return option.text || "";
         }}
         onChange={(event, newValue) => {
           if (typeof newValue === 'string') {
             field.onChange(newValue);
-            onChange(event, { songname: newValue, isCustom: true });
+            onChange(event, { text: newValue, isCustom: true });
           } else if (newValue && newValue.key) {
-            field.onChange(newValue.songname);
+            field.onChange(newValue.text);
             onChange(event, newValue);
           } else {
             field.onChange('');
@@ -81,3 +81,5 @@ export const SelectAutocompleteFreesolo = (props) => {
     </ColPadded>
   );
 };
+
+SelectAutocompleteFreesolo.displayName = 'SelectAutocompleteFreesolo';

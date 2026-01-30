@@ -183,7 +183,7 @@ describe("TextField", () => {
       </TestHarness>
     );
     
-    const infoIcon = screen.getByTestId('HelpRoundedIcon');
+    const infoIcon = screen.getByTestId('IconHelpRounded');
     expect(infoIcon).toBeInTheDocument();
     
     // Click the info icon to open the popover

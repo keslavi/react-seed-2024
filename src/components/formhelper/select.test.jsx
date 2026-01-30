@@ -263,7 +263,7 @@ describe("Formhelper-Select", () => {
     );
 
     // Find the help icon anywhere in the document (not just within the select container)
-    const infoIcon = screen.getByTestId('HelpRoundedIcon');
+    const infoIcon = screen.getByTestId('IconHelpRounded');
     expect(infoIcon).toBeInTheDocument();
     
     // Click the info icon

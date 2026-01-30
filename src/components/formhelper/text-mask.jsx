@@ -2,17 +2,37 @@ import { memo, useCallback, useMemo, useState, useEffect, useRef } from "react";
 import { 
   TextField as MuiTextField, 
   FormHelperText,
-  // IconButton, 
-  // InputAdornment 
+  IconButton, 
+  InputAdornment 
 } from "@mui/material";
-// import IconVisibility from "@mui/icons-material/Visibility";
-// import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconVisibility from "@mui/icons-material/Visibility";
+import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
 import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
 import { DateMask } from "./date-mask";
 import { color } from "@/theme-material";
+
+
+// Predefined mask patterns
+export const inputMask = {
+  ein: '##-#######',
+  ssn: '###-##-####',
+  phone: '(###) ###-####',
+  phoneExt: '(###) ###-#### x####',
+  creditCard: '#### #### #### ####',
+  creditCardExpiry: '##/##',
+  zipCode: '#####',
+  zipCodePlus4: '#####-####',
+  date: '##/##/####',
+  time: '##:##',
+  currency: '$#,###.##',
+  percentage: '##%',
+  licensePlate: 'AAA-####',
+  date: '##/##/####',
+};
+
 // Utility functions for masking and formatting
 const applyMask = (value, mask) => {
   if (!value || !mask) return value;
@@ -86,24 +106,6 @@ const removeMask = (value, mask) => {
   return value.replace(/[^a-zA-Z0-9]/g, '');
 };
 
-// Predefined mask patterns
-export const inputMask = {
-  ein: '##-#######',
-  ssn: '###-##-####',
-  phone: '(###) ###-####',
-  phoneExt: '(###) ###-#### x####',
-  creditCard: '#### #### #### ####',
-  creditCardExpiry: '##/##',
-  zipCode: '#####',
-  zipCodePlus4: '#####-####',
-  date: '##/##/####',
-  time: '##:##',
-  currency: '$#,###.##',
-  percentage: '##%',
-  licensePlate: 'AAA-####',
-  date: '##/##/####',
-};
-
 // Function to create partial mask showing only last N characters
 const createPartialMask = (value, maskPattern, showLast = 4) => {
   if (!value || !maskPattern) return value;
@@ -161,7 +163,6 @@ export const TextMask = memo((props) => {
   if (props.mask === inputMask.date) return <DateMask {...props} />
 
   const timeoutRef = useRef(null);
-  const helperTimeoutRef = useRef(null);
   
   const { 
     field, 
@@ -172,7 +173,6 @@ export const TextMask = memo((props) => {
   const [showValue, setShowValue] = useState(
     !(valueProp && valueProp.value && String(valueProp.value).trim() !== '')
   );
-  const [showHelper, setShowHelper] = useState(false);
 
   // Get mask pattern from props or predefined patterns
   const maskPattern = useMemo(() => {
@@ -250,21 +250,12 @@ export const TextMask = memo((props) => {
   }, [field.value, maskPattern, formatPattern, showValue, props.showLast]);
 
   const onFocus = useCallback((e) => {
-    setShowHelper(true);
     props.onFocus?.(e);
   }, []);
 
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
     props.onBlur?.(e);
-    
-    // Hide helper text after 1 second to give user time to click
-    if (helperTimeoutRef.current) {
-      clearTimeout(helperTimeoutRef.current);
-    }
-    helperTimeoutRef.current = setTimeout(() => {
-      setShowHelper(false);
-    }, 1000); // 1 second
   }, [field]);
 
   const onChange = useCallback((e) => {
@@ -316,9 +307,9 @@ export const TextMask = memo((props) => {
     }
   }, [showValue]);
 
-  const onMouseDownShowValue = useCallback((event) => {
-    event.preventDefault();
-  }, []);
+  // const onMouseDownShowValue = useCallback((event) => {
+  //   event.preventDefault();
+  // }, []);
 
   // Prevent keyboard input when field is masked
   const onKeyDown = useCallback((event) => {
@@ -346,9 +337,6 @@ export const TextMask = memo((props) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      if (helperTimeoutRef.current) {
-        clearTimeout(helperTimeoutRef.current);
-      }
     };
   }, []);
 
@@ -367,23 +355,25 @@ export const TextMask = memo((props) => {
         value={displayValue}
         {...cleanParentProps(props)}
         {...errorMui}
-        // InputProps={{
-        //   endAdornment: !isPersistent ? (
-        //     <InputAdornment position="end">
-        //       <IconButton
-        //         aria-label="toggle value visibility"
-        //         onClick={onClickShowValue}
-        //         onMouseDown={onMouseDownShowValue}
-        //         edge="end"
-        //       >
-        //         {showValue ? <IconVisibilityOff /> : <IconVisibility />}
-        //       </IconButton>
-        //     </InputAdornment>
-        //   ) : undefined,
-        // }}
+        slotProps={{
+          input: {
+            endAdornment: !props.persistent ? (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle value visibility"
+                  onClick={onClickShowValue}
+                  onMouseDown={(e) => e.preventDefault()}
+                  edge="end"
+                >
+                  {showValue ? <IconVisibilityOff /> : <IconVisibility />}
+                </IconButton>
+              </InputAdornment>
+            ) : undefined,
+          }
+        }}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
-      {!props.persistent && (
+      {/* {!props.persistent && (
         <FormHelperText id={`${field.id}HelperText`}
           style={{
             color: color.primary.blue,
@@ -394,7 +384,7 @@ export const TextMask = memo((props) => {
         >
           {showValue ? 'Hide' : 'Show'}
         </FormHelperText>
-      )}
+      )} */}
     </ColPadded>
   );
 });

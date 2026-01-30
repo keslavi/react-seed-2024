@@ -12,11 +12,12 @@
       "store": ["store/*"],
       "scss": ["scss/*"],
       "test": ["test/*"],
+      "theme-material": ["./src/theme-material.jsx"],
     },
     "types":[
       "vitest","vitest/globals"
     ]
   }, 
-  "include": ["_setupTest.js","src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+  "include": ["_setupTest.js","src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "src/**/*.d.ts"],
   "exclude": ["node_modules", "dist", "build", "out", "coverage", "**/*.spec.ts", "**/*.test.ts"]
 }

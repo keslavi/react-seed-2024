@@ -249,7 +249,7 @@ export const Header = (props) => {
         </Container>
       </AppBar>
     </ThemeProvider>
-    <br/><br/>
+    <div style={{ marginTop: '10px' }}><br/><br/></div>
     </>    
   );
 };

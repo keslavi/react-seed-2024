@@ -84,6 +84,7 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     resolve: {
+      extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
       alias: {
         "@": path.resolve(__dirname, "./src"),
         "config": path.resolve(__dirname, "./config/config.js"),
@@ -91,6 +92,7 @@ export default defineConfig(({ command, mode }) => {
         "helpers": path.resolve(__dirname, "./src/helpers"),
         "pages": path.resolve(__dirname, "./src/pages"),
         "store": path.resolve(__dirname, "./src/store"),
+        "theme-material": path.resolve(__dirname, "./src/theme-material.jsx"),
         //"assets": path.resolve(__dirname, "./src/assets"),
       },
       dedupe: ['react', 'react-dom', 'react-is', 'prop-types'],

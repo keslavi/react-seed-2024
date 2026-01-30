@@ -32,7 +32,7 @@ export const SelectCheckbox = memo((props) => {
   const onBlur = useCallback((e) => {
     field.onBlur(e.target.value);
     props.onBlur?.(e);
-  }, [field, props]);
+  }, []);
  
   const onChange = useCallback((e, newValue) => {
     const selectedValues = Array.isArray(newValue)
@@ -40,7 +40,7 @@ export const SelectCheckbox = memo((props) => {
       : [];
     field.onChange(selectedValues);
     props.onChange?.(selectedValues);
-  }, [field, props]);
+  }, []);
  
   const selectedOptions = useMemo(() => {
     if (!Array.isArray(field.value) || !Array.isArray(options)) {
@@ -65,7 +65,6 @@ export const SelectCheckbox = memo((props) => {
         popupIcon={<KeyboardArrowDownIcon />}
         getOptionLabel={(option) => option?.text || ""}
         isOptionEqualToValue={(option, value) => option?.key === value?.key}
-        placeholder={selectedOptions.length === 0 ? "Please Select" : ""}
         data-testid={props['data-testid'] || "autocomplete-component"}
         value={autocompleteValue}
         {...cleanParentProps(restProps)}
@@ -84,7 +83,7 @@ export const SelectCheckbox = memo((props) => {
             </li>
           );
         }}
-        renderInput={(params) => (
+        renderInput={(params) => ( 
           <TextField
             {...params}
             inputRef={field.ref}

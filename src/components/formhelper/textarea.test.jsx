@@ -311,7 +311,7 @@ describe("Formhelper-TextArea", () => {
     );
 
     const textarea = screen.getByRole('textbox', { name: /description/i });
-    const infoIcon = screen.getByTestId('HelpRoundedIcon');
+    const infoIcon = screen.getByTestId('IconHelpRounded');
     
     expect(textarea).toBeVisible();
     expect(infoIcon).toBeVisible();
