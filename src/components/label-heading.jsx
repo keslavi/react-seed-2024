@@ -1,6 +1,7 @@
 import { InfoPopover } from './info-popover';
 import { Info } from "./formhelper/info";
 
+
 /**
  * @property {enum}
  * @param h1 large blue font
@@ -14,13 +15,23 @@ export const labelHeadingVariant = {
   h1: "h1",
   h2: "h2",
   h3: "h3",
+  h4: "h4",
+  h5: "h5",
+  h6: "h6",
 };
+
+
+
+const showWarning = new Set();
 
 /**
  * @property {label}
  * @param variant h1,h2, h3... use string or enum labelHeadingVariant
  * @returns {label formatted by variant}
- */
+ */ 
+
+
+
 export const LabelHeading = (props) => {
   const id = new Date().getTime().toString();
   
@@ -35,6 +46,7 @@ export const LabelHeading = (props) => {
   if (props.dark) classNames.push("dark");
   if (props.errorColor) classNames.push("errorColor");
   if (props.disabled) classNames.push("disabled");
+  if (props.link) classNames.push("link");
   
   const className = classNames.join(" ");
   const color = props.headingColor;
@@ -46,13 +58,6 @@ export const LabelHeading = (props) => {
     gap: "8px",
     ...(color && { color }),
   };
-  
-  // Add link styling if link prop is present
-  if (props.link && !props.disabled) {
-    inlineStyle.cursor = "pointer";
-    inlineStyle.color = inlineStyle.color || "var(--color-link)";
-    inlineStyle.textDecoration = "underline";
-  }
 
   return (
     <>

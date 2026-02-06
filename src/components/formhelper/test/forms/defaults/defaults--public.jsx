@@ -4,7 +4,6 @@ import {
   Col,
   Row,
   TableRows,
-
   AlertInline,
   BtnContinueSave,
   Fieldset,
@@ -17,151 +16,44 @@ import {
 } from "components";
 
 import { color } from "@/theme-material";
+import { Headers } from "./sections/section-headers";
+import { LabelHeadingSection } from "./sections/section-label-heading";
+import { TableRowsSection } from "./sections/section-table-rows";
+import { ButtonsSection } from "./sections/section-buttons";
+import { AlertInlineSection } from "./sections/section-alert-inline";
+import { IconSection } from "./sections/section-Icon";
 
 
 //schema, options, item are below Children 
 
+const End = () => (<>
+  <br />
+  <div style={{ 
+    height: '20px', 
+    backgroundColor: '#d4edda',
+    marginLeft: 'calc(-50vw + 50%)',
+    marginRight: 'calc(-50vw + 50%)',
+    paddingLeft: 'calc(50vw - 50%)',
+    paddingRight: 'calc(50vw - 50%)'
+  }}><b>(Section End)</b></div>
+  <br />
+</>)
 
 export const ChildrenDefault = () => {
   return (
     <>
-      <h1>h1-h6 non Fieldset Example</h1>
-      <br />
-      <h1>1 This is a sample h1</h1>
-      <h2>2 This is a sample h2</h2>
-      <h3>3 This is a sample h3</h3>
-      <h4>4 regular sample h4</h4>
-      <h4 data-h4-color-alt>4 data-h4-color-alt h4</h4>
-      <h4 data-h4-subtitle>4 data-h4-subtitle h4</h4>
-      <h5>5 This is a sample h5</h5>
-      <h6>6 This is a sample h6</h6>
-      <hr />
-      <h1>h1-h6 Fieldset Example</h1>
-      <Fieldset>
-        <h1>1 This is a sample h1</h1>
-        <h2>2 This is a sample h2</h2>
-        <h3>3 This is a sample h3</h3>
-        <h4>4 regular sample h4</h4>
-        <h4 data-h4-color-alt>4 data-h4-color-alt h4</h4>
-        <h4 data-h4-subtitle>4 data-h4-subtitle h4</h4>
-        <h5>5 This is a sample h5</h5>
-        <h6>6 This is a sample h6</h6>
-      </Fieldset>
-      <br/>
-      <h1>LabelHeadings & TableRows</h1>
-      <Fieldset>
-        <TableRows>
-          <Row>
-            <Col style={{flex:1}}>
-              <b>Style/Variant<br/>
-                {/* LabelHeading<br/> */}
-                {/* NOT &lt;h&gt; */}
-              </b>
-            </Col>
-            <Col style={{flex:1}}>
-              <b>H1</b>            
-            </Col>
-            <Col style={{flex:1}}>
-              <b>H2</b>            
-            </Col>
-            <Col style={{flex:1}}>
-              <b>H3</b>            
-            </Col>
-            <Col style={{flex:1}}>
-              <b>H4</b>            
-            </Col>
-            <Col style={{flex:1}}>
-              <b>H5</b>            
-            </Col>
-            <Col style={{flex:1}}>
-              <b>H6</b>            
-            </Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}>light</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" light>H1 Light</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" light>H2 Light</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" light>H3 Light</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" light>H4 Light</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" light>H5 Light</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" light>H6 Light</LabelHeading></Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}>bold</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" bold>H1 Bold</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" bold>H2 Bold</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" bold>H3 Bold</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" bold>H4 Bold</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" bold>H5 Bold</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" bold>H6 Bold</LabelHeading></Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}>boldish</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" boldish>H1 Boldish</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" boldish>H2 Boldish</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" boldish>H3 Boldish</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" boldish>H4 Boldish</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" boldish>H5 Boldish</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" boldish>H6 Boldish</LabelHeading></Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}>regular</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" regular>H1 Regular</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" regular>H2 Regular</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" regular>H3 Regular</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" regular>H4 Regular</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" regular>H5 Regular</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" regular>H6 Regular</LabelHeading></Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}>dark</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" dark>H1 Dark</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" dark>H2 Dark</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" dark>H3 Dark</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" dark>H4 Dark</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" dark>H5 Dark</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" dark>H6 Dark</LabelHeading></Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}>errorColor</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" errorColor>H1 Error Color</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" errorColor>H2 Error Color</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" errorColor>H3 Error Color</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" errorColor>H4 Error Color</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" errorColor>H5 Error Color</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" errorColor>H6 Error Color</LabelHeading></Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}> link</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" disabled>H1 Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" disabled>H2 Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" disabled>H3 Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" disabled>H4 Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" disabled>H5 Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" disabled>H6 Disabled</LabelHeading></Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}>link</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" link onClick={() => alert('link clicked')}>H1 Link</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" link onClick={() => alert('link clicked')}>H2 Link</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" link onClick={() => alert('link clicked')}>H3 Link</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" link onClick={() => alert('link clicked')}>H4 Link</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" link onClick={() => alert('link clicked')}>H5 Link</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" link onClick={() => alert('link clicked')}>H6 Link</LabelHeading></Col>
-          </Row>
-          <Row>
-            <Col style={{flex:1}}>link disabled</Col>
-            <Col style={{flex:1}}><LabelHeading variant="h1" disabled link onClick={() => alert('link clicked')}>H1 Link Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h2" disabled link onClick={() => alert('link clicked')}>H2 Link Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h3" disabled link onClick={() => alert('link clicked')}>H3 Link Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h4" disabled link onClick={() => alert('link clicked')}>H4 Link Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h5" disabled link onClick={() => alert('link clicked')}>H5 Link Disabled</LabelHeading></Col>
-            <Col style={{flex:1}}><LabelHeading variant="h6" disabled link onClick={() => alert('link clicked')}>H6 Link Disabled</LabelHeading></Col>
-          </Row>
-        </TableRows>
-      </Fieldset>
-
-
+      <Headers />
+      <End />
+      <LabelHeadingSection />
+      <End />
+      <TableRowsSection />
+      <End />
+      <ButtonsSection />
+      <End />
+      <AlertInlineSection />
+      <End />
+      <IconSection />
+      <End />
       <Row>
         <Input
           textarea

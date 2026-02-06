@@ -12,9 +12,9 @@ describe('Global Render Test', () => {
     
     // Check if ToastContainer is present (it should be a sibling)
     const container = document.querySelector('[data-testid="toast-container"]');
-    console.log('ToastContainer found:', container);
+    // console.log('ToastContainer found:', container);
     
     // Debug the entire DOM
-    screen.debug();
+    // screen.debug();
   });
 }); 

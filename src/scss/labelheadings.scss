@@ -2,6 +2,39 @@
   color: $headingColor;
   letter-spacing: 0.01rem;
   font-size: 0.01rem;
+  &.bold {
+    font-weight: $bold;
+  }
+  &.boldish {
+    font-weight: $boldish;
+  }
+  &.regular {
+    font-weight: $regular;
+  }
+  &.light {
+    font-weight: $light;
+  }
+  &.dark {
+    color: $headingColorSecondary;
+  }
+  &.errorColor {
+    color: $red;
+  }
+  &.disabled {
+    color: var(--color-disabled, var(--color-gray-200)) !important;
+    cursor: not-allowed;
+    pointer-events: none;
+    text-decoration: none !important;
+  }
+  &.link {
+    color: var(--color-link);
+    cursor: pointer;
+    text-decoration: none !important;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 }
 
 .labelHeadingH1B {
@@ -44,45 +77,6 @@
   font-weight: $light;
 }
 
-.labelHeadingRoot {
-  &.bold {
-    font-weight: $bold;
-  }
+// .labelHeadingRoot {
 
-  &.boldish {
-    font-weight: $boldish;
-  }
-
-  &.regular {
-    font-weight: $regular;
-  }
-
-  &.light {
-    font-weight: $light;
-  }
-
-  &.dark {
-    color: $headingColorSecondary;
-  }
-
-  &.errorColor {
-    color: $red;
-  }
-
-  &.disabled {
-    color: var(--color-disabled, var(--color-gray-200)) !important;
-    cursor: not-allowed;
-    pointer-events: none;
-    text-decoration: none !important;
-  }
-
-  &.link {
-    color: var(--color-link);
-    cursor: pointer;
-    text-decoration: underline;
-    
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-}
+// }

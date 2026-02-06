@@ -38,7 +38,8 @@ export const Task = () => {
 
   const frmMethods = useFormProvider({
     resolver,
-    mode: "onChange"
+    mode: "onBlur",
+    reValidateMode: "onChange"
   });
   const { reset } = frmMethods;
   // end React hook form and validation***********************

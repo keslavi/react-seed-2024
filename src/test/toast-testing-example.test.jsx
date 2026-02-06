@@ -44,7 +44,7 @@ describe('Toast Testing Examples', () => {
       await userEvent.click(successButton);
     });
     
-    screen.debug();
+    // screen.debug();
     // Wait for and verify the toast content
     await waitForToast('Operation completed successfully!');
     

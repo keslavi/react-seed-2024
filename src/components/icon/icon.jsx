@@ -1,24 +1,30 @@
 import { useState } from 'react';
 
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import CheckcircleIcon from '@mui/icons-material/Checkcircle';
-import panoramalFishEySharpIcon from '@mui/icons-material/PanoramaFishEyeSharp';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PanoramaFishEyeSharpIcon from '@mui/icons-material/PanoramaFishEyeSharp';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 
 /**
+ * Available icon keys for the Icon component
+ * @typedef {'complete' | 'completeContain' | 'completeOutline' | 'uncomplete' | 'forwardArrow' | 'arrow' | 'arrowForward' | 'backArrow' | 'arrowBack' | 'arrowBackward' | 'expanded' | 'expand' | 'add' | 'remove'} IconTypeMap
+ */
+
+/**
  * Predefined icon components from Material-UI.
  * Use these as values for the Icon component's `src` prop.
- * @type {Object.<string, import('react').ComponentType>}
+ * @type {Object.<IconTypeMap, import('react').ComponentType>}
  */
 export const iconType = {
-  complete: CheckcircleIcon,
-  completeContain: CheckcircleIcon,
+  complete: CheckCircleIcon,
+  completeContain: CheckCircleIcon,
   completeOutline: CheckCircleOutlineIcon,
-  uncomplete: panoramalFishEySharpIcon,
+  uncomplete: PanoramaFishEyeSharpIcon,
   forwardArrow: ArrowForwardIosIcon,
   arrow: ArrowForwardIosIcon,
   arrowForward: ArrowForwardIosIcon,
@@ -26,6 +32,8 @@ export const iconType = {
   arrowBack: ArrowBack,
   arrowBackward: ArrowBack,
   expanded: ExpandMoreIcon,
+  expand: ExpandMoreIcon,
+  accordion: ExpandMoreIcon,
   add: AddIcon,
   remove: RemoveIcon,
 }
@@ -45,8 +53,7 @@ const arrowSizeMap = {
 
 /**
  * Renders an icon with optional text and configurable styling.
- * @param {Object} props - Component props
- * @param {import('react').ComponentType} props.src - Icon component from iconType or any MUI Icon
+ * @param {import('react').ComponentType<IconTypeMap>} props.src - Icon component from iconType (use iconType.complete, iconType.arrow, etc.) or any MUI Icon
  * @param {string} [props.text] - Optional text to display next to the icon
  * @param {('sm'|'md'|'lg')} [props.size='md'] - Size of the icon
  * @param {('sm'|'md'|'lg')} [props.fontSize] - Font size (defaults to size value)
@@ -65,19 +72,20 @@ export const Icon = ({
   size = "md",
   fontSize = size,
   expanded = false,
-  onClick,
   textPosition = "right",
   className = "iconRoot",
   colorIcon,
   color = "inherit",
   bold,
-  ...rest
+  ...props
 }) => {
   const [isExpanded0, setIsExpanded0] = useState(expanded);
 
   const IconComponent = src;
 
   if (!src) return null;
+
+  const isExpandIcon = src === iconType.expanded || src === iconType.expand;
 
   const getPattern = () => {
     switch (src) {
@@ -88,6 +96,7 @@ export const Icon = ({
       case iconType.uncomplete:
         return { color: "var(--color-border)", borderRadius: "50%" };
       case iconType.expanded:
+      case iconType.expand:
         return { color: colorIcon || "primary.main" };
       case iconType.add:
       case iconType.remove:
@@ -124,9 +133,11 @@ export const Icon = ({
 
   const iconSize = isArrowIcon ? fontSize0 : baseSize;
 
-  const handleClick = () => {
-    setIsExpanded0(!isExpanded0);
-    onClick?.();
+  const onClick = (e) => {
+    if (isExpandIcon) {
+      setIsExpanded0(!isExpanded0);
+    }
+    props.onClick?.(e);
   };
 
   const textRender = text && (
@@ -143,11 +154,11 @@ export const Icon = ({
 
   return (
     <span
-      onClick={handleClick}
+      onClick={onClick}
       style={{
         display: "inline-flex",
         alignItems: "center",
-        ...(onClick && { cursor: 'pointer' }),
+        ...((isExpandIcon || props.onClick) && { cursor: 'pointer' }),
         ...sx,
       }}>
       {textPosition === "left" && textRender}
@@ -155,11 +166,13 @@ export const Icon = ({
         sx={{
           ...sx,
           fontSize: iconSize,
-          transform: isExpanded0 ? 'rotate(90deg)' : 'rotate(0deg)',
-          transition: 'transform 0.4s ease-in-out',
+          ...(isExpandIcon && { 
+            transform: isExpanded0 ? 'rotate(90deg)' : 'rotate(0deg)',
+            transition: 'transform 0.4s ease-in-out',
+          }),
         }}
         className={className}
-        {...rest}
+        {...props}
       />
       {textPosition === "right" && textRender}
     </span>
