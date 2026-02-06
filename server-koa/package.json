@@ -12,14 +12,20 @@
     "start:prod": "NODE_ENV=production node src/index.js"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.0",
     "@koa/cors": "^5.0.0",
     "@koa/router": "^12.0.1",
     "axios": "^1.13.2",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.6.1",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
     "koa": "^2.16.1",
     "koa-bodyparser": "^4.4.1",
     "koa-logger": "^3.2.1",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "mongoose": "^8.9.5",
+    "nodemailer": "^6.9.16"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
