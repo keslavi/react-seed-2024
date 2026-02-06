@@ -13,10 +13,6 @@ export const Row = (props) => {
           mt:1,
           mb:1,
         },
-        //line above first row
-        ".table-using-rows & + &":{
-          borderTop:'1px solid #d5d5d5',
-        },
         //lines between rows
         ".table-using-rows & + &":{
           borderTop: '1px solid #d5d5d5',

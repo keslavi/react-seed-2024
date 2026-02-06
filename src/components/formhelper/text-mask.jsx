@@ -30,7 +30,6 @@ export const inputMask = {
   currency: '$#,###.##',
   percentage: '##%',
   licensePlate: 'AAA-####',
-  date: '##/##/####',
 };
 
 // Utility functions for masking and formatting

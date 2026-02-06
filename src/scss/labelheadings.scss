@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 .labelHeadingRoot {
   color: $headingColor;
   letter-spacing: 0.01rem;
