@@ -20,7 +20,7 @@ export const Info = ({ id, info }) => {
   const tooltipInfoStyle = () => {
     infoHeader = info.label;
     infoSubject = (<>
-      {info.message && (<Typography variant="h5" gutterBottom>
+      {info.message && (<Typography variant="caption">
         {info.message}
       </Typography>)}
       {info.content && isValidElement(info.content) && info.content}

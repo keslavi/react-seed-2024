@@ -5,8 +5,7 @@ import { createTheme, ThemeProvider as MuiThemeProvider } from "@mui/material/st
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { AccordionSummary } from '@mui/material';
-import { minHeight, styled } from "@mui/system";
-import { head } from "lodash";
+import { /*minHeight,*/ styled } from "@mui/system";
 
 /*************************************************
  
@@ -61,7 +60,7 @@ export const color = {
   gray300: scss('--color-gray-300', '#e0e0e0'),
   headingColor: scss('--color-heading-color', '#000000'),
   headingColorSecondary: scss('--color-header-secondary', '#000000'),
-  link:scss('--color-link', '#0053c2'),
+  link: scss('--color-link', '#0053c2'),
 };
 
 const buttonSizes = {
@@ -85,55 +84,22 @@ const buttonSizes = {
   },
 }
 
-const getFieldsetButtonStyles = ({ theme }) => ({
-  ...buttonSizes.small,
-  backgroundColor: 'transparent',
-  border: '1px solid rbga(9,40,111,0.8)',//`1px solid ${color.primary.blue}`,
-  color: color.primary.blue,
-  boxShadow: 'none',
-  '&:hover': {
-    backgroundColor: 'rgba(0,0,0,0.04)',
-    border: `1px solid ${color.primary.blue}`,//`1px solid ${color.primary.blue}`,
-    color: color.primary.blue,
-  },
-  '&:active': {
-    backgroundColor: 'rgba(0,0,0,0.04)',
-    border: `1px solid ${color.primary.blue}`,
-    color: color.primary.blue,
-  },
-  '&.Mui-disabled': {
-    backgroundColor: 'rgba(0,0,0,0.04)',
-    color: color.primary.disabled,
-    border: `1px solid ${color.primary.disabled}`,
-    boxShadow: 'none',
-    cursor: 'not-allowed',
-    pointerEvents: 'none',
-  },
-  '&:disabled': {
-    backgroundColor: 'rgba(0,0,0,0.04)',
-    border: `1px solid ${color.primary.blue}`,
-    color: color.primary.blue,
-  },
-});
-
-
 const init = createTheme();
 //TIP: use ctrl-k + ctrl-0 to collapse all, then expand
 export const theme = createTheme({
   //TODO: finish all the custom stuff as it comes up
   cssVariables: true,
   typography: {
-    fontFamily: "Connections, Calibri, 'sans-serif'",
+    fontFamily: "Connections, Roboto, Calibri, 'sans-serif'",
     fontWeight: 400,
     fontSize: 16,
     //lineHeight: 1.5,
     color: color.cobe1.black,
     body2: {
-      fontFamily: "Connections, Calibri, 'sans-serif'",
+      fontFamily: "Connections, Roboto, Calibri, 'sans-serif'",
       fontWeight: 400,
-      fontSize: 16,
+      fontSize: "1rem",
       lineHeight: 1.5,
-      //color: color.cobe1.black,
     },
   },
   palette: {
@@ -342,13 +308,7 @@ export const theme = createTheme({
     MuiButtonBase: {
       styleOverrides: {
         root: {
-          // fontSize: "0rem",
           minWidth: "20px",
-          // '&.MuiButton-root': {
-          //   svg: {
-          //     color: color.cobe1.white,
-          //   },
-          // },
         },
       },
     },
@@ -368,7 +328,7 @@ export const theme = createTheme({
           boxSizing: 'border-box',
           border: '1px solid transparent',
           '&:hover': {
-            color: color.cobe1.blue,
+            color: color.cobe1.white,
             backgroundColor: color.cobe1.blue,
             //border: `1px solid ${color.cobe1.blue}`,
             borderColor: color.cobe1.blue,
@@ -377,7 +337,7 @@ export const theme = createTheme({
         },
         outlined: {
           backgroundColor: 'transparent',
-          borderColor: color.secondary.blue700,
+          borderColor: color.secondary.blue950,
         },
         text: {
           minWidth: 'auto',
@@ -456,7 +416,7 @@ export const theme = createTheme({
           '.MuiFormLabel-root': {
             position: "relative",
             transform: "none",
-            fontFamily: "Connections, Calibri, sans-serif",
+            fontFamily: "Connections, Roboto, Calibri, sans-serif",
             // color: "#333",
             // fontSize: "14px",
           },
@@ -585,12 +545,8 @@ export const theme = createTheme({
       },
     },
     MuiInputLabel: {
-      // root: {
-      //   color: color.secondary.blue700,
-      // },
       styleOverrides: {
         root: {
-          //color: color.cobe1.black,
           zIndex: 0,
         },
       }
@@ -615,10 +571,6 @@ export const theme = createTheme({
       }
     },
     MuiTextField: {
-      // root: {
-      //   marginTop: "10px",
-      //   marginBottom: "10px",
-      // },
       styleOverrides: {
         root: {
           alignSelf: "flex-start",
@@ -736,13 +688,28 @@ export const theme = createTheme({
         },
       }
     },
+    MuiChip: {
+      variants: [
+        {
+          props: { variant: "tag" },
+          style: {
+            borderRadius: '0.25rem',
+            background: "#E5F1FA",//on-ff custom background color
+            color: color.link,
+            margin: '4px',
+            minHeight: '24px',
+            maxHeight: '24px',
+          }
+        }
+      ]
+    }
   },
 });
 
 export const ThemeProvider = ({ children }) => (
   <MuiThemeProvider theme={theme}>
-    <CssBaseline/>
-      {children}
+    <CssBaseline />
+    {children}
   </MuiThemeProvider>
 );
 export default ThemeProvider;

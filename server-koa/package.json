@@ -1,5 +1,5 @@
 {
-  "name": "kanban-server",
+  "name": "react-seed",
   "version": "1.0.0",
   "description": "Koa server for kanban application with file-based storage",
   "main": "src/index.js",
