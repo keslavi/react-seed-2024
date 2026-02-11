@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Popover } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
+import IconHelpRounded from '@mui/icons-material/HelpRounded';
+import { color } from "@/theme-material";
 
 
 const InfoPopover = ({ info }) => {
@@ -19,11 +20,11 @@ const InfoPopover = ({ info }) => {
 
   return (
     <div>
-      <InfoIcon
+      <IconHelpRounded
         aria-describedby={id}
-        variant="contained"
         onClick={onClick}
-      />Open
+        sx={{ color: color.primary.blue, cursor: 'pointer', fontSize: '1.2rem', verticalAlign: 'middle' }}
+      />
       <Popover
         id={id}
         open={open}

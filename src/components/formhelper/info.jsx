@@ -56,7 +56,7 @@ export const Info = ({ id, info }) => {
     <div style={{
       position: 'absolute',
       right: 10,
-      top: 8,
+      top: 5,
       zIndex: 1
     }}>
       <IconHelpRounded
@@ -131,7 +131,7 @@ export const InfoIcon = (props) => {
         sx={{
           color: color.cobe1.blue,
           position: 'absolute',
-          top: 0,
+          top: '-3px',
           right: 0,
           transform: 'translate(-10%,50%)',
           cursor: "pointer"

@@ -414,24 +414,29 @@ export const theme = createTheme({
             backgroundColor: "#f0f0e8",
           },
           '.MuiFormLabel-root': {
-            position: "relative",
-            transform: "none",
             fontFamily: "Connections, Roboto, Calibri, sans-serif",
             // color: "#333",
             // fontSize: "14px",
           },
           '.MuiInputBase-input': {
-            padding: "8.5px 5px 8.5px 5px",
+            padding: '8px 12px !important',
+            height: 'auto !important',
+            minHeight: '40px',
+            lineHeight: '1.2',
+            boxSizing: 'border-box',
+          },
+          '.MuiInputBase-root': {
+            minHeight: 'auto',
           },
           'MuiInputBase-input[placeholder="None Added"]::placeholder': {
             color: color.cobe1.black,
             opacity: 1,
           },
           '.MuiOutlinedInput-notchedOutline': {
-            top: '0px',
+            // keep the outline positioned naturally so label background can cover it
           },
-          legend: {
-            display: "none",
+          '.MuiOutlinedInput-notchedOutline legend': {
+            // allow the notch/legend to render normally (don't hide) to avoid overlap issues
           },
         },
       },
@@ -517,7 +522,8 @@ export const theme = createTheme({
         inputRoot: {
           padding: "0px",
           '.MuiInputBase-input': {
-            padding: "8.5px 35px 8.5px 5px",
+            padding: "0px 35px 0px 5px",
+            height: "1.4375em",
             '&:hover': {
               paddingRight: "60px",
             },
@@ -545,9 +551,23 @@ export const theme = createTheme({
       },
     },
     MuiInputLabel: {
+      defaultProps: {
+        shrink: false,
+      },
       styleOverrides: {
         root: {
-          zIndex: 0,
+          zIndex: 2,
+          position: 'relative',
+          transform: 'none',
+          marginBottom: '4px',
+          fontSize: '13px',
+          backgroundColor: 'transparent',
+          padding: '0',
+          '&.MuiInputLabel-shrink': {
+            transform: 'none',
+            backgroundColor: 'transparent',
+            padding: '0',
+          },
         },
       }
     },
@@ -574,6 +594,9 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           alignSelf: "flex-start",
+          '& .MuiInputBase-root': {
+            minHeight: "auto",
+          },
         }
       },
     },
@@ -602,9 +625,21 @@ export const theme = createTheme({
           borderRadius: "0px",
           display: "flex",
           padding: "0px",
+          minHeight: "32px",
+          alignItems: 'center',
+          '& .MuiOutlinedInput-notchedOutline legend': {
+            display: 'none',
+          },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             border: `1px solid ${color.cobe1.blue}`,
           },
+        },
+        input: {
+          padding: '4px 8px !important',
+          height: 'auto !important',
+          minHeight: '26px',
+          lineHeight: '1.2',
+          boxSizing: 'border-box',
         },
       },
     },

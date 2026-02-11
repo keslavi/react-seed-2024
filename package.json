@@ -40,6 +40,8 @@
     "@mui/x-data-grid": "^8.9.1",
     "@mui/x-date-pickers": "^8.9.2",
     "@reduxjs/toolkit": "^2.8.2",
+    "@swc/plugin-emotion": "^11.0.2",
+    "@vitejs/plugin-react-swc": "^3.10.2",
     "axios": "^1.11.0",
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
@@ -52,8 +54,6 @@
     "react-toastify": "^11.0.5",
     "sass": "^1.89.2",
     "vitest": "^3.2.4",
-    "@vitejs/plugin-react-swc": "^3.10.2",
-    "@swc/plugin-emotion": "^11.0.2",
     "yup": "^1.6.1",
     "zustand": "^5.0.6"
   },
@@ -73,6 +73,7 @@
     "globals": "^16.3.0",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
+    "puppeteer": "^24.37.2",
     "vite": "^7.0.4",
     "vite-plugin-static-copy": "^3.1.1"
   }
