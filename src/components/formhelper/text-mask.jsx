@@ -343,6 +343,11 @@ export const TextMask = memo((props) => {
     <ColPadded {...colProps(props)}>
       <MuiTextField
         fullWidth
+        size="small"
+        sx={{
+          '& .MuiOutlinedInput-root': { minHeight: 34, overflow: 'visible' },
+          '& .MuiOutlinedInput-input': { padding: '6px 8px' }
+        }}
         id={field.name}
         name={field.name}
         label={props.label}
@@ -354,21 +359,25 @@ export const TextMask = memo((props) => {
         value={displayValue}
         {...cleanParentProps(props)}
         {...errorMui}
-        slotProps={{
-          input: {
-            endAdornment: !props.persistent ? (
-              <InputAdornment position="end">
+        InputProps={{
+          endAdornment: !props.persistent ? (
+            <InputAdornment position="end" sx={{ height: 'auto' }}>
                 <IconButton
-                  aria-label="toggle value visibility"
-                  onClick={onClickShowValue}
-                  onMouseDown={(e) => e.preventDefault()}
-                  edge="end"
-                >
-                  {showValue ? <IconVisibilityOff /> : <IconVisibility />}
-                </IconButton>
-              </InputAdornment>
-            ) : undefined,
-          }
+                aria-label="toggle value visibility"
+                onClick={onClickShowValue}
+                onMouseDown={(e) => e.preventDefault()}
+                edge="end"
+                  size="small"
+                  sx={{ p: '2px', minWidth: 'auto', transform: 'translateY(-2px)', '& svg': { fontSize: '1.15rem' } }}
+              >
+                  {showValue ? (
+                    <IconVisibilityOff sx={{ transform: 'translateY(-2px)' }} />
+                  ) : (
+                    <IconVisibility sx={{ transform: 'translateY(-2px)' }} />
+                  )}
+              </IconButton>
+            </InputAdornment>
+          ) : undefined,
         }}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}

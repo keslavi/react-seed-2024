@@ -79,7 +79,20 @@ export const Textarea = memo((props) => {
 
   return (
     <ColPadded {...colProps(props)}>
-      <InputLabel htmlFor={field.name} style={getLabelStyle()}>{props.label}</InputLabel>
+      <InputLabel
+        htmlFor={field.name}
+        style={{
+          ...getLabelStyle(),
+          display: 'block',
+          marginBottom: '2px',
+          marginTop: '0px',
+          lineHeight: '1.1',
+          transform: 'none',
+          fontSize: '0.875rem'
+        }}
+      >
+        {props.label}
+      </InputLabel>
       <TextareaAutosize
         style={{
           width: "100%",

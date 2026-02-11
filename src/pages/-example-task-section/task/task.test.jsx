@@ -64,22 +64,21 @@ describe('Task Component Integration Tests', () => {
     }, { timeout: 5000 });
     
     
-    // !IMPORTANT: for validation to work, you need to focus and blur
+    // Trigger focus -> clear -> blur to run validation reliably
     await userEvent.click(bodyInput);
     await userEvent.clear(bodyInput);
-    await userEvent.tab();
+    // ensure blur fires reliably
+    bodyInput.blur();
 
-    // Wait for validation to complete
-    await waitFor(() => {
-      expect(screen.getByText('please provide a body')).toBeInTheDocument();
-    }, { timeout: 3000 });
+    // Wait for validation message to appear
+    await screen.findByText('please provide a body', { timeout: 3000 });
 
     expect(screen.getByText('Continue')).toBeDisabled();
 
-    // !IMPORTANT: for validation to work, you need to focus and blur
+    // refocus, type value and blur to clear validation
     await userEvent.click(bodyInput);
     await userEvent.type(bodyInput, 'USED FOR TESTING');
-    await userEvent.tab();
+    bodyInput.blur();
 
     // Wait for validation to clear
     await waitFor(() => {

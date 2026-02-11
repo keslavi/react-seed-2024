@@ -136,6 +136,14 @@ export const ChildrenDefault = () => {
           mask={inputMask.ssn}
           info="Enter your 9-digit SSN in format XXX-XX-XXXX"
         />
+        <Input name="whatever" label="whatever"/>
+            <Input
+          datepicker
+          name="dob2"
+          label="Date of Birth (Datepicker)"
+          info="Empty date field with MM/DD/YYYY format"
+        />    
+        <Input charCount={10} name="body" label="Body" />
         <Input
           name="ssn2"
           label="SSN2"

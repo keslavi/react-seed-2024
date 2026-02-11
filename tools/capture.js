@@ -53,7 +53,64 @@ import puppeteer from 'puppeteer';
         return { found: true, html: ico.outerHTML, rect: { x: r.x, y: r.y, width: r.width, height: r.height } };
       });
 
+      // Capture the visibility (eye) icon by aria-label on its button
+      const eye = await page.evaluate(() => {
+        const btn = document.querySelector('[aria-label="toggle value visibility"]');
+        if (!btn) return { found: false };
+        const ico = btn.querySelector('svg');
+        if (!ico) return { found: false };
+        const r = ico.getBoundingClientRect();
+        return { found: true, html: ico.outerHTML, rect: { x: r.x, y: r.y, width: r.width, height: r.height } };
+      });
+
+      // Capture the datepicker icon by finding an input with date placeholder and its svg
+      const datepicker = await page.evaluate(() => {
+        const input = Array.from(document.querySelectorAll('input')).find(i => i.placeholder && /mm|dd|yyyy/i.test(i.placeholder));
+        if (!input) return { found: false };
+        const root = input.closest('.MuiFormControl-root') || input.parentElement;
+        const ico = root ? root.querySelector('svg') : input.querySelector('svg');
+        if (!ico) return { found: false };
+        const r = ico.getBoundingClientRect();
+        return { found: true, html: ico.outerHTML, rect: { x: r.x, y: r.y, width: r.width, height: r.height } };
+      });
+
       fs.writeFileSync(path.join(outDir, 'icon.json'), JSON.stringify(icon, null, 2));
+      fs.writeFileSync(path.join(outDir, 'eye.json'), JSON.stringify(eye, null, 2));
+      fs.writeFileSync(path.join(outDir, 'datepicker.json'), JSON.stringify(datepicker, null, 2));
+
+        // Dump all svg elements and bounding boxes to help identify icons
+        const svgs = await page.evaluate(() => {
+          return Array.from(document.querySelectorAll('svg')).map((s) => {
+            const r = s.getBoundingClientRect();
+            return { html: s.outerHTML, rect: { x: r.x, y: r.y, width: r.width, height: r.height } };
+          });
+        });
+        fs.writeFileSync(path.join(outDir, 'svgs.json'), JSON.stringify(svgs, null, 2));
+
+          // Find the form control labeled 'SSN' and capture its rect and any svg inside
+          const ssn = await page.evaluate(() => {
+            const labels = Array.from(document.querySelectorAll('.MuiFormLabel-root, label'));
+            const lbl = labels.find(l => l.textContent && l.textContent.trim().toUpperCase() === 'SSN');
+            if (!lbl) return { found: false };
+            const root = lbl.closest('.MuiFormControl-root') || lbl.parentElement;
+            if (!root) return { found: false };
+            const rect = root.getBoundingClientRect();
+            const ico = root.querySelector('svg');
+            const icoRect = ico ? ico.getBoundingClientRect() : null;
+            return {
+              found: true,
+              html: root.outerHTML,
+              rect: { x: rect.x, y: rect.y, width: rect.width, height: rect.height },
+              svg: ico ? { html: ico.outerHTML, rect: { x: icoRect.x, y: icoRect.y, width: icoRect.width, height: icoRect.height } } : null
+            };
+          });
+          fs.writeFileSync(path.join(outDir, 'ssn.json'), JSON.stringify(ssn, null, 2));
+
+          // Dump all label texts for debugging
+          const labelsDump = await page.evaluate(() => {
+            return Array.from(document.querySelectorAll('.MuiFormLabel-root, label')).map(l => ({ text: l.textContent && l.textContent.trim(), rect: (() => { const r = l.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; })() }));
+          });
+          fs.writeFileSync(path.join(outDir, 'labels.json'), JSON.stringify(labelsDump, null, 2));
 
     fs.writeFileSync(path.join(outDir, 'control.html'), details.found ? details.html : 'not found');
     fs.writeFileSync(path.join(outDir, 'control.json'), JSON.stringify(details, null, 2));

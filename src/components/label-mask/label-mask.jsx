@@ -203,13 +203,20 @@ export const LabelMask = memo((props) => {
           size="small"
           style={{ marginLeft: "8px" }}
           sx={{
-            padding: '2px',
+            p: '2px',
+            minWidth: 'auto',
+            transform: 'translateY(-2px)',
+            '& svg': { fontSize: '1.15rem' },
             '&:hover': {
               backgroundColor: 'rgba(0, 0, 0, 0.04)'
             }
           }}
         >
-          {showValue ? <IconVisibilityOff fontSize="small" /> : <IconVisibility fontSize="small" />}
+          {showValue ? (
+            <IconVisibilityOff sx={{ transform: 'translateY(-2px)' }} />
+          ) : (
+            <IconVisibility sx={{ transform: 'translateY(-2px)' }} />
+          )}
         </IconButton>
       )}
     </span>
