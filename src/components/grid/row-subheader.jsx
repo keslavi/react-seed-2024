@@ -2,7 +2,7 @@ import { color } from "@/theme-material";
 import { Grid } from "@mui/material";
 import { isEmpty } from "lodash";
 
-export const RowHeader = (props) => {
+export const RowSubheader = (props) => {
   const { leftcontent, rightcontent, children, backgroundColor, ...rest } = props;
 
   const leftcontent2 = props.leftcontent || props.children;

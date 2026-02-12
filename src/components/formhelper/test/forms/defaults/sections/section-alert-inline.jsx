@@ -1,9 +1,9 @@
 import {
   Col,
   Row,
-  TableRows,
+//  TableRows,
   Fieldset,
-  LabelHeading,
+//  LabelHeading,
   labelHeadingVariant as lv,
   AlertInline,
 } from "components";

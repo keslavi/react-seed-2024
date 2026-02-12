@@ -3,15 +3,8 @@ import { Button, ListItemText } from "@mui/material";
 import {
   Col,
   Row,
-  TableRows,
-  AlertInline,
-  BtnContinueSave,
-  Fieldset,
-  Icon,
-  iconType,
   Input,
   inputMask,
-  LabelHeading,
   LabelMask,
 } from "components";
 
@@ -22,14 +15,14 @@ import { TableRowsSection } from "./sections/section-table-rows";
 import { ButtonsSection } from "./sections/section-buttons";
 import { AlertInlineSection } from "./sections/section-alert-inline";
 import { IconSection } from "./sections/section-Icon";
-
+import { MuiLinkSection } from "./sections/section-muilink";
 
 //schema, options, item are below Children 
 
 const End = () => (<>
   <br />
-  <div style={{ 
-    height: '20px', 
+  <div style={{
+    height: '20px',
     backgroundColor: '#d4edda',
     marginLeft: 'calc(-50vw + 50%)',
     marginRight: 'calc(-50vw + 50%)',
@@ -42,6 +35,8 @@ const End = () => (<>
 export const ChildrenDefault = () => {
   return (
     <>
+      <MuiLinkSection />
+      <End />
       <Headers />
       <End />
       <LabelHeadingSection />
@@ -136,13 +131,13 @@ export const ChildrenDefault = () => {
           mask={inputMask.ssn}
           info="Enter your 9-digit SSN in format XXX-XX-XXXX"
         />
-        <Input name="whatever" label="whatever"/>
-            <Input
+        <Input name="whatever" label="whatever" />
+        <Input
           datepicker
           name="dob2"
           label="Date of Birth (Datepicker)"
           info="Empty date field with MM/DD/YYYY format"
-        />    
+        />
         <Input charCount={10} name="body" label="Body" />
         <Input
           name="ssn2"

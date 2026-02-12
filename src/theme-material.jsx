@@ -5,7 +5,7 @@ import { createTheme, ThemeProvider as MuiThemeProvider } from "@mui/material/st
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { AccordionSummary } from '@mui/material';
-import { /*minHeight,*/ styled } from "@mui/system";
+import { /*minHeight,*/ fontFamily, fontWeight, styled } from "@mui/system";
 
 /*************************************************
  
@@ -695,6 +695,52 @@ export const theme = createTheme({
           opacity: 1
         }
       }
+    },
+    MuiLink: {
+      defaultProps:{
+        underline: 'hover',
+      },
+      styleOverrides: {
+        root: ({ ownerState }) => {
+          const underline = ownerState.underline || 'hover';
+          
+          const defaultUnderline = underline === 'always' ? 'underline' : 'none';
+          const hoverUnderline = underline === 'none' ? 'none' : 'underline';
+          
+          return {
+            cursor: 'pointer',
+            color: color.secondary.blue550,
+            fontFamily: "Roboto, Connections, Calibri, sans-serif",
+            fontWeight: 'bold',
+            textDecoration: defaultUnderline,
+            '&:hover': {
+              textDecoration: hoverUnderline,
+              color: color.secondary.blue950,
+            }
+          };
+        }
+      },
+      variants: [
+        {
+          props: { variant: "dark" },
+          style: {
+            color: color.primary.blue,
+            '&:hover': {
+              color: color.link,
+            }
+          }
+        },
+        {
+          props: { variant: "current" },
+          style: {
+            color: color.secondary.blue550,
+            '&:hover': {
+              color: color.secondary.blue550,
+              textDecoration: 'underline',
+            }
+          }
+        }
+      ]
     },
     MuiListItemText: {
       styleOverrides: {
