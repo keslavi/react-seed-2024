@@ -20,7 +20,7 @@ export const MuiLinkSection = () => {
         <TableRows>
           <Row>
             <Col flexGrow={1}>
-              1 Current example
+              1 Current Behavior
             </Col>
             <Col size={6}>
               {'<Link variant="current">Example 1</Link>'}
@@ -38,23 +38,23 @@ export const MuiLinkSection = () => {
               <br/>when i added color change on hover, noticed it looked odd
             </Col>
             <Col flexGrow={1} sx={{ textAlign: 'right' }}>
-              <Link onClick={() => alert('Example clicked')}>Example 1</Link>
+              <Link onClick={() => alert('Example clicked')}>Example 2</Link>
             </Col>
           </Row>
           <Row>
             <Col flexGrow={1}>
-              always underline
+              3 always underline
             </Col>
             <Col size={6}>
-              {'<Link underline="always">Example 2</Link>'}
+              {'<Link underline="always">Example 3</Link>'}
             </Col>
             <Col flexGrow={1} sx={{ textAlign: 'right' }}>
-              <Link underline="always">Example 2</Link>
+              <Link underline="always">Example 3</Link>
             </Col>
           </Row>
           <Row>
             <Col flexGrow={1}>
-              Do we mean this?
+              4 Do we mean this?
             </Col>
             <Col size={6}>
               Heron is static, i think it's showing the hover color.
