@@ -54,25 +54,25 @@ export const MuiLinkSection = () => {
           </Row>
           <Row>
             <Col flexGrow={1}>
-              4 Do we mean this?
+              4.1 Do we mean this?
             </Col>
             <Col size={6}>
               Heron is static, i think it's showing the hover color.
               <br /> does this make sense? primary blue, then lighter on hover<br />
             </Col>
             <Col flexGrow={1} sx={{ textAlign: 'right' }}>
-              <Link variant="dark">Example 4</Link>
+              <Link variant="dark">Example 4.1</Link>
             </Col>
           </Row>
           <Row>
             <Col flexGrow={1}>
-              5 or no underline?
+              4.2 or no underline?
             </Col>
             <Col size={6}>
               
             </Col>
             <Col flexGrow={1} sx={{ textAlign: 'right' }}>
-              <Link variant="dark" underline="none">Example 4</Link>
+              <Link variant="dark" underline="none">Example 4.2</Link>
             </Col>
           </Row>
         </TableRows>
