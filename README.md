@@ -1,8 +1,7 @@
-# Kanban Board - Repository-Based Backend
 
-A kanban solution that stores data in JSON files within the GitHub repository, designed for environments that can't easily set up a traditional backend. Team members can pull/push to sync task data.
+# react seed 2024
+straight javascript seed starter project with zustand, notifications, form validation
 
-Based on [react-seed-2024](https://github.com/keslavi/react-seed-2024) with extensions for task management and kanban visualization.
 ## quickstart !important  
 
 you need to run both the api backend as well as the main app in order to get data
@@ -29,7 +28,6 @@ in a new terminal (if in windows, use command prompt, not bash. it formats outpu
 ## current features
 - tasks section to demonstrate end to end usage (tasks=todo, but who wants a million 'todo' files and references???
 - full unit tests for task section... redux and component
-- **FormHelper components** - Comprehensive form input library with masking, validation, and advanced features
 - form validation 
 
 - api error handling and notification for errors
@@ -43,6 +41,7 @@ in a new terminal (if in windows, use command prompt, not bash. it formats outpu
 - proxy handling to prevent CORS issues (see package.json proxy)
 
 - notification popups via toastify ()
+- kanban board added to tasks with data saving to repo
 
 
 ## IDE Dependancies
@@ -85,33 +84,6 @@ by default the project comes with the following backends that have a simple ToDo
  https://www.getpostman.com/collections/6a24df4d7cc7984ac429
   
 
-## FormHelper Components
-
-The project includes a comprehensive form input library with advanced features:
-
-### Documentation
-- **[Usage Examples](src/components/formhelper/USAGE_EXAMPLES.md)** - Comprehensive examples for all components
-- **[Quick Reference](src/components/formhelper/QUICK_REFERENCE.md)** - Most common patterns and props
-- **[Text Mask Specifications](src/components/formhelper/text-mask-specifications.md)** - Technical specifications
-
-### Key Features
-- **Text masking** (SSN, phone, credit card, etc.)
-- **Date masking** with range validation
-- **Partial masking** for sensitive data
-- **Select components** (dropdown, autocomplete, multi-select)
-- **Grid layout** support
-- **Form validation** integration
-
-### Quick Start
-```jsx
-import { Input } from '@/components/formhelper';
-
-// Basic usage
-<Input name="ssn" label="SSN" mask="ssn" />
-<Input name="phone" label="Phone" mask="phone" />
-<Input name="date" label="Date" mask="MM/DD/YYYY" />
-```
-
 ## jest unit testing
 
 In vs code install extension "jest", VS code will now automatically run tests and show in bottom left notificatin bar.
@@ -137,33 +109,3 @@ For more complex examples that use the redux store and mockups, look at todo*.te
 - zustand
 - react-hook-form
 - yup 
-
-# React Application
-
-## Environment Variables
-
-Create a `.env.local` file in the root directory with the following variables:
-
-```env
-# API Configuration
-VITE_API_URL=http://localhost:5000/api
-
-# Other Configuration
-VITE_APP_ENV=development
-```
-
-Note: All environment variables must be prefixed with `VITE_` to be exposed to the client-side code.
-
-## Development
-
-To start the development server:
-
-```bash
-npm run dev
-```
-
-This will use the environment variables from `.env.local` file.
-
-## Production
-
-For production deployment, make sure to set all required environment variables in your hosting platform (e.g., Render.com).
