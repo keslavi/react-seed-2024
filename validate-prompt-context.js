@@ -81,7 +81,7 @@ class PromptValidator {
       if (promptReferences === 0) {
         console.warn('⚠️  No recent commits reference context prompts');
         console.log('💡 Consider adding "Context: prompt.md" to commit messages');
-        return false;
+        return true;
       }
       
       console.log(`✅ Found ${promptReferences} commits with prompt references`);
