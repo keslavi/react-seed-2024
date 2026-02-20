@@ -18,7 +18,8 @@
     "start:prod": "cd server-koa && npm run start:prod",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "prepare": "husky || true"
+    "prepare": "husky || true",
+    "zzzvzalidate:prompts": "node validate-prompt-context.js"
   },
   "overrides": {
     "react": "^19.1.0",

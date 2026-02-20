@@ -18,6 +18,31 @@ export const MuiLinkSection = () => {
       <h1>Link Examples</h1>
       <Fieldset>
         <TableRows>
+                    <Row>
+            <Col flexGrow={1}>
+              Theme Material Changes Behavior
+            </Col>
+            <Col size={6}>
+              {'<Link>Example</Link>'}
+            </Col>
+            <Col flexGrow={1} sx={{ textAlign: 'right' }}>
+              <Link onClick={() => alert('Example clicked')}>Example</Link>
+            </Col>
+             <Col flexGrow={1}></Col>
+            <Col size={6}>
+              {'<Link variant="regular">Example</Link>'}
+            </Col>
+            <Col flexGrow={1} sx={{ textAlign: 'right' }}>
+              <Link variant="regular" onClick={() => alert('Example clicked')}>Example</Link>
+            </Col>
+             <Col flexGrow={1}></Col>
+            <Col size={6}>
+              {'<Link underline="hover">Example</Link>'}
+            </Col>
+            <Col flexGrow={1} sx={{ textAlign: 'right' }}>
+              <Link underline="hover" onClick={() => alert('Example clicked')}>Example</Link>
+            </Col>
+          </Row>   
           <Row>
             <Col flexGrow={1}>
               1 Current Behavior

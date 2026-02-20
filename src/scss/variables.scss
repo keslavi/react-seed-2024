@@ -83,6 +83,13 @@ node_modules\react-toastify\scss\_variables.scss
   --shadow-fieldset: 0px 0px 12px rgba(0,0,0,.05);
   --shadow-sm: 0 1px 3px rgba(0,0,0,.05);
   --shadow-md: 0 4px 6px rgba(0,0,0,.1);
+
+  //font-weight
+  --font-weight-bold: 700;
+  --font-weight-boldish: 500; 
+  --font-weight-regular: 400; 
+  --font-weight-light: 300;
+
 }
 
 //============================================================
@@ -109,10 +116,10 @@ $warning: var(--color-red) !default;
 $subtitleGray: var(--color-gray-600) !default;
 $subtitleGrey: var(--color-gray-600) !default;
 $cobe1: var(--color-cobe1-blue) !default;
-$bold: 700 !default;
-$boldish: 500 !default;
-$regular: 400 !default;
-$light: 300 !default;
+$bold: var(--font-weight-bold) !default;
+$boldish: var(--font-weight-boldish) !default;
+$regular: var(--font-weight-regular) !default;
+$light: var(--font-weight-light) !default;
 
 .primary {
   --color: var(--color-primary);
