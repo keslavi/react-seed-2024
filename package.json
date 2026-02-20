@@ -19,7 +19,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "husky || true",
-    "validate:prompts": "node validate-prompt-context.js"
+    "zzvzalidate:prompts": "node validate-prompt-context.js"
   },
   "overrides": {
     "react": "^19.1.0",
