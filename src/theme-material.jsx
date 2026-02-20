@@ -63,6 +63,13 @@ export const color = {
   link: scss('--color-link', '#0053c2'),
 };
 
+export const fontWeights = {
+  bold: scss('--font-weight-bold', 700),
+  boldish: scss('--font-weight-boldish', 500),
+  regular: scss('--font-weight-regular', 400),
+  light: scss('--font-weight-light', 300)
+}
+
 const buttonSizes = {
   small: {
     fontSize: "12px",
@@ -696,32 +703,32 @@ export const theme = createTheme({
         }
       }
     },
-    MuiLink: {
-      defaultProps:{
-        underline: 'hover',
+     MuiLink:{
+      defaultProps: {
+        underline: 'none'
       },
       styleOverrides: {
-        root: ({ ownerState }) => {
-          const underline = ownerState.underline || 'hover';
-          
-          const defaultUnderline = underline === 'always' ? 'underline' : 'none';
-          const hoverUnderline = underline === 'none' ? 'none' : 'underline';
-          
-          return {
-            cursor: 'pointer',
-            color: color.secondary.blue550,
-            fontFamily: "Roboto, Connections, Calibri, sans-serif",
-            fontWeight: 'bold',
-            textDecoration: defaultUnderline,
-            '&:hover': {
-              textDecoration: hoverUnderline,
-              color: color.secondary.blue950,
+        root: ({ownerState}) => ({
+          cursor: 'pointer',
+          fontWeight: fontWeights.bold,
+          color: color.secondary.blue550,
+          ...(ownerState.underline === 'hover' && {
+            textDecoration: 'none',
+            '&:hover, &:focus-visible': {
+              textDecoration: 'underline',
+              color: color.secondary.blue950
             }
-          };
-        }
+          })
+        })
       },
       variants: [
         {
+          props: {variant: 'regular'},
+          style: {
+            fontWeight: fontWeights.regular
+          }
+        },
+         {
           props: { variant: "dark" },
           style: {
             color: color.primary.blue,
