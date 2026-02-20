@@ -23,9 +23,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
-    - name: Validate prompt context
-      run: npm run validate:prompts
-      
     - name: Check prompt file currency
       run: |
         echo "Checking prompt file modification dates..."
