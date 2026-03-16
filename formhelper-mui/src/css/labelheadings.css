@@ -1,0 +1,83 @@
+/* labelheadings.css */
+
+.labelHeadingRoot {
+  color: var(--color-header, #012169);
+  letter-spacing: 0.01rem;
+  font-size: 0.01rem;
+}
+
+.labelHeadingRoot.bold {
+  font-weight: var(--font-weight-bold, 700);
+}
+
+.labelHeadingRoot.boldish {
+  font-weight: var(--font-weight-boldish, 500);
+}
+
+.labelHeadingRoot.regular {
+  font-weight: var(--font-weight-regular, 400);
+}
+
+.labelHeadingRoot.light {
+  font-weight: var(--font-weight-light, 300);
+}
+
+.labelHeadingRoot.dark {
+  color: var(--color-header-secondary, #000000);
+}
+
+.labelHeadingRoot.errorColor {
+  color: var(--color-red, #e31836);
+}
+
+.labelHeadingRoot.disabled {
+  color: var(--color-disabled, var(--color-gray-200, #eeeeee)) !important;
+  cursor: not-allowed;
+  pointer-events: none;
+  text-decoration: none !important;
+}
+
+.labelHeadingRoot.link {
+  color: var(--color-link, #0053c2);
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.labelHeadingRoot.link:hover {
+  opacity: 0.8;
+}
+
+.labelHeadingH1B {
+  font-size: 20px;
+  font-weight: var(--font-weight-bold, 700);
+}
+
+.labelHeadingH1 {
+  font-size: 20px;
+  font-weight: var(--font-weight-boldish, 500);
+}
+
+.labelHeadingH2 {
+  font-size: 18px;
+  font-weight: var(--font-weight-regular, 400);
+}
+
+.labelHeadingH3 {
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-light, 300);
+}
+
+.labelHeadingH4 {
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-light, 300);
+}
+
+.labelHeadingH5 {
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-light, 300);
+}
+
+.labelHeadingH6 {
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-light, 300);
+}

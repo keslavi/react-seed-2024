@@ -1,0 +1,11 @@
+---
+alwaysApply: true
+---
+
+# Context Requirements
+
+**Primary References**: 
+- [.copilot-rules/context-required.md](mdc:.copilot-rules/context-required.md)
+- [.copilot-rules/prompt-reference.md](mdc:.copilot-rules/prompt-reference.md)
+
+These documents specify which context files to reference for different types of development work. Always consult them before making code changes to ensure you're following the correct patterns and conventions.

@@ -1,0 +1,18 @@
+---
+globs: *.tsx,*.ts,*.jsx,*.js
+description: FormHelper component patterns, MUI 7 specifics, and testing approaches
+---
+
+# FormHelper Component Patterns
+
+**Primary Reference**: [.copilot-rules/promptFormhelper.md](mdc:.copilot-rules/promptFormhelper.md)
+
+When working with formhelper components (Input, Select, Autocomplete, SelectCheckbox), always reference the comprehensive patterns and MUI 7 migration guidelines in the promptFormhelper documentation above.
+
+## Key Topics Covered
+
+- MUI 7 component behavior changes (TextField, Select, Autocomplete)
+- Testing patterns with TestHarness
+- Component structure and performance patterns
+- Common issues and solutions
+- Best practices for accessibility and error handling
