@@ -4,7 +4,6 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PanoramaFishEyeSharpIcon from '@mui/icons-material/PanoramaFishEyeSharp';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -36,7 +35,7 @@ export const iconType = {
   accordion: ExpandMoreIcon,
   add: AddIcon,
   remove: RemoveIcon,
-}
+};
 
 const sizeMap = {
   sm: 16,
@@ -85,7 +84,7 @@ export const Icon = ({
 
   if (!src) return null;
 
-  const isExpandIcon = src === iconType.expanded || src === iconType.expand;
+  const isExpandIcon = src === iconType.expanded || src === iconType.expand || src === iconType.accordion;
 
   const getPattern = () => {
     switch (src) {
@@ -94,9 +93,10 @@ export const Icon = ({
       case iconType.completeOutline:
         return { color: "success.main", background: "white" };
       case iconType.uncomplete:
-        return { color: "var(--color-border)", borderRadius: "50%" };
+        return { color: 'var(--color-border)', borderRadius: '50%' };
       case iconType.expanded:
       case iconType.expand:
+      case iconType.accordion:
         return { color: colorIcon || "primary.main" };
       case iconType.add:
       case iconType.remove:
@@ -106,11 +106,11 @@ export const Icon = ({
       case iconType.arrowForward:
       case iconType.backArrow:
       case iconType.forwardArrow:
-        return { color: colorIcon || "var(--color-blue-550)" };
+        return { color: colorIcon || 'var(--color-blue-550, #0053c2)' };
       default:
-        return {} //defaults already set
+        return {};
     }
-  }
+  };
 
   const isArrowIcon = [
     iconType.add,
@@ -150,17 +150,18 @@ export const Icon = ({
     }}>
       {text}
     </span>
-  )
+  );
 
   return (
     <span
       onClick={onClick}
       style={{
-        display: "inline-flex",
-        alignItems: "center",
+        display: 'inline-flex',
+        alignItems: 'center',
         ...((isExpandIcon || props.onClick) && { cursor: 'pointer' }),
         ...sx,
-      }}>
+      }}
+    >
       {textPosition === "left" && textRender}
       <IconComponent
         sx={{
@@ -176,8 +177,10 @@ export const Icon = ({
       />
       {textPosition === "right" && textRender}
     </span>
-  )
-}
+  );
+};
+
+export default Icon;
 
 
 

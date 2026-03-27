@@ -13,24 +13,7 @@ import { Info } from "./info";
 import { ColPadded } from "@/components/grid";
 import { DateMask } from "./date-mask";
 import { color } from "@/theme-material";
-
-
-// Predefined mask patterns
-export const maskPattern = {
-  ein: '##-#######',
-  ssn: '###-##-####',
-  phone: '(###) ###-####',
-  phoneExt: '(###) ###-#### x####',
-  creditCard: '#### #### #### ####',
-  creditCardExpiry: '##/##',
-  zipCode: '#####',
-  zipCodePlus4: '#####-####',
-  date: '##/##/####',
-  time: '##:##',
-  currency: '$#,###.##',
-  percentage: '##%',
-  licensePlate: 'AAA-####',
-};
+import { maskPattern } from "./mask-pattern";
 
 // Utility functions for masking and formatting
 const applyMask = (value, mask) => {
@@ -174,7 +157,7 @@ export const TextMask = memo((props) => {
   );
 
   // Get mask pattern from props or predefined patterns
-  const maskPattern = useMemo(() => {
+  const resolvedMaskPattern = useMemo(() => {
     if (props.mask) {
       // First check if it's a predefined pattern
       if (maskPattern[props.mask]) {
@@ -203,8 +186,8 @@ export const TextMask = memo((props) => {
   const displayValue = useMemo(() => {
     const rawValue = field.value || '';
     
-    if (maskPattern) {
-      const formattedValue = applyMask(rawValue, maskPattern);
+    if (resolvedMaskPattern) {
+      const formattedValue = applyMask(rawValue, resolvedMaskPattern);
       
           // If value is visible, show formatted value
     if (showValue || !rawValue) {
@@ -214,14 +197,14 @@ export const TextMask = memo((props) => {
     // If value is hidden, check if partial masking is requested
     if (props.showLast && typeof props.showLast === 'number' && props.showLast > 0) {
       // Show partial mask with last N characters
-      return createPartialMask(rawValue, maskPattern, props.showLast);
+      return createPartialMask(rawValue, resolvedMaskPattern, props.showLast);
     }
     
           // If value is hidden and no partial masking, show asterisks instead
-      if (maskPattern === '##/##/####') {
+      if (resolvedMaskPattern === '##/##/####') {
         return '**/**/****';
       }
-      return maskPattern.replace(/[#A*]/g, '*');
+      return resolvedMaskPattern.replace(/[#A*]/g, '*');
     }
     
     if (formatPattern) {
@@ -261,8 +244,8 @@ export const TextMask = memo((props) => {
     let newValue = e.target.value;
     
     // If using mask, remove mask characters for storage
-    if (maskPattern) {
-      newValue = removeMask(newValue, maskPattern);
+    if (resolvedMaskPattern) {
+      newValue = removeMask(newValue, resolvedMaskPattern);
     }
     
     // If using format, clean the value

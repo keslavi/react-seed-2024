@@ -87,8 +87,9 @@ export default defineConfig(({ command, mode }) => {
       extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
       alias: {
         "@": path.resolve(__dirname, "./src"),
-        "config": path.resolve(__dirname, "./config/config.js"),
+        "@formhelper": path.resolve(__dirname, "./formhelper-mui-dist/formhelper-mui.js"),
         "components": path.resolve(__dirname, "./src/components"),
+        "config": path.resolve(__dirname, "./config/config.js"),
         "helpers": path.resolve(__dirname, "./src/helpers"),
         "pages": path.resolve(__dirname, "./src/pages"),
         "store": path.resolve(__dirname, "./src/store"),

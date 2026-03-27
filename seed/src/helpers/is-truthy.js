@@ -1,21 +1,6 @@
 
-export const isTruthy = (value)=>{
-  const truthyValues = [
-    '1',
-    'enabled',
-    'ok',
-    'on',
-    'true',
-    'yes',
-  ]
+import { isTruthy, isFalsy } from '../../formhelper-mui-dist/formhelper-mui.js';
 
-  if (value===true) return true;
-  const normalizedValue=(value||"").toString().toLowerCase();
-  return truthyValues.includes(normalizedValue);
-}
-
-export const isFalsy = (value)=>{
-  return !isTruthy(value);
-}
+export { isTruthy, isFalsy };
 
 export default { isTruthy, isFalsy };

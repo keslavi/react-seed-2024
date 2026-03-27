@@ -10,8 +10,7 @@ import { useFormField, UseFormFieldProps } from './form-provider';
 import { cleanParentProps } from './helper/clean-parent-props';
 import { colProps } from './helper/col-props';
 import { ColPadded } from '../grid';
-
-const isTruthy = (v: unknown) => !!v && v !== 'false' && v !== '0';
+import { isTruthy } from '../../utils/is-truthy';
 
 export type CheckboxProps = UseFormFieldProps & {
   label?: string;

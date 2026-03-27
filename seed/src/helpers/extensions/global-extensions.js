@@ -1,5 +1,4 @@
-import isEmpty from "lodash/isEmpty";
-import {isTruthy,isFalsy} from "../is-truthy";
+import { isEmpty, isTruthy, isFalsy } from "../../../formhelper-mui-dist/formhelper-mui.js";
 
 globalThis.isEmpty = isEmpty;
 globalThis.isTruthy = isTruthy;

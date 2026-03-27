@@ -26,8 +26,10 @@ export * from './components/nav-sticky';
 export * from './components/navbar';
 export * from './components/textarea-debug';
 
-// Components (uncomment as they are migrated from /legacy)
+// Formhelper
 export * from './components/formhelper';
-// export * from './components/label-heading';
-// export * from './components/alert-inline';
-// export * from './components/info-popover';
+
+// Utilities
+export { isEmpty } from './utils/is-empty';
+export { isTruthy, isFalsy } from './utils/is-truthy';
+

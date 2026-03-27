@@ -14,6 +14,22 @@ export type DatepickerProps = UseFormFieldProps & {
   size?: number | string;
 };
 
+const normalizeDateInput = (raw?: any): string | undefined => {
+  if (!raw) return raw;
+
+  if (typeof raw === 'string') {
+    const isoMatch = raw.match(/^\d{4}-\d{2}-\d{2}/);
+    if (isoMatch) return isoMatch[0];
+  }
+
+  const parsed = dayjs(raw);
+  if (parsed.isValid()) {
+    return parsed.format('YYYY-MM-DD');
+  }
+
+  return typeof raw === 'string' ? raw : undefined;
+};
+
 export const Datepicker = memo((props: DatepickerProps) => {
   const { field, errorMui, valueProp } = useFormField(props);
 
@@ -23,6 +39,16 @@ export const Datepicker = memo((props: DatepickerProps) => {
     if (!isEmpty(props.max)) inputProps.max = dayjs(props.max).format('YYYY-MM-DD');
     return inputProps;
   }, [props.min, props.max]);
+
+  const normalizedValueProp = useMemo(() => {
+    if ('value' in valueProp && valueProp.value !== undefined) {
+      return { value: normalizeDateInput(valueProp.value) };
+    }
+    if ('defaultValue' in valueProp && valueProp.defaultValue !== undefined) {
+      return { defaultValue: normalizeDateInput(valueProp.defaultValue) };
+    }
+    return valueProp;
+  }, [valueProp]);
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(e.target.value);
@@ -41,7 +67,7 @@ export const Datepicker = memo((props: DatepickerProps) => {
         onBlur={field.onBlur}
         onChange={onChange}
         {...cleanParentProps(props)}
-        {...valueProp}
+        {...normalizedValueProp}
         {...errorMui}
         slotProps={{
           htmlInput: {

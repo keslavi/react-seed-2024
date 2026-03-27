@@ -23,7 +23,6 @@ const Task = lazy(() => import("./pages/-example-task-section/task/task"));
 //const Contact = lazy(() => import("./pages/-example-contact/contact/contact"));
 const Scratchpad = lazy(() => import("./pages/dev-section/scratchpad"));
 //const Formhelper = lazy(() => import("./components/formhelper/test/formhelper"));
-import { Formhelper } from "./components/formhelper/test/formhelper";
 const Kanban = lazy(() => import("./pages/-example-task-section/kanban/kanban"));
 
 //not introducing jwt and private routes yet
@@ -38,7 +37,7 @@ const menu = [
       { text: "Tasks", link: "/dev/tasks" },
       //{ text: "Contacts", link: "/dev/contacts" },
       { text: "Scratchpad", link: "/dev/scratchpad" },
-      { text: "FormHelper", link: "/dev/formhelper" },
+      //{ text: "FormHelper", link: "/dev/formhelper" },
     ],
   },
 ];
@@ -66,14 +65,6 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<div>Loading...</div>}>
                 <Kanban />
-              </Suspense>
-            ),
-          },
-          {
-            path: "formhelper",
-            element: (
-              <Suspense fallback={<div>Loading...</div>}>
-                <Formhelper />
               </Suspense>
             ),
           },

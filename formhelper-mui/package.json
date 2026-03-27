@@ -19,6 +19,7 @@
     "start": "npm run dev",
     "dev": "vite",
     "build": "tsc -p tsconfig.app.json --noEmit && vite build",
+    "deploy:seed": "npm run build && node deploy-to-seed.js",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "lint": "eslint .",
     "preview": "vite preview",

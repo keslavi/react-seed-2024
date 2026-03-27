@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty } from '../../utils/is-empty';
 import { ArrayInput, ArrayInputProps } from './array-input';
 import { Checkbox, CheckboxProps } from './checkbox';
 import { Datepicker, DatepickerProps } from './datepicker';

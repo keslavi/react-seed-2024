@@ -1,11 +1,10 @@
 // https://mui.com/material-ui/customization/theming/
 // https://mui.com/material-ui/customization/theme-components/
 
-import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider as MuiThemeProvider, styled } from '@mui/material/styles';
 import type { ThemeOptions } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AccordionSummary } from '@mui/material';
-import { styled } from '@mui/system';
 import React from 'react';
 
 /*
@@ -77,9 +76,11 @@ function hex(cssVar: string): string {
 
 const init = createTheme();
 
-/** Plain options object — spread and override in your own createTheme() call */
+/** Plain options object — spread and override in your own createTheme() call.
+ *  Note: cssVariables is omitted so palette values stay as hex for MUI's JS style
+ *  code (e.g. alpha()). Enable in app if needed: createTheme({ ...baseThemeOptions, cssVariables: true })
+ */
 export const baseThemeOptions: ThemeOptions = {
-  cssVariables: true,
   typography: {
     fontFamily: "Connections, Roboto, Calibri, 'sans-serif'",
     fontSize: 16,
@@ -127,7 +128,6 @@ export const baseThemeOptions: ThemeOptions = {
         root: {
           boxShadow: 'none',
           position: 'relative',
-          '& > .MuiButton-root': { marginRight: '1rem' },
         },
       },
     },
@@ -196,34 +196,6 @@ export const baseThemeOptions: ThemeOptions = {
       },
       variants: [
         { props: { variant: 'noborder' }, style: { border: `1px solid ${color.primary.white}` } } as any,
-      ],
-    },
-    MuiButtonBase: { styleOverrides: { root: { minWidth: '20px' } } },
-    MuiButton: {
-      defaultProps:  { size: 'medium', variant: 'text', disableElevation: true },
-      styleOverrides: {
-        root: {
-          borderRadius:   '40px',
-          textTransform:  'none',
-          fontWeight:     500,
-          fontSize:       '1.75rem',
-          position:       'relative',
-          boxSizing:      'border-box',
-          border:         '1px solid transparent',
-          '&:hover': {
-            color:           color.cobe1.white,
-            backgroundColor: color.cobe1.blue,
-            borderColor:     color.cobe1.blue,
-            boxShadow:       'inset 0 0 0 1px white',
-          },
-        },
-        outlined: { backgroundColor: 'transparent', borderColor: color.secondary.blue950 },
-        text:     { minWidth: 'auto' },
-      },
-      variants: [
-        { props: { pageSize: 'small'  }, style: { fontSize: '.75rem' } } as any,
-        { props: { pageSize: 'medium' }, style: { fontSize: '1rem'   } } as any,
-        { props: { pageSize: 'large'  }, style: { fontSize: '1.5rem' } } as any,
       ],
     },
     MuiCheckbox: {
