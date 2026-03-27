@@ -84,9 +84,23 @@ const getMockDataKey = (isNode) => {
   );
 };
 
+const isTruthyFlag = (value) => ['1', 'true', 'yes', 'on'].includes(String(value || '').toLowerCase());
+
+const getEncryptedOnlyMode = (isNode) => {
+  if (isNode) {
+    return isTruthyFlag(process.env.MOCK_DATA_ENCRYPTED_ONLY);
+  }
+
+  return isTruthyFlag(
+    globalThis.__MOCK_DATA_ENCRYPTED_ONLY__ ||
+    import.meta.env?.VITE_MOCK_DATA_ENCRYPTED_ONLY
+  );
+};
+
 export const mockLoad = async (url) => {
   // Simple and reliable Node.js detection
   const isNode = typeof process !== 'undefined' && process.versions && process.versions.node;
+  const encryptedOnly = getEncryptedOnlyMode(isNode);
   
 //  console.log(["all"], `[MSW] mockLoad called for ${url}, isNode: ${isNode}`);
   
@@ -135,6 +149,11 @@ export const mockLoad = async (url) => {
         }
       }
 
+      if (encryptedOnly) {
+        const prefix = encryptedError ? `Encrypted load failed: ${encryptedError.message}. ` : '';
+        throw new Error(`${prefix}Plaintext mock fallback is disabled (MOCK_DATA_ENCRYPTED_ONLY=true)`);
+      }
+
       const dataPath = plainCandidatePaths.find((path) => existsSync(path));
       if (!dataPath) {
         const prefix = encryptedError ? `Encrypted load failed: ${encryptedError.message}. ` : '';
@@ -173,6 +192,11 @@ export const mockLoad = async (url) => {
         } catch (error) {
           encryptedError = error;
         }
+      }
+
+      if (encryptedOnly) {
+        const prefix = encryptedError ? `Encrypted load failed: ${encryptedError.message}. ` : '';
+        throw new Error(`${prefix}Plaintext mock fallback is disabled (encrypted-only mode)`);
       }
       
       const response = await fetch(`/mock/${url}.iife.js`);

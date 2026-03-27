@@ -44,6 +44,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@formhelper": path.resolve(__dirname, "./formhelper-mui-dist/formhelper-mui.js"),
       "config": path.resolve(__dirname, "./config/config.js"),
       "components": path.resolve(__dirname, "./src/components"),
       "helpers": path.resolve(__dirname, "./src/helpers"),

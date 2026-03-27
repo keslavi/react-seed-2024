@@ -6,7 +6,7 @@
  * Only copies files if source is newer than destination
  */
 
-import { copyFileSync, mkdirSync, readdirSync, statSync, existsSync } from 'fs';
+import { copyFileSync, mkdirSync, readdirSync, statSync, existsSync, unlinkSync } from 'fs';
 import { resolve, join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -20,10 +20,14 @@ const sourceCandidates = [
 ];
 const sourceDir = sourceCandidates.find((path) => existsSync(path));
 const targetDir = resolve(__dirname, 'public/mock');
+const encryptedOnly = ['1', 'true', 'yes', 'on'].includes(String(
+  process.env.MOCK_DATA_ENCRYPTED_ONLY || process.env.VITE_MOCK_DATA_ENCRYPTED_ONLY || ''
+).toLowerCase());
 
 console.log('Copying mock data files...');
 console.log('Source:', sourceDir);
 console.log('Target:', targetDir);
+console.log('Encrypted only:', encryptedOnly);
 
 if (!sourceDir) {
   console.error('❌ Could not find mock source directory. Tried:');
@@ -34,6 +38,29 @@ if (!sourceDir) {
 try {
   // Create target directory if it doesn't exist
   mkdirSync(targetDir, { recursive: true });
+
+  const cleanupPlaintextMocks = (dir) => {
+    const items = readdirSync(dir);
+
+    items.forEach((item) => {
+      const fullPath = join(dir, item);
+      const stat = statSync(fullPath);
+
+      if (stat.isDirectory()) {
+        cleanupPlaintextMocks(fullPath);
+        return;
+      }
+
+      if (!item.endsWith('.enc.json')) {
+        unlinkSync(fullPath);
+        console.log(`🧹 Removed plaintext mock: ${item}`);
+      }
+    });
+  };
+
+  if (encryptedOnly) {
+    cleanupPlaintextMocks(targetDir);
+  }
 
   let copiedCount = 0;
   let skippedCount = 0;
@@ -50,6 +77,10 @@ try {
         mkdirSync(destPath, { recursive: true });
         copyRecursive(srcPath, destPath);
       } else {
+        if (encryptedOnly && !item.endsWith('.enc.json')) {
+          return;
+        }
+
         let shouldCopy = true;
         let reason = 'destination does not exist';
         

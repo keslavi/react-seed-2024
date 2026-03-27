@@ -35,6 +35,9 @@ in a new terminal (if in windows, use command prompt, not bash. it formats outpu
 - runtime loading behavior:
     - encrypted-first when key is available
     - plaintext `.iife.js` fallback for local compatibility
+    - set `MOCK_DATA_ENCRYPTED_ONLY=true` to disable plaintext fallback in tests/node loaders
+    - set `VITE_MOCK_DATA_ENCRYPTED_ONLY=true` to disable plaintext fallback in browser/msw
+    - when encrypted-only mode is enabled, `copy:mock` publishes only `*.enc.json` into `public/mock`
 
 
 ## current features
