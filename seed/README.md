@@ -2,6 +2,8 @@
 # react seed 2024
 straight javascript seed starter project with zustand, notifications, form validation
 
+See also: [README-mock-data.md](README-mock-data.md) for the encrypted shared mock-data solution, policy modes, and rollout guide.
+
 ## quickstart !important  
 
 you need to run both the api backend as well as the main app in order to get data
