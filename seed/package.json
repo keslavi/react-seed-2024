@@ -11,6 +11,8 @@
     "test:commit": "vitest run",
     "build": "node ./node_modules/vite/bin/vite.js build",
     "build:secure": "node build-secure.js",
+    "mock:encrypt": "node scripts/encrypt-mock-data.js",
+    "mock:refresh": "npm run mock:encrypt && npm run copy:mock",
     "build:server": "cd server-koa && npm install && npm run build",
     "build:all": "npm run build && npm run build:server",
     "postbuild": "node copy-mock-data.js",

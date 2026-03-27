@@ -24,6 +24,18 @@ leave the terminal running :)
 in a new terminal (if in windows, use command prompt, not bash. it formats output better)
 - npm run test
 
+## encrypted mock data (optional)
+
+- canonical mock source remains in `../server-koa/data`
+- browser/msw still serves from `public/mock`
+- generate encrypted artifacts (`*.enc.json`) with:
+    - `npm run mock:encrypt` (requires `MOCK_DATA_KEY`)
+    - `npm run copy:mock` to refresh `public/mock`
+    - `npm run mock:refresh` to run both steps
+- runtime loading behavior:
+    - encrypted-first when key is available
+    - plaintext `.iife.js` fallback for local compatibility
+
 
 ## current features
 - tasks section to demonstrate end to end usage (tasks=todo, but who wants a million 'todo' files and references???

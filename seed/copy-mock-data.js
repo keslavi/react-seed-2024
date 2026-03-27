@@ -6,7 +6,7 @@
  * Only copies files if source is newer than destination
  */
 
-import { copyFileSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { copyFileSync, mkdirSync, readdirSync, statSync, existsSync } from 'fs';
 import { resolve, join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -14,19 +14,27 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const sourceDir = resolve(__dirname, 'server-koa/data');
+const sourceCandidates = [
+  resolve(__dirname, '../server-koa/data'),
+  resolve(__dirname, 'server-koa/data'),
+];
+const sourceDir = sourceCandidates.find((path) => existsSync(path));
 const targetDir = resolve(__dirname, 'public/mock');
 
 console.log('Copying mock data files...');
 console.log('Source:', sourceDir);
 console.log('Target:', targetDir);
 
+if (!sourceDir) {
+  console.error('❌ Could not find mock source directory. Tried:');
+  sourceCandidates.forEach((path) => console.error(`   - ${path}`));
+  process.exit(1);
+}
+
 try {
   // Create target directory if it doesn't exist
   mkdirSync(targetDir, { recursive: true });
 
-  const { existsSync } = await import('fs'); // dynamic import for compatibility
-  
   let copiedCount = 0;
   let skippedCount = 0;
   
