@@ -12,7 +12,10 @@ if (config.msw === true) {
   // console.log(["all"], "[MSW] Setting up browser MSW - explicitly enabled in config");
   
   // Use existing handlers from test environment
-  const browserHandlers = [...mswTask, ...mswOption];
+  const browserHandlers = [
+    ...mswTask, 
+    ...mswOption,
+  ];
   // console.log(["all"], "[MSW] Browser handlers:", browserHandlers);
   
   const worker = setupWorker(...browserHandlers);

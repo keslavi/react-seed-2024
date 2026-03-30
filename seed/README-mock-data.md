@@ -39,9 +39,6 @@ We need a practical setup where:
 4. **No enforceable policy toggle**  
    There was no way to require encrypted-only loading and block plaintext fallback.
 
-5. **Test harness drift**  
-   Vitest aliases and helper behavior diverged from app behavior, causing failing Seed tests.
-
 ---
 
 ## Resolution implemented
