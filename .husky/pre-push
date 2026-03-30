@@ -1,1 +1,34 @@
-# npm --prefix seed run test:commit
+#!/usr/bin/env sh
+set -e
+
+if command -v npm >/dev/null 2>&1; then
+	npm --prefix seed run test:commit
+	exit 0
+fi
+
+if command -v node >/dev/null 2>&1; then
+	NODE_BIN="$(command -v node)"
+	NODE_DIR="$(dirname "$NODE_BIN")"
+	NPM_CLI="$NODE_DIR/node_modules/npm/bin/npm-cli.js"
+
+	if [ -f "$NPM_CLI" ]; then
+		node "$NPM_CLI" --prefix seed run test:commit
+		exit 0
+	fi
+
+	if [ -f "/c/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" ]; then
+		node "/c/Program Files/nodejs/node_modules/npm/bin/npm-cli.js" --prefix seed run test:commit
+		exit 0
+	fi
+
+	if [ -f "/mingw64/lib/node_modules/npm/bin/npm-cli.js" ]; then
+		node "/mingw64/lib/node_modules/npm/bin/npm-cli.js" --prefix seed run test:commit
+		exit 0
+	fi
+
+	echo "pre-push: npm not found and npm-cli.js could not be located"
+	exit 127
+fi
+
+echo "pre-push: neither npm nor node is available in PATH"
+exit 127
