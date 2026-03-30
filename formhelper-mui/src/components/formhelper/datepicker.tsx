@@ -11,6 +11,7 @@ export type DatepickerProps = UseFormFieldProps & {
   label?: string;
   min?: string;
   max?: string;
+  readOnly?: boolean;
   size?: number | string;
 };
 
@@ -32,6 +33,7 @@ const normalizeDateInput = (raw?: any): string | undefined => {
 
 export const Datepicker = memo((props: DatepickerProps) => {
   const { field, errorMui, valueProp } = useFormField(props);
+  const isReadOnly = !!props.readOnly;
 
   const attributes = useMemo(() => {
     const inputProps: Record<string, string> = {};
@@ -50,10 +52,39 @@ export const Datepicker = memo((props: DatepickerProps) => {
     return valueProp;
   }, [valueProp]);
 
+  const displayValue = useMemo(
+    () => normalizeDateInput(field?.value ?? (valueProp as any)?.value ?? (valueProp as any)?.defaultValue) ?? '',
+    [field?.value, valueProp]
+  );
+
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(e.target.value);
     props.onChange?.(e as any);
   }, [field, props.onChange]);
+
+  if (isReadOnly) {
+    return (
+      <ColPadded {...colProps(props)}>
+        <MuiTextField
+          fullWidth
+          id={field.name}
+          name={field.name}
+          label={props.label}
+          inputRef={field.ref}
+          onBlur={field.onBlur}
+          value={displayValue}
+          {...cleanParentProps(props)}
+          {...errorMui}
+          slotProps={{
+            htmlInput: {
+              readOnly: true,
+              style: { cursor: 'text' },
+            },
+          }}
+        />
+      </ColPadded>
+    );
+  }
 
   return (
     <ColPadded {...colProps(props)}>

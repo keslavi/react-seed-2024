@@ -105,7 +105,7 @@ const DemoForm = () => {
           />
         </Row>
         <Row>
-          <Input name="subject" label="Subject" size={6} />
+          <Input name="subject" label="Subject"/>
           <Input name="body" label="Body" textarea minRows={3} size={12} />
         </Row>
         <Row>
@@ -250,7 +250,7 @@ const DemoForm = () => {
           />
         </Row>
         <Row>
-          <Input name="subject" label="Subject" size={6} />
+          <Input name="subject" label="Subject" />
           <Input name="body" label="Body" textarea minRows={3} size={12} />
         </Row>
         <Row>
@@ -317,6 +317,31 @@ const SimpleWrapper = ({ children, defaultValues = {} }) => {
   );
 };
 
+export const ReadOnlyStory = {
+  name: 'ReadOnly',
+  render: () => (
+    <SimpleWrapper
+      defaultValues={{
+        emailReadOnly: 'readonly@example.com',
+        roleReadOnly: 'inProgress',
+        roleAutoReadOnly: 'done',
+        tagsReadOnly: ['steve', 'riley'],
+        tagsCbReadOnly: ['cindy', 'riley'],
+        dateReadOnly: '2024-10-21',
+        dobReadOnly: '1990-05-15',
+      }}
+    >
+      <Input name="emailReadOnly" label="Email (ReadOnly)"/>
+      <Input name="roleReadOnly" label="Role Select (ReadOnly)" select options={option.task.status}/>
+      <Input name="roleAutoReadOnly" label="Role Auto (ReadOnly)" options={option.task.status}/>
+      <Input name="tagsReadOnly" label="Tags Multi (ReadOnly)" optionsMulti={option.task.names}/>
+      <Input name="tagsCbReadOnly" label="Tags Checkbox (ReadOnly)" optionsCheckbox={option.task.names}/>
+      <Input name="dateReadOnly" label="Pick a Date (ReadOnly)" datepicker/>
+      <Input name="dobReadOnly" label="Date of Birth Mask (ReadOnly)" datemask/>
+    </SimpleWrapper>
+  ),
+};
+
 export const TextFieldStory = {
   name: 'TextField',
   render: () => (
@@ -349,7 +374,7 @@ export const CheckboxStory = {
   render: () => (
     <SimpleWrapper>
       <Input name="agree" label="I agree" checkbox/>
-      <Input name="notify" label="Notify me (h1)" checkbox variant="h1" size={12} />
+      <Input name="notify" label="Notify me (h1)" checkbox variant="h1"/>
     </SimpleWrapper>
   ),
 };

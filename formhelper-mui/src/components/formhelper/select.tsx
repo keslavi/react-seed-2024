@@ -4,9 +4,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  TextField as MuiTextField,
 } from '@mui/material';
 import { cleanParentProps } from './helper/clean-parent-props';
 import { colProps } from './helper/col-props';
+import { getOptionLabelByKey } from './helper/option-display';
 import { useFormField, UseFormFieldProps } from './form-provider';
 import { Info } from './info';
 import { ColPadded } from '../grid';
@@ -26,6 +28,7 @@ export type SelectProps = UseFormFieldProps & {
 
 export const Select = React.memo((props: SelectProps) => {
   const { field, error, valueProp } = useFormField(props);
+  const isReadOnly = !!props.readOnly;
 
   const renderedOptions = useMemo(() =>
     props.options?.map(x => (
@@ -46,6 +49,29 @@ export const Select = React.memo((props: SelectProps) => {
 
   const hasError = !!error || !!props.error;
   const errorMessage = error?.message ?? (typeof props.error === 'object' ? props.error?.message : props.error);
+
+  const rawValue = (field?.value ?? (valueProp as any)?.value ?? (valueProp as any)?.defaultValue) as unknown;
+  const displayValue = useMemo(() => getOptionLabelByKey(props.options, rawValue), [props.options, rawValue]);
+
+  if (isReadOnly) {
+    return (
+      <ColPadded {...colProps(props)}>
+        <MuiTextField
+          fullWidth
+          id={field.name}
+          name={field.name}
+          label={props.label}
+          inputRef={field.ref}
+          onBlur={onBlur}
+          value={displayValue}
+          {...(hasError ? { error: true, helperText: errorMessage } : {})}
+          {...cleanParentProps(props)}
+          slotProps={{ htmlInput: { readOnly: true } }}
+        />
+        {props.info && <Info id={`${field.name}Info`} info={props.info} />}
+      </ColPadded>
+    );
+  }
 
   return (
     <ColPadded {...colProps(props)}>

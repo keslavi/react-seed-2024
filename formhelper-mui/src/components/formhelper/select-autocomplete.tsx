@@ -7,6 +7,7 @@ import {
 import IconKeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { cleanParentProps } from './helper/clean-parent-props';
 import { colProps } from './helper/col-props';
+import { getOptionLabelByKey } from './helper/option-display';
 import { useFormField, UseFormFieldProps } from './form-provider';
 import { Info } from './info';
 import { ColPadded } from '../grid';
@@ -27,6 +28,7 @@ export type SelectAutocompleteProps = UseFormFieldProps & {
 export const SelectAutocomplete = memo((props: SelectAutocompleteProps) => {
   const options = useMemo(() => props.options ?? [], [props.options]);
   const { field, errorMui } = useFormField(props);
+  const isReadOnly = !!props.readOnly;
 
   const placeholder = props.placeholder !== undefined ? props.placeholder : 'Please Select';
 
@@ -46,6 +48,29 @@ export const SelectAutocomplete = memo((props: SelectAutocompleteProps) => {
     field.onChange(newValue ? newValue.key : null);
     props.onChange?.(_e, newValue as any);
   }, [field, props.onChange]);
+
+  const displayValue = useMemo(() => getOptionLabelByKey(options, field.value), [options, field.value]);
+
+  if (isReadOnly) {
+    return (
+      <ColPadded {...colProps(props)}>
+        <MuiTextField
+          fullWidth
+          id={field.name}
+          name={field.name}
+          label={props.label}
+          inputRef={field.ref}
+          onBlur={onBlur}
+          value={displayValue}
+          placeholder={placeholder}
+          {...errorMui}
+          {...cleanParentProps(props)}
+          slotProps={{ htmlInput: { readOnly: true } }}
+        />
+        {props.info && <Info id={`${field.name}Info`} info={props.info} />}
+      </ColPadded>
+    );
+  }
 
   return (
     <ColPadded {...colProps(props)}>

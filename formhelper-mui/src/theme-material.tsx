@@ -348,6 +348,23 @@ export const baseThemeOptions: ThemeOptions = {
         root: {
           alignSelf: 'flex-start',
           '& .MuiInputBase-root': { minHeight: 'auto' },
+          '& .MuiOutlinedInput-root:has(input[readonly])': {
+            backgroundColor: 'transparent',
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'transparent',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'transparent',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'transparent',
+            },
+            '& .MuiOutlinedInput-input': {
+              paddingLeft: '0px !important',
+              paddingRight: '0px !important',
+              cursor: 'text',
+            },
+          },
         },
       },
     },

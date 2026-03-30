@@ -3,6 +3,7 @@ import { TextField, Autocomplete as MuiAutocomplete } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { cleanParentProps } from './helper/clean-parent-props';
 import { colProps } from './helper/col-props';
+import { getOptionLabelsByKeys } from './helper/option-display';
 import { useFormField, UseFormFieldProps } from './form-provider';
 import { Info } from './info';
 import { ColPadded } from '../grid';
@@ -22,6 +23,7 @@ export type SelectMultiProps = UseFormFieldProps & {
 
 export const SelectMulti = memo((props: SelectMultiProps) => {
   const { field, errorMui } = useFormField(props);
+  const isReadOnly = !!props.readOnly;
   const [inputValue, setInputValue] = useState('');
 
   const placeholder = props.placeholder !== undefined ? props.placeholder : 'Please Select';
@@ -50,6 +52,33 @@ export const SelectMulti = memo((props: SelectMultiProps) => {
   }, [field, props.onChange]);
 
   const shouldShowPlaceholder = selectedOptions.length === 0 && inputValue === '';
+
+  const displayValue = useMemo(
+    () => getOptionLabelsByKeys(props.optionsMulti, field.value).join(', '),
+    [props.optionsMulti, field.value]
+  );
+
+  if (isReadOnly) {
+    return (
+      <ColPadded {...colProps(props)}>
+        <TextField
+          inputRef={field.ref}
+          id={field.name}
+          name={field.name}
+          label={props.label}
+          variant="outlined"
+          fullWidth
+          value={displayValue}
+          placeholder={placeholder}
+          onBlur={onBlur}
+          {...errorMui}
+          {...cleanParentProps(props)}
+          slotProps={{ htmlInput: { readOnly: true } }}
+        />
+        {props.info && <Info id={`${field.name}Info`} info={props.info} />}
+      </ColPadded>
+    );
+  }
 
   return (
     <ColPadded {...colProps(props)}>

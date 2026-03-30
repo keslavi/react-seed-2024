@@ -110,6 +110,7 @@ export const DateMask = memo((props: DateMaskProps) => {
         {...sharedProps}
         value={(valueProp as any)?.value ? dayjs((valueProp as any).value).format('MM/DD/YYYY') : ''}
         slotProps={{ htmlInput: { ...attributes, style: inputStyle, readOnly: true } }}
+        InputProps={{ endAdornment }}
       />
     </ColPadded>
   );

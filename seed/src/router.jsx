@@ -22,6 +22,7 @@ const Task = lazy(() => import("./pages/-example-task-section/task/task"));
 //const Contacts = lazy(() => import("./pages/-example-contact/contacts/contacts"));
 //const Contact = lazy(() => import("./pages/-example-contact/contact/contact"));
 const Scratchpad = lazy(() => import("./pages/dev-section/scratchpad"));
+const Storybook = lazy(() => import("./pages/dev-section/storybook"));
 //const Formhelper = lazy(() => import("./components/formhelper/test/formhelper"));
 const Kanban = lazy(() => import("./pages/-example-task-section/kanban/kanban"));
 
@@ -37,6 +38,7 @@ const menu = [
       { text: "Tasks", link: "/dev/tasks" },
       //{ text: "Contacts", link: "/dev/contacts" },
       { text: "Scratchpad", link: "/dev/scratchpad" },
+      { text: "Storybook", link: "/dev/storybook" },
       //{ text: "FormHelper", link: "/dev/formhelper" },
     ],
   },
@@ -89,6 +91,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<div>Loading...</div>}>
                 <Scratchpad />
+              </Suspense>
+            ),
+          },
+          {
+            path: "storybook",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Storybook />
               </Suspense>
             ),
           },
