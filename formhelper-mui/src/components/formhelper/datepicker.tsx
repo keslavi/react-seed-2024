@@ -63,17 +63,27 @@ export const Datepicker = memo((props: DatepickerProps) => {
   }, [field, props.onChange]);
 
   if (isReadOnly) {
+    const readOnlyFieldProps = { ...cleanParentProps(props) } as Record<string, unknown>;
+    delete readOnlyFieldProps.type;
+
     return (
       <ColPadded {...colProps(props)}>
         <MuiTextField
           fullWidth
+          type="text"
           id={field.name}
           name={field.name}
           label={props.label}
           inputRef={field.ref}
           onBlur={field.onBlur}
-          value={displayValue}
-          {...cleanParentProps(props)}
+          value={
+            displayValue
+              ? (dayjs(displayValue).isValid()
+                ? dayjs(displayValue).format('MM/DD/YYYY')
+                : String(displayValue))
+              : ''
+          }
+          {...readOnlyFieldProps}
           {...errorMui}
           slotProps={{
             htmlInput: {

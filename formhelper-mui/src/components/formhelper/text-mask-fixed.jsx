@@ -295,20 +295,26 @@ export const TextMask = memo((props) => {
         value={displayValue}
         {...cleanParentProps(props)}
         {...errorMui}
-        InputProps={{
-          endAdornment: !isPersistent ? (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle value visibility"
-                onClick={onClickShowValue}
-                onMouseDown={onMouseDownShowValue}
-                edge="end"
-              >
-                {showValue ? <IconVisibilityOff /> : <IconVisibility />}
-              </IconButton>
-            </InputAdornment>
-          ) : undefined,
-        }}
+        {...(!isPersistent
+          ? {
+              slotProps: {
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle value visibility"
+                        onClick={onClickShowValue}
+                        onMouseDown={onMouseDownShowValue}
+                        edge="end"
+                      >
+                        {showValue ? <IconVisibilityOff /> : <IconVisibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              },
+            }
+          : {})}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
     </ColPadded>

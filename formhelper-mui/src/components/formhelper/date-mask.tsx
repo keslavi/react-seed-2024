@@ -49,7 +49,11 @@ export const DateMask = memo((props: DateMaskProps) => {
   }, []);
 
   const inputStyle = { cursor: 'pointer' } as const;
-  const sharedProps = {
+
+  const parentFieldProps = { ...cleanParentProps(props) } as Record<string, unknown>;
+  delete parentFieldProps.type;
+
+  const baseSharedProps = {
     fullWidth: true,
     id: field.name,
     name: field.name,
@@ -57,9 +61,8 @@ export const DateMask = memo((props: DateMaskProps) => {
     inputRef: field.ref,
     onBlur,
     onChange,
-    ...cleanParentProps(props),
+    ...parentFieldProps,
     ...errorMui,
-    slotProps: { htmlInput: { ...attributes, style: inputStyle } },
   };
 
   const endAdornment = (
@@ -86,31 +89,47 @@ export const DateMask = memo((props: DateMaskProps) => {
     </InputAdornment>
   );
 
+  /** MUI 7: end adornment on `slotProps.input`; keep min/max on `htmlInput`. */
+  const slotMasked = {
+    input: { endAdornment },
+    htmlInput: { ...attributes, style: inputStyle, readOnly: true },
+  };
+
+  const slotDateEditable = {
+    input: { endAdornment },
+    htmlInput: { ...attributes, style: inputStyle },
+  };
+
+  const slotReadOnlyFormatted = {
+    input: { endAdornment },
+    htmlInput: { ...attributes, style: inputStyle, readOnly: true },
+  };
+
   return (
     <ColPadded {...colProps(props)}>
-      {/* Masked view */}
+      {/* Masked view — text only (no type=date) so native calendar never appears */}
       <MuiTextField
         className={masked ? '' : 'hidden'}
-        {...sharedProps}
+        {...baseSharedProps}
+        type="text"
         value="**/**/****"
-        slotProps={{ htmlInput: { ...attributes, style: inputStyle, readOnly: true } }}
-        InputProps={{ endAdornment }}
+        slotProps={slotMasked}
       />
-      {/* Date input */}
+      {/* Date input — only when !readOnly (native calendar allowed here) */}
       <MuiTextField
         className={!masked && !props.readOnly ? '' : 'hidden'}
+        {...baseSharedProps}
         type="date"
-        {...sharedProps}
         {...valueProp}
-        InputProps={{ endAdornment }}
+        slotProps={slotDateEditable}
       />
-      {/* ReadOnly formatted */}
+      {/* Read-only formatted — text only, no native date picker */}
       <MuiTextField
         className={!masked && props.readOnly ? '' : 'hidden'}
-        {...sharedProps}
+        {...baseSharedProps}
+        type="text"
         value={(valueProp as any)?.value ? dayjs((valueProp as any).value).format('MM/DD/YYYY') : ''}
-        slotProps={{ htmlInput: { ...attributes, style: inputStyle, readOnly: true } }}
-        InputProps={{ endAdornment }}
+        slotProps={slotReadOnlyFormatted}
       />
     </ColPadded>
   );

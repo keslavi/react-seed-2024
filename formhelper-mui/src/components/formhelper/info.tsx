@@ -75,7 +75,7 @@ export const Info = ({ id, info }: InfoProps) => {
         anchorEl={anchor}
         onClose={() => setAnchor(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        PaperProps={{ style: { width: 400 } }}
+        slotProps={{ paper: { style: { width: 400 } } }}
       >
         {infoHeader && <div><b>{infoHeader}</b></div>}
         {infoSubject && (isValidElement(infoSubject)

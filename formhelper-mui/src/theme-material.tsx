@@ -359,6 +359,9 @@ export const baseThemeOptions: ThemeOptions = {
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
               borderColor: 'transparent',
             },
+            '& .MuiInputAdornment-root.MuiInputAdornment-positionEnd': {
+              flexShrink: 0,
+            },
             '& .MuiOutlinedInput-input': {
               paddingLeft: '0px !important',
               paddingRight: '0px !important',

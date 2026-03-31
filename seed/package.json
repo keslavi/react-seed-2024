@@ -9,6 +9,8 @@
     "devWithConsoleDebug": "vite port 3000 --host --inspect --debug",
     "test": "vitest --ui --watch",
     "test:commit": "vitest run",
+    "build:formhelper": "node ./scripts/build-formhelper-assets.js",
+    "build:render": "npm run build:formhelper && npm run build",
     "build": "node ./node_modules/vite/bin/vite.js build",
     "build:secure": "node build-secure.js",
     "mock:encrypt": "node scripts/encrypt-mock-data.js",

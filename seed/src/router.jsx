@@ -23,7 +23,7 @@ const Task = lazy(() => import("./pages/-example-task-section/task/task"));
 //const Contact = lazy(() => import("./pages/-example-contact/contact/contact"));
 const Scratchpad = lazy(() => import("./pages/dev-section/scratchpad"));
 const Storybook = lazy(() => import("./pages/dev-section/storybook"));
-//const Formhelper = lazy(() => import("./components/formhelper/test/formhelper"));
+const Showcase = lazy(() => import("./pages/dev-section/ui-showcase/showcase"));
 const Kanban = lazy(() => import("./pages/-example-task-section/kanban/kanban"));
 
 //not introducing jwt and private routes yet
@@ -39,7 +39,7 @@ const menu = [
       //{ text: "Contacts", link: "/dev/contacts" },
       { text: "Scratchpad", link: "/dev/scratchpad" },
       { text: "Storybook", link: "/dev/storybook" },
-      //{ text: "FormHelper", link: "/dev/formhelper" },
+      { text: "UI showcase", link: "/dev/showcase" },
     ],
   },
 ];
@@ -99,6 +99,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<div>Loading...</div>}>
                 <Storybook />
+              </Suspense>
+            ),
+          },
+          {
+            path: "showcase",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Showcase />
               </Suspense>
             ),
           },

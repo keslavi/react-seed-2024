@@ -1,7 +1,4 @@
 /* css/index.css — import all base styles */
 @import './variables.css';
 @import './global.css';
-@import './headings.css';
-@import './labelheadings.css';
-@import './table-cobe.css';
 @import './toast/index.css';

@@ -13,6 +13,17 @@ const getVisibleInput = (labelText: string, type: string) => {
   return fc.querySelector(`input[type="${type}"]`);
 };
 
+/** Visibility toggle in the non-hidden FormControl */
+const getVisibleVisibilityToggle = () => {
+  const buttons = screen.getAllByRole('button', { name: /toggle date visibility/i });
+  const visible = buttons.find(btn => {
+    const fc = btn.closest('div[class*="MuiFormControl"]');
+    return fc && !fc.className.includes('hidden');
+  });
+  if (!visible) throw new Error('Expected a visible date visibility toggle');
+  return visible;
+};
+
 describe('DateMask', () => {
   it('when empty, renders date input visible and masked as hidden', () => {
     render(
@@ -30,7 +41,7 @@ describe('DateMask', () => {
     const maskedInput = screen.getByDisplayValue('**/**/****');
     expect(maskedInput).toBeInTheDocument();
 
-    expect(screen.getByText('Hide')).toBeInTheDocument();
+    expect(getVisibleVisibilityToggle()).toBeInTheDocument();
   });
 
   it('accepts a date value', async () => {
@@ -48,7 +59,7 @@ describe('DateMask', () => {
     expect(dateInput).toHaveValue('2023-12-01');
   });
 
-  it('toggles Show/Hide on helper text click', async () => {
+  it('toggles masked vs unmasked via visibility control', async () => {
     const user = userEvent.setup();
     render(
       <TestHarness item={{}}>
@@ -57,13 +68,32 @@ describe('DateMask', () => {
         </Row>
       </TestHarness>
     );
-    // initially date input is visible (Hide shown)
-    expect(screen.getByText('Hide')).toBeInTheDocument();
 
-    await user.click(screen.getByText('Hide'));
-    await waitFor(() => {
-      expect(screen.getByText('Show')).toBeInTheDocument();
-    });
+    await user.click(getVisibleVisibilityToggle());
+    expect(getVisibleInput('Test Date', 'date')).not.toBeInTheDocument();
+    expect(screen.getByDisplayValue('**/**/****')).toBeInTheDocument();
+
+    await user.click(getVisibleVisibilityToggle());
+    expect(getVisibleInput('Test Date', 'date')).toBeInTheDocument();
+  });
+
+  it('readOnly: unmasked shows formatted text, visibility toggle, and no visible type=date input', async () => {
+    const user = userEvent.setup();
+    render(
+      <TestHarness item={{ testDate: '2023-06-15' }}>
+        <Row>
+          <DateMask name="testDate" label="Test Date" readOnly />
+        </Row>
+      </TestHarness>
+    );
+
+    expect(getVisibleVisibilityToggle()).toBeInTheDocument();
+
+    await user.click(getVisibleVisibilityToggle());
+
+    expect(screen.getByDisplayValue('06/15/2023')).toBeInTheDocument();
+    expect(getVisibleInput('Test Date', 'date')).toBeNull();
+    expect(getVisibleVisibilityToggle()).toBeInTheDocument();
   });
 
   it('applies min date attribute', async () => {

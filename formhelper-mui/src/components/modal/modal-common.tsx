@@ -28,7 +28,11 @@ export const ModalCommon = ({
   return (
     <Dialog
       open={isModalOpen}
-      PaperProps={{ style: { ...(width && { width }), ...(height && { height }) } }}
+      slotProps={{
+        paper: {
+          style: { ...(width && { width }), ...(height && { height }) },
+        },
+      }}
       {...rest}
     >
       <DialogTitle style={titleStyle ?? {}} sx={{ m: 0, p: 2 }} color="primary">

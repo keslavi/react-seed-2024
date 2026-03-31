@@ -331,13 +331,13 @@ export const ReadOnlyStory = {
         dobReadOnly: '1990-05-15',
       }}
     >
-      <Input name="emailReadOnly" label="Email (ReadOnly)"/>
-      <Input name="roleReadOnly" label="Role Select (ReadOnly)" select options={option.task.status}/>
-      <Input name="roleAutoReadOnly" label="Role Auto (ReadOnly)" options={option.task.status}/>
-      <Input name="tagsReadOnly" label="Tags Multi (ReadOnly)" optionsMulti={option.task.names}/>
-      <Input name="tagsCbReadOnly" label="Tags Checkbox (ReadOnly)" optionsCheckbox={option.task.names}/>
-      <Input name="dateReadOnly" label="Pick a Date (ReadOnly)" datepicker/>
-      <Input name="dobReadOnly" label="Date of Birth Mask (ReadOnly)" datemask/>
+      <Input name="emailReadOnly" label="Email (ReadOnly)" readOnly/>
+      <Input name="roleReadOnly" label="Role Select (ReadOnly)" select readOnly options={option.task.status}/>
+      <Input name="roleAutoReadOnly" label="Role Auto (ReadOnly)" readOnly options={option.task.status}/>
+      <Input name="tagsReadOnly" label="Tags Multi (ReadOnly)" readOnly optionsMulti={option.task.names}/>
+      <Input name="tagsCbReadOnly" label="Tags Checkbox (ReadOnly)" readOnly optionsCheckbox={option.task.names}/>
+      <Input name="dateReadOnly" label="Pick a Date (ReadOnly)" readOnly datepicker/>
+      <Input name="dobReadOnly" label="Date of Birth Mask (ReadOnly)" readOnly datemask/>
     </SimpleWrapper>
   ),
 };

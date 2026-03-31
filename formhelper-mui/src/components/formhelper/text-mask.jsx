@@ -343,26 +343,37 @@ export const TextMask = memo((props) => {
         value={displayValue}
         {...cleanParentProps(props)}
         {...errorMui}
-        InputProps={{
-          endAdornment: !props.persistent ? (
-            <InputAdornment position="end" sx={{ height: 'auto' }}>
-                <IconButton
-                aria-label="toggle value visibility"
-                onClick={onClickShowValue}
-                onMouseDown={(e) => e.preventDefault()}
-                edge="end"
-                  size="small"
-                  sx={{ p: '2px', minWidth: 'auto', transform: 'translateY(-2px)', '& svg': { fontSize: '1.15rem' } }}
-              >
-                  {showValue ? (
-                    <IconVisibilityOff sx={{ transform: 'translateY(-2px)' }} />
-                  ) : (
-                    <IconVisibility sx={{ transform: 'translateY(-2px)' }} />
-                  )}
-              </IconButton>
-            </InputAdornment>
-          ) : undefined,
-        }}
+        {...(!props.persistent
+          ? {
+              slotProps: {
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" sx={{ height: 'auto' }}>
+                      <IconButton
+                        aria-label="toggle value visibility"
+                        onClick={onClickShowValue}
+                        onMouseDown={(e) => e.preventDefault()}
+                        edge="end"
+                        size="small"
+                        sx={{
+                          p: '2px',
+                          minWidth: 'auto',
+                          transform: 'translateY(-2px)',
+                          '& svg': { fontSize: '1.15rem' },
+                        }}
+                      >
+                        {showValue ? (
+                          <IconVisibilityOff sx={{ transform: 'translateY(-2px)' }} />
+                        ) : (
+                          <IconVisibility sx={{ transform: 'translateY(-2px)' }} />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              },
+            }
+          : {})}
       />
       {props.info && <Info id={`${field.id}Info`} info={props.info} />}
       {/* {!props.persistent && (
