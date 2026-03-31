@@ -22,7 +22,22 @@ const validate = (res) => {
     let httperrorRes = null;
 
     // handle network errors
-    const data = res.data;
+    if (!res || typeof res !== 'object') {
+        const error = new Error('Invalid API response');
+        error.status = 0;
+        message('apiError', error.message, null, 'invalid-response');
+        return Promise.reject(error);
+    }
+
+    const data = res.data || {};
+
+    if (typeof res.status !== 'number') {
+        const error = new Error('Invalid API response status');
+        error.status = 0;
+        error.response = res;
+        message('apiError', error.message, null, 'invalid-status', res);
+        return Promise.reject(error);
+    }
 
     if (res.status < 200 || res.status > 299) {
         action.type = 'apiError';
@@ -86,10 +101,10 @@ function message(actionType, msg, netDetails, rrid, httperrorRes = null) {
 export function messageHttpError(error) {
     const url = error.config?.url || 'Unknown URL';
     const method = error.config?.method || 'Unknown Method';
-    const msg = error.message;
+    const msg = error?.message || 'Request failed';
     
     // Special handling for timeout errors
-    const isTimeout = error.code === 'ECONNABORTED' || msg.includes('timeout');
+    const isTimeout = error?.code === 'ECONNABORTED' || msg.toLowerCase().includes('timeout');
     const errorType = isTimeout ? 'Request Timeout' : 'HTTP Error';
 
     toast.error(

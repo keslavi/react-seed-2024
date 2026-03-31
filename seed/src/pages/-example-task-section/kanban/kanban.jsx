@@ -52,21 +52,24 @@ export const Kanban = () => {
     setDraggedTask(null);
   };
 
-  if (isEmpty(items) || isEmpty(option)) return <>Loading...</>;
+  const statuses = Array.isArray(option?.task?.status) ? option.task.status : [];
+  const safeItems = Array.isArray(items) ? items.filter(Boolean) : [];
+
+  if (isEmpty(safeItems) || isEmpty(statuses)) return <>Loading...</>;
 
   // Group tasks by status
   const tasksByStatus = {};
-  option.task.status.forEach((status) => {
+  statuses.forEach((status) => {
     tasksByStatus[status.key] = {
       text: status.text,
-      tasks: items.filter((task) => task.status == status.key),
+      tasks: safeItems.filter((task) => task?.status == status.key),
     };
   });
 
   return (
     <div className="kanban-container">
       <div className="kanban-board">
-        {option.task.status.map((status) => (
+        {statuses.map((status) => (
           <Paper 
             key={status.key} 
             className="kanban-column" 
