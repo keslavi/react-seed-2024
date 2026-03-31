@@ -60,7 +60,7 @@ if (!existsSync(formhelperDir)) {
 }
 
 console.log("Installing formhelper-mui dependencies...");
-run(npmCommand, ["ci"], formhelperDir);
+run(npmCommand, ["ci", "--include=dev"], formhelperDir);
 
 console.log("Building formhelper-mui library...");
 run(npmCommand, ["run", "build"], formhelperDir);

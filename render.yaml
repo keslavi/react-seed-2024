@@ -2,7 +2,7 @@ services:
   - type: web
     name: react-seed
     runtime: static
-    buildCommand: cd seed && npm ci && npm run build:render
+    buildCommand: cd seed && npm ci --include=dev && npm run build:render
     staticPublishPath: seed/dist
     routes:
       - type: rewrite
