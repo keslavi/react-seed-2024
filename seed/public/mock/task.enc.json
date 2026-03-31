@@ -1,0 +1,10 @@
+{
+  "v": 1,
+  "alg": "aes-256-gcm",
+  "kdf": "pbkdf2-sha256",
+  "iterations": 100000,
+  "salt": "MByUJW5D8Dewyk5epwW5Yw==",
+  "iv": "eNa1AuzNnarI+gSI",
+  "data": "nyGFaD/7xHtUBTLoxouR1P066uBMtOlS9VwzVnUCpCJdwdc8eanGO/33l1JS0UIoKXFSIKrAcH0oHfIjiNuj/cK/WqvdAf2jSExdBgmx+EQUKMvaB8450yV+2TTt5nPk6VkDfnzCsfKb3MlehHNoG0NcP0MwwDq2TxuRq8xTE70UCIzekv9QZHng925VVdNk3F2vJeaKx8zSnwClZAsviZsIy/0167d5yaMuA+TsPK4Y0VbXP0BsWu4sGgJBCz7SrtL4HSGF+bEC0cvaEm4FTFfW1LbDH2t58tXGWk/Uf5Sy6btIpOe6hrjhK8H35EzPP9tNYuu3LAKYcuC3+tHltb8LzbQcDuJI1EnRFrV+honXHRqL0Zq8wigDjGtOHd2fw0YM2VMzd0hSjWYe4erWqKqwiEHeISGFNeEP4FIr2IEWvtAZlrz4DnAM9V/WEwCVSqH492Num0/r3ugY4WZLFXQ3Z4T4h9KF3GT06+VlGoZqFd/+v6TWOQlttYkgBjoDgn+zb0rlHHOqwfKu3ofVaXM66UQ5CXXzjg1agIY61tgt0QURRur5MdO/f4S2w4X5gZylJJ5y6sOR0/TlAauir+y+4YJ+G4qIzzTOI1m7qy0WVNrQdARWYi1e",
+  "generatedAt": "2026-03-27T22:37:17.149Z"
+}

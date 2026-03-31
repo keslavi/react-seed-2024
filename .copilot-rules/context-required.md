@@ -9,7 +9,7 @@ Before asking Copilot for assistance with any code, you MUST reference the appro
 - **Required for**: All code changes, new features, refactoring
 
 ### Specialized Contexts
-- **Form Components**: Reference `promptFormhelper.md` for Input, Select, Autocomplete patterns
+- **Formhelper Components**: Reference `promptFormhelper.md` for Input, Select, Autocomplete patterns
 - **Testing**: Reference `promptTesting.md` for test patterns and MSW setup
 - **API/Mocking**: Reference `promptMSW.md` for mock service worker patterns
 - **Styling**: Reference `promptSCSS.md` for styling conventions
