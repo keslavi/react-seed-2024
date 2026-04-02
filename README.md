@@ -1,0 +1,139 @@
+
+# react seed (2026) refactor
+## overview of refactor changes
+### /seed:
+  - still the seed project, docs below Quickstart
+  - formhelper refactored out, pulling using /seed/formhelper-mui-dist
+  - storybook page to document formhelper & show code.
+  - kanban tasks page that updates to a repo file; good for communication with team without cross-team constraints
+  - unit testing hardened
+  - msw (mock service worker) intercepts http calls for easier integration testing.
+  - msw also can run in LIVE and serve mock data referened in msw-browser... for when api isn't ready
+  - mock data encrypted to avoid exposing potential npi
+### /server-koa
+  - node server starter handles api calls, wires up tasks
+  - encrypts data for mock testing.
+### /formhelper-mui
+  - separate project breakout
+  - built in TS to improve developer intellisense.
+
+______________________________________________________________________________
+# details: 
+
+straight javascript seed starter project with zustand, notifications, form validation
+
+See also: [README-mock-data.md](README-mock-data.md) for the encrypted shared mock-data solution, policy modes, and rollout guide.
+
+## quickstart !important  
+
+you need to run both the api backend as well as the main app in order to get data
+
+**1. Start the backend server**
+in a terminal
+
+- navigate to server-koa
+- npm i
+- npm
+
+leave the terminal running :) 
+
+**2. Start the react app**
+- at the root:
+- npm i
+- npm start
+
+**3. Start the unit tester**
+in a new terminal (if in windows, use command prompt, not bash. it formats output better)
+- npm run test
+
+## encrypted mock data (optional)
+
+- canonical mock source remains in `../server-koa/data`
+- browser/msw still serves from `public/mock`
+- generate encrypted artifacts (`*.enc.json`) with:
+    - `npm run mock:encrypt` (requires `MOCK_DATA_KEY`)
+    - `npm run copy:mock` to refresh `public/mock`
+    - `npm run mock:refresh` to run both steps
+- runtime loading behavior:
+    - encrypted-first when key is available
+    - plaintext `.iife.js` fallback for local compatibility
+    - set `MOCK_DATA_ENCRYPTED_ONLY=true` to disable plaintext fallback in tests/node loaders
+    - set `VITE_MOCK_DATA_ENCRYPTED_ONLY=true` to disable plaintext fallback in browser/msw
+    - when encrypted-only mode is enabled, `copy:mock` publishes only `*.enc.json` into `public/mock`
+
+
+## current features
+- tasks section to demonstrate end to end usage (tasks=todo, but who wants a million 'todo' files and references???
+- full unit tests for task section... redux and component
+- form validation 
+
+- api error handling and notification for errors
+
+- block ui screen during http calls
+
+- tasks displays both redux-saga and redux-promise
+
+- mirror sends requests on a round trip to display error handling
+
+- proxy handling to prevent CORS issues (see package.json proxy)
+
+- notification popups via toastify ()
+- kanban board added to tasks with data saving to repo
+
+
+## IDE Dependancies
+ 
+
+if using visual studio code, install the latest version, then install the extension: 
+ 
+- ES7 React/Redux/-  GraphQL/React-Native snippetsds
+
+[https://scotch.io/tutorials/the-best-react-extension-for-vs-code](https://scotch.io/tutorials/the-best-react-extension-for-vs-code)
+
+- Jest: with this vs code will automatically run tests on files that change
+
+ ## proxy configuration in Dev
+
+
+in package.json, there is a proxy setting to reduce CORS issues during development. 
+
+
+## backend
+
+
+by default the project comes with the following backends that have a simple ToDo app:
+
+ 
+- /server-koa: arguably better than express, support asynchronous calls. If you're more used to .Net this will probably be a pleasant surprise
+    to run: in terminal, navigate to folder then:
+    > npm i
+    > npm start
+
+    although it's bypassed for this example, note the following features:
+    -- jwt auth capabilities with api for register, reset pass
+    -- graphql path
+    -- mongodb initialation wired in (requires install or connection link to mongodb)
+
+- /server/net-server: (pending completion) run and install for the front end to reach an api 
+
+### Backend Testing: 
+ use the following postman public link to test the api independantly of front end:
+ https://www.getpostman.com/collections/6a24df4d7cc7984ac429
+  
+
+## jest unit testing
+
+In vs code install extension "jest", VS code will now automatically run tests and show in bottom left notificatin bar.
+
+in windows command prompt, also run >npm run test to see colorized commentary of tests
+
+tests are next to files as *.test.tsx
+
+for a quick sample, in home.test.tsx, change the value in "it ('has a header')" from true to false
+
+For more complex examples that use the redux store and mockups, look at todo*.test.tsx
+
+## todo/requested features
+- private routes based on user role
+
+### library highlights
