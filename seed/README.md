@@ -2,7 +2,7 @@
 # react seed 2024
 straight javascript seed starter project with zustand, notifications, form validation
 
-See also: [README-mock-data.md](README-mock-data.md) for the encrypted shared mock-data solution, policy modes, and rollout guide.
+See also: [README-mock-data.md](README-mock-data.md) for shared mock-data usage in Seed.
 
 ## quickstart !important  
 
@@ -26,20 +26,12 @@ leave the terminal running :)
 in a new terminal (if in windows, use command prompt, not bash. it formats output better)
 - npm run test
 
-## encrypted mock data (optional)
+## mock data
 
-- canonical mock source remains in `../server-koa/data`
-- browser/msw still serves from `public/mock`
-- generate encrypted artifacts (`*.enc.json`) with:
-    - `npm run mock:encrypt` (requires `MOCK_DATA_KEY`)
-    - `npm run copy:mock` to refresh `public/mock`
-    - `npm run mock:refresh` to run both steps
-- runtime loading behavior:
-    - encrypted-first when key is available
-    - plaintext `.iife.js` fallback for local compatibility
-    - set `MOCK_DATA_ENCRYPTED_ONLY=true` to disable plaintext fallback in tests/node loaders
-    - set `VITE_MOCK_DATA_ENCRYPTED_ONLY=true` to disable plaintext fallback in browser/msw
-    - when encrypted-only mode is enabled, `copy:mock` publishes only `*.enc.json` into `public/mock`
+- canonical mock source is in `../server-koa/data/mock`
+- browser/msw serves from `public/mock`
+- refresh served assets with:
+    - `npm run copy:mock`
 
 
 ## current features

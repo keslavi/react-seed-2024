@@ -44,6 +44,10 @@ describe('Task Component Integration Tests', () => {
     expect(continueButton).toBeInTheDocument();
     
     await userEvent.click(continueButton);
+
+    await waitFor(() => {
+      expect(mswTaskSpy.postCalled).toBe(true);
+    }, { timeout: 10000 });
     
     // Verify the data that was sent to MSW
     expect(mswTaskSpy.postData).toHaveProperty('id');
@@ -51,7 +55,7 @@ describe('Task Component Integration Tests', () => {
     
     // Clean up
     mswTaskSpy.reset();
-  });
+  }, 15000);
 
 //???????????? THE TEST IS FAILED - NEED TO CHECK STEVE????????????????????????
   // it('should show validation message for empty body and not call onSubmit', async () => {

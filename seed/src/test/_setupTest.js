@@ -13,6 +13,7 @@ import { isTruthy, isFalsy } from "../helpers/is-truthy";
 import { setupServer } from 'msw/node';
 import { mswAll } from './msw/mswAll';
 import { vi } from 'vitest';
+import { createMswRequestSpy } from './msw/createMswRequestSpy';
 
 // Load global extensions as mentioned in prompt.md
 import '../helpers/extensions/global-extensions.js';
@@ -29,6 +30,22 @@ global.isTruthy = isTruthy;
 global.isFalsy = isFalsy;
 global.isFalsey = (value) => !isTruthy(value);
 global.vi = vi;
+global.createMswRequestSpy = createMswRequestSpy;
+globalThis.createMswRequestSpy = createMswRequestSpy;
+
+if (typeof globalThis.ProgressEvent === 'undefined') {
+  class ProgressEventPolyfill extends Event {
+    constructor(type, eventInitDict = {}) {
+      super(type, eventInitDict);
+      this.lengthComputable = Boolean(eventInitDict.lengthComputable);
+      this.loaded = Number(eventInitDict.loaded || 0);
+      this.total = Number(eventInitDict.total || 0);
+    }
+  }
+
+  globalThis.ProgressEvent = ProgressEventPolyfill;
+  global.ProgressEvent = ProgressEventPolyfill;
+}
 
 // Set up MSW server for API mocking
 const server = setupServer(...mswAll);

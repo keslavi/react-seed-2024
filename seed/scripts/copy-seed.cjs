@@ -18,7 +18,7 @@ const readline = require('readline');
 
 // Configuration
 const configFile = path.join(__dirname, 'copy-seed-config.json');
-const trgPath = __dirname;
+const trgPath = path.resolve(__dirname, '..');
 const trgDirName = path.basename(trgPath);
 const srcUneditedPath = path.join(path.dirname(trgPath), `${trgDirName}-unedited`);
 

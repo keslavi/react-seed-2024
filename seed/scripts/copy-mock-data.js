@@ -13,25 +13,22 @@ import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const seedRoot = resolve(__dirname, '..');
 
-const sourceCandidates = [
-  resolve(__dirname, '../server-koa/data'),
-  resolve(__dirname, 'server-koa/data'),
-];
-const sourceDir = sourceCandidates.find((path) => existsSync(path));
-const targetDir = resolve(__dirname, 'public/mock');
+const sourceDir = resolve(seedRoot, '..', 'server-koa', 'data', 'mock');
+const targetDir = resolve(seedRoot, 'public', 'mock');
 const encryptedOnly = ['1', 'true', 'yes', 'on'].includes(String(
   process.env.MOCK_DATA_ENCRYPTED_ONLY || process.env.VITE_MOCK_DATA_ENCRYPTED_ONLY || ''
 ).toLowerCase());
+const isEncryptedMock = (fileName) => fileName.includes('.enc.');
 
 console.log('Copying mock data files...');
 console.log('Source:', sourceDir);
 console.log('Target:', targetDir);
 console.log('Encrypted only:', encryptedOnly);
 
-if (!sourceDir) {
-  console.error('❌ Could not find mock source directory. Tried:');
-  sourceCandidates.forEach((path) => console.error(`   - ${path}`));
+if (!existsSync(sourceDir)) {
+  console.error('❌ Could not find mock source directory:', sourceDir);
   process.exit(1);
 }
 
@@ -77,6 +74,10 @@ try {
         mkdirSync(destPath, { recursive: true });
         copyRecursive(srcPath, destPath);
       } else {
+        if (!isEncryptedMock(item)) {
+          return;
+        }
+
         if (encryptedOnly && !item.endsWith('.enc.json')) {
           return;
         }

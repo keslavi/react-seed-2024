@@ -34,7 +34,8 @@ export default defineConfig(({ command, mode }) => {
       jsxRuntime: 'automatic',
       // Ensure proper JSX handling
       plugins: [
-        ['@swc/plugin-emotion', {}]
+        // intenionally disabled, causing  build issues on some windows builds.
+        //['@swc/plugin-emotion', {}]
       ]
     }), 
     propTypesFixPlugin(),

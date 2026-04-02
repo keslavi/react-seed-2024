@@ -21,6 +21,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',//'happy-dom',
+    globalSetup: './src/test/globalSetup.js',
     setupFiles: './src/test/_setupTest.js',
     css: true,
     watch: true,

@@ -9,8 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const sourceCandidates = [
-	resolve(__dirname, '..', '..', 'server-koa', 'data'),
-	resolve(__dirname, '..', 'server-koa', 'data'),
+	resolve(__dirname, '..', 'data', 'mock'),
+	resolve(__dirname, '..', 'data'),
 ];
 
 const sourceDir = sourceCandidates.find((path) => existsSync(path));

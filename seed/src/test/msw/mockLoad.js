@@ -73,14 +73,15 @@ const decryptEnvelope = async (envelope, passphrase, isNode) => {
 };
 
 const getMockDataKey = (isNode) => {
+  const keyHarcoded = 'SteveCranford';
   if (isNode) {
-    return process.env.MOCK_DATA_KEY || '';
+    return process.env.MOCK_DATA_KEY || keyHarcoded;
   }
 
   return (
     globalThis.__MOCK_DATA_KEY__ ||
     import.meta.env?.VITE_MOCK_DATA_KEY ||
-    ''
+    keyHarcoded
   );
 };
 
