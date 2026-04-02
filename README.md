@@ -1,7 +1,7 @@
 
 # react seed (2026) refactor
 ## overview of refactor changes
-###/seed:
+### /seed:
   - still the seed project, docs below Quickstart
   - formhelper refactored out, pulling using /seed/formhelper-mui-dist
   - storybook page to document formhelper & show code.
@@ -10,10 +10,10 @@
   - msw (mock service worker) intercepts http calls for easier integration testing.
   - msw also can run in LIVE and serve mock data referened in msw-browser... for when api isn't ready
   - mock data encrypted to avoid exposing potential npi
-###/server-koa
+### /server-koa
   - node server starter handles api calls, wires up tasks
   - encrypts data for mock testing.
-###/formhelper-mui
+### /formhelper-mui
   - separate project breakout
   - built in TS to improve developer intellisense.
 
