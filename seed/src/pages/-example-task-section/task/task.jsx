@@ -108,6 +108,13 @@ export const Task = () => {
         <BtnContinueSave
           onClickContinueSave={onClickContinueSave}
         />
+        <button
+          type="button"
+          id="btnTestNavigation"
+          onClick={() => navigate('/whatever')}
+        >
+          testNavigation
+        </button>
 
         <div className="hidden">
           <Row>

@@ -1,13 +1,10 @@
 import { Task } from './task';
 
-// Mock react-router-dom to simulate URL parameters
-const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-  useNavigate: () => mockNavigate,
-  useParams: () => ({ id: '1' })
-}));
-
 describe('Task Component Integration Tests', () => {
+  beforeEach(() => {
+    ROUTER.set({ params: { id: '1' } });
+  });
+
   it('should mount', async () => {
     render(<Task />);
     expect(screen.getByText('loading...')).toBeInTheDocument();
@@ -56,6 +53,22 @@ describe('Task Component Integration Tests', () => {
     // Clean up
     mswTaskSpy.reset();
   }, 15000);
+
+  it('should call navigate when testNavigation is clicked', async () => {
+    const navigateMock = vi.fn();
+    ROUTER.navigate(navigateMock);
+
+    render(<Task />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Task')).toBeVisible();
+    }, { timeout: 5000 });
+
+    const testNavigationButton = screen.getByRole('button', { name: 'testNavigation' });
+    await userEvent.click(testNavigationButton);
+
+    expect(navigateMock).toHaveBeenCalledWith('/whatever');
+  });
 
 //???????????? THE TEST IS FAILED - NEED TO CHECK STEVE????????????????????????
   // it('should show validation message for empty body and not call onSubmit', async () => {

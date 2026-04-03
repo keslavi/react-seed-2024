@@ -11,8 +11,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define data directory path
-const DATA_DIR = path.join(__dirname, '..', '..', 'data');
-const TASK_FILE = path.join(DATA_DIR, 'tasks.json');
+const DATA_DIR  = path.join(__dirname, '..', '..', 'data');
+const TASK_FILE = path.join(DATA_DIR, 'task.iife.js');
 
 // In-memory task data storage
 let taskData = [];
@@ -30,23 +30,21 @@ const getUsername = (ctx) => {
     return username;
 };
 
-// Load task data from JSON file (single-line format)
+// Load task data from IIFE file
 const loadData = () => {
     try {
         if (!fs.existsSync(TASK_FILE)) {
-            console.log('Task file does not exist, creating empty file');
+            console.log('Task IIFE file does not exist, starting with empty data');
             taskData = [];
             return;
         }
-        
+
         const fileContent = fs.readFileSync(TASK_FILE, 'utf8');
-        const lines = fileContent.trim().split('\n').filter(line => line.trim());
-        taskData = lines.map(line => JSON.parse(line));
-        
-        console.log(`Task data loaded: ${taskData.length} tasks from JSON file`);
+        taskData = eval(fileContent);
+
+        console.log(`Task data loaded: ${taskData.length} tasks from IIFE file`);
     } catch (error) {
-        console.error('Error loading task data from JSON file:', error);
-        // Fallback to empty data
+        console.error('Error loading task data from IIFE file:', error);
         taskData = [];
     }
 };
@@ -60,15 +58,14 @@ const readData = () => {
 
 const writeData = (data) => {
     taskData = data;
-    
-    // Write data back to JSON file (single-line format)
+
+    // Write data back to IIFE file format
     try {
-        // Each record on its own line
-        const jsonLines = data.map(task => JSON.stringify(task)).join('\n');
-        fs.writeFileSync(TASK_FILE, jsonLines + '\n', 'utf8');
-        console.log('Task data persisted to JSON file');
+        const iifeContent = `(() => (${JSON.stringify(data, null, 2)}))()\n`;
+        fs.writeFileSync(TASK_FILE, iifeContent, 'utf8');
+        console.log('Task data persisted to IIFE file');
     } catch (error) {
-        console.error('Error writing task data to JSON file:', error);
+        console.error('Error writing task data to IIFE file:', error);
         throw new Error('Failed to persist task data');
     }
 }

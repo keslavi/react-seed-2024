@@ -33,6 +33,114 @@ global.vi = vi;
 global.createMswRequestSpy = createMswRequestSpy;
 globalThis.createMswRequestSpy = createMswRequestSpy;
 
+const routerState = {
+  navigateDefault: vi.fn(),
+  navigateQueue: [],
+  paramsDefault: {},
+  paramsQueue: []
+};
+
+const useNavigateMock = vi.fn(() => {
+  if (routerState.navigateQueue.length > 0) {
+    return routerState.navigateQueue.shift();
+  }
+
+  return routerState.navigateDefault;
+});
+
+const useParamsMock = vi.fn(() => {
+  if (routerState.paramsQueue.length > 0) {
+    return routerState.paramsQueue.shift();
+  }
+
+  return routerState.paramsDefault;
+});
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+
+  return {
+    ...actual,
+    useNavigate: useNavigateMock,
+    useParams: useParamsMock
+  };
+});
+
+/**
+ * @typedef {Object} RouterTestApi
+ * @property {(input?: { navigate?: import('vitest').Mock, params?: Record<string, any> }) => { navigate: import('vitest').Mock, params: Record<string, any> }} set
+ * Set default navigate mock and/or params returned by hooks.
+ * @property {(input?: { navigate?: import('vitest').Mock[], params?: Record<string, any>[] }) => void} que
+ * Queue call-by-call values for useNavigate and useParams.
+ * @property {() => void} reset
+ * Reset all router mock state to clean defaults.
+ * @property {(mockNavigate?: import('vitest').Mock) => import('vitest').Mock}
+ * Get the current navigate mock, or replace it and return it.
+ */
+
+/** @type {RouterTestApi} */
+const ROUTER = {
+  set(input = {}) {
+    const { navigate, params } = input;
+
+    if (navigate) {
+      routerState.navigateDefault = navigate;
+    }
+
+    if (params) {
+      routerState.paramsDefault = params;
+    }
+
+    global.mockNavigate = routerState.navigateDefault;
+    globalThis.mockNavigate = routerState.navigateDefault;
+
+    return {
+      navigate: routerState.navigateDefault,
+      params: routerState.paramsDefault
+    };
+  },
+
+  que(input = {}) {
+    const { navigate = [], params = [] } = input;
+
+    if (navigate.length > 0) {
+      routerState.navigateQueue = [...navigate];
+    }
+
+    if (params.length > 0) {
+      routerState.paramsQueue = [...params];
+    }
+  },
+
+  reset() {
+    routerState.navigateDefault = vi.fn();
+    routerState.navigateQueue = [];
+    routerState.paramsDefault = {};
+    routerState.paramsQueue = [];
+
+    useNavigateMock.mockClear();
+    useParamsMock.mockClear();
+
+    global.mockNavigate = routerState.navigateDefault;
+    globalThis.mockNavigate = routerState.navigateDefault;
+  },
+
+  navigate(mockNavigate) {
+    if (mockNavigate) {
+      routerState.navigateDefault = mockNavigate;
+      global.mockNavigate = routerState.navigateDefault;
+      globalThis.mockNavigate = routerState.navigateDefault;
+    }
+
+    return routerState.navigateDefault;
+  }
+};
+
+ROUTER.reset();
+
+global.ROUTER = ROUTER;
+globalThis.ROUTER = ROUTER;
+
 if (typeof globalThis.ProgressEvent === 'undefined') {
   class ProgressEventPolyfill extends Event {
     constructor(type, eventInitDict = {}) {
@@ -70,6 +178,7 @@ afterAll(() => {
 
 afterEach(() => {
   server.resetHandlers();
+  ROUTER.reset();
   //console.log('[MSW] Handlers reset');
 });
 
