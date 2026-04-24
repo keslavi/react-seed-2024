@@ -1,5 +1,5 @@
 import { Paper, styled } from '@mui/material';
-import { color } from '@/theme-material';
+import { color } from '../../theme-material';
 
 //adjusting here instead of theme; want to avoid affecting all Paper components, and this is the only place we use it in formhelper-mui
 export const Item = styled(Paper)(({ theme }) => ({

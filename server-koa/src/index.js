@@ -87,8 +87,9 @@ async function main() {
     console.log(`.`);
     console.log(`******************************************************************************************`);
     console.log(`📁 !IMPORTANT: if you need to check in test data changes, you MUST do npm run mock-encrypt`);
-    console.log('   - npm run mock-encrypt        # encrypt changed .iife.js -> data/mock/*.enc.json');
-    console.log('   - npm run mock-decrypt        # decrypt changed data/mock/*.enc.json -> .iife.js');
+    console.log('   - npm run mock-encrypt        # encrypt changed .iife.js -> data/enc/*.enc.json');
+    console.log('   - npm run mock-decrypt        # decrypt changed data/enc/*.enc.json -> .iife.js');
+    console.log('   - npm run mock-sync           # sync newest *.enc.json between data/enc and ../seed/public/mock/enc');
     console.log('   - npm run mock-encrypt-force  # force encrypt all .iife.js');
     console.log('   - npm run mock-decrypt-force  # force decrypt all .enc.json');
     console.log(`******************************************************************************************`);

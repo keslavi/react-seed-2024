@@ -17,11 +17,6 @@ export default defineConfig({
     react(),
     dts({ include: ['src'], insertTypesEntry: true }),
   ],
-  resolve: {
-    alias: {
-      '@': resolve(dirname, 'src'),
-    },
-  },
   build: {
     lib: {
       entry: resolve(dirname, 'src/index.ts'),

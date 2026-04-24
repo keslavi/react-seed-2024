@@ -1,6 +1,6 @@
-export * from './col';
-export * from './container';
-export * from './item';
-export * from './row';
-export * from './row-header';
-export * from './row-subheader';
+export { Col, ColPadded } from './col';
+export { Container, ContainerFullWidth } from './container';
+export { Item, ItemNoPadding } from './item';
+export { Row, TableRows } from './row';
+export { RowHeader } from './row-header';
+export { RowSubheader } from './row-subheader';

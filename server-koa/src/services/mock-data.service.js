@@ -1,12 +1,12 @@
 /**
  * mock-data.service.js
  *
- * Startup:  analyze data/mock/*.enc.json and decrypt into data/*.iife.js
+ * Startup:  analyze data/enc/*.enc.json and decrypt into data/*.iife.js
  *           when missing, stale, or force mode is enabled.
  *
  * Shutdown: for each data/*.iife.js that is newer than its
- *           data/mock/*.enc.json counterpart (or has no counterpart),
- *           encrypt it back into data/mock/.
+ *           data/enc/*.enc.json counterpart (or has no counterpart),
+ *           encrypt it back into data/enc/.
  */
 
 import { pbkdf2Sync, randomBytes, createCipheriv, createDecipheriv } from 'crypto';
@@ -19,7 +19,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const DATA_DIR  = resolve(__dirname, '..', '..', 'data');
-const MOCK_DIR  = resolve(__dirname, '..', '..', 'data', 'mock');
+const ENC_DIR   = resolve(__dirname, '..', '..', 'data', 'enc');
 const iterations = 100000;
 
 // ── Crypto helpers ────────────────────────────────────────────────────────────
@@ -90,11 +90,11 @@ const evalIife = (content, filePath) => {
 };
 
 // ── name mapping helpers ──────────────────────────────────────────────────────
-//   data/mock/task.enc.json  ↔  data/task.iife.js   (base = "task")
+//   data/enc/task.enc.json  ↔  data/task.iife.js   (base = "task")
 
 const encToBase   = (name) => name.replace('.enc.json', '');
 const baseToIife  = (base) => join(DATA_DIR, `${base}.iife.js`);
-const baseToEnc   = (base) => join(MOCK_DIR,  `${base}.enc.json`);
+const baseToEnc   = (base) => join(ENC_DIR,  `${base}.enc.json`);
 
 // ── Startup: decrypt missing IIFE files ───────────────────────────────────────
 
@@ -102,16 +102,16 @@ export const decryptChangedIifeFiles = ({ force = false } = {}) => {
     const key = getKey();
     if (!key) return;
 
-    if (!existsSync(MOCK_DIR)) {
-        console.log('ℹ️  data/mock not found – skipping startup decrypt.');
+    if (!existsSync(ENC_DIR)) {
+        console.log('ℹ️  data/enc not found – skipping startup decrypt.');
         return;
     }
 
     mkdirSync(DATA_DIR, { recursive: true });
 
-    const encFiles = readdirSync(MOCK_DIR).filter((f) => f.endsWith('.enc.json'));
+    const encFiles = readdirSync(ENC_DIR).filter((f) => f.endsWith('.enc.json'));
     if (encFiles.length === 0) {
-        console.log('ℹ️  No .enc.json files in data/mock – nothing to decrypt on startup.');
+        console.log('ℹ️  No .enc.json files in data/enc – nothing to decrypt on startup.');
         return;
     }
 
@@ -119,7 +119,7 @@ export const decryptChangedIifeFiles = ({ force = false } = {}) => {
     for (const encFile of encFiles) {
         const base     = encToBase(encFile);
         const iifePath = baseToIife(base);
-        const encPath  = join(MOCK_DIR, encFile);
+        const encPath  = join(ENC_DIR, encFile);
 
         try {
             const envelope  = JSON.parse(readFileSync(encPath, 'utf8'));
@@ -165,7 +165,7 @@ export const encryptChangedIifeFiles = ({ force = false } = {}) => {
         return { encrypted: 0, scanned: 0, changedFiles: [], reason: 'missing-data-dir' };
     }
 
-    mkdirSync(MOCK_DIR, { recursive: true });
+    mkdirSync(ENC_DIR, { recursive: true });
 
     const iifeFiles = readdirSync(DATA_DIR).filter((f) => f.endsWith('.iife.js'));
 
@@ -200,7 +200,7 @@ export const encryptChangedIifeFiles = ({ force = false } = {}) => {
             writeFileSync(encPath, `${JSON.stringify(envelope, null, 2)}\n`, 'utf8');
             encrypted++;
             changedFiles.push(iifeFile);
-            console.log(`🔐 Encrypted: ${iifeFile} -> mock/${base}.enc.json`);
+            console.log(`🔐 Encrypted: ${iifeFile} -> enc/${base}.enc.json`);
         } catch (err) {
             console.error(`❌ Shutdown encrypt failed for ${iifeFile}: ${err.message}`);
         }

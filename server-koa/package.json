@@ -10,6 +10,7 @@
     "dev": "nodemon src/index.js",
     "mock-encrypt": "node ./scripts/mock-data.js encrypt",
     "mock-decrypt": "node ./scripts/mock-data.js decrypt",
+    "mock-sync": "node ./scripts/mock-sync.js",
     "mock-encrypt-force": "node --input-type=module -e \"import('./src/services/mock-data.service.js').then(m => m.encryptChangedIifeFiles({ force: true }))\"",
     "mock-decrypt-force": "node --input-type=module -e \"import('./src/services/mock-data.service.js').then(m => m.decryptChangedIifeFiles({ force: true }))\"",
     "test": "echo \"Error: no test specified\" && exit 1",

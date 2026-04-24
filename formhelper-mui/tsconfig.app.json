@@ -26,11 +26,6 @@
     "allowJs": true,
     "checkJs": false,
 
-    /* Path aliases */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
     "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src"],

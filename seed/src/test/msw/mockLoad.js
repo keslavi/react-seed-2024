@@ -120,9 +120,9 @@ export const mockLoad = async (url) => {
       const encryptedFileName = `${url}.enc.json`;
 
       const encryptedCandidatePaths = [
-        join(__dirname, '..', '..', '..', '..', 'server-koa', 'data', encryptedFileName),
-        join(__dirname, '..', '..', '..', 'server-koa', 'data', encryptedFileName),
-        join(__dirname, '..', '..', '..', 'public', 'mock', encryptedFileName),
+        join(__dirname, '..', '..', '..', '..', 'server-koa', 'data', 'enc', encryptedFileName),
+        join(__dirname, '..', '..', '..', 'server-koa', 'data', 'enc', encryptedFileName),
+        join(__dirname, '..', '..', '..', 'public', 'mock', 'enc', encryptedFileName),
       ];
 
       const plainCandidatePaths = [
@@ -179,7 +179,7 @@ export const mockLoad = async (url) => {
     try {
       let encryptedError = null;
 
-      const encryptedResponse = await fetch(`/mock/${url}.enc.json`);
+      const encryptedResponse = await fetch(`/mock/enc/${url}.enc.json`);
       if (encryptedResponse.ok) {
         try {
           const mockDataKey = getMockDataKey(false);

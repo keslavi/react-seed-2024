@@ -5,7 +5,7 @@ import IconVisibilityOff from "@mui/icons-material/VisibilityOff";
 import { cleanParentProps, colProps } from "./helper";
 import { useFormField } from "./form-provider";
 import { Info } from "./info";
-import { ColPadded } from "@/components/grid";
+import { ColPadded } from "../grid";
 
 
 const applyMask = (value, mask) => {

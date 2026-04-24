@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Script to copy mock data files from server-koa/data to dist/mock
+ * Script to copy encrypted mock data files from server-koa/data/enc to public/mock/enc
  * This can be run independently of the build process
  * Only copies files if source is newer than destination
  */
@@ -15,8 +15,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const seedRoot = resolve(__dirname, '..');
 
-const sourceDir = resolve(seedRoot, '..', 'server-koa', 'data', 'mock');
-const targetDir = resolve(seedRoot, 'public', 'mock');
+const sourceDir = resolve(seedRoot, '..', 'server-koa', 'data', 'enc');
+const targetDir = resolve(seedRoot, 'public', 'mock', 'enc');
 const encryptedOnly = ['1', 'true', 'yes', 'on'].includes(String(
   process.env.MOCK_DATA_ENCRYPTED_ONLY || process.env.VITE_MOCK_DATA_ENCRYPTED_ONLY || ''
 ).toLowerCase());

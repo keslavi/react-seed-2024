@@ -1,7 +1,7 @@
-# Working IIFE files are decrypted at startup from data/mock/*.enc.json
-# Edit them freely; they are re-encrypted to data/mock on server shutdown.
+# Working IIFE files are decrypted at startup from data/enc/*.enc.json
+# Edit them freely; they are re-encrypted to data/enc on server shutdown.
 *.iife.js
 !*.init.iife.js
 
-# Runtime / generated JSON (enc.json lives in data/mock/, not here)
+# Runtime / generated JSON (enc.json lives in data/enc/, not here)
 *.json
