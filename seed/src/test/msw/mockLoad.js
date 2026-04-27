@@ -98,6 +98,8 @@ const getEncryptedOnlyMode = (isNode) => {
   );
 };
 
+export const clearMockLoadCache = () => {};
+
 export const mockLoad = async (url) => {
   // Simple and reliable Node.js detection
   const isNode = typeof process !== 'undefined' && process.versions && process.versions.node;
@@ -131,6 +133,20 @@ export const mockLoad = async (url) => {
         join(__dirname, '..', '..', '..', 'public', 'mock', plainFileName),
       ];
 
+      if (!encryptedOnly) {
+        const dataPath = plainCandidatePaths.find((path) => existsSync(path));
+        if (dataPath) {
+          // Read the IIFE file content
+          const fileContent = readFileSync(dataPath, 'utf8');
+
+          // Execute the IIFE and return the result
+          const data = eval(fileContent);
+
+         //console.log(["all"], `[MSW] Successfully loaded mock data for ${url} from ${dataPath}`);
+          return data;
+        }
+      }
+
       let encryptedError = null;
 
       const encryptedPath = encryptedCandidatePaths.find((path) => existsSync(path));
@@ -155,20 +171,8 @@ export const mockLoad = async (url) => {
         throw new Error(`${prefix}Plaintext mock fallback is disabled (MOCK_DATA_ENCRYPTED_ONLY=true)`);
       }
 
-      const dataPath = plainCandidatePaths.find((path) => existsSync(path));
-      if (!dataPath) {
-        const prefix = encryptedError ? `Encrypted load failed: ${encryptedError.message}. ` : '';
-        throw new Error(`${prefix}Mock file not found. Tried plain paths: ${plainCandidatePaths.join(' | ')}`);
-      }
-      
-      // Read the IIFE file content
-      const fileContent = readFileSync(dataPath, 'utf8');
-      
-      // Execute the IIFE and return the result
-      const data = eval(fileContent);
-      
-     //console.log(["all"], `[MSW] Successfully loaded mock data for ${url} from ${dataPath}`);
-      return data;
+      const prefix = encryptedError ? `Encrypted load failed: ${encryptedError.message}. ` : '';
+      throw new Error(`${prefix}Mock file not found. Tried plain paths: ${plainCandidatePaths.join(' | ')}`);
       
     } catch (error) {
       console.error(["all"], `[MSW] Error loading mock data for ${url}:`, error.message);
@@ -177,6 +181,24 @@ export const mockLoad = async (url) => {
   } else {
     // Running in browser - fetch and eval IIFE files
     try {
+      if (!encryptedOnly) {
+        const response = await fetch(`/mock/${url}.iife.js`);
+        if (response.ok) {
+          const fileContent = await response.text();
+          //console.log(["all"], `[MSW] Successfully fetched /mock/${url}.iife.js, content length: ${fileContent.length}`);
+
+          // Execute the IIFE and return the result
+          const data = eval(fileContent);
+
+          // console.log(["all"], `[MSW] Successfully loaded mock data for ${url} from browser`);
+          return data;
+        }
+
+        if (response.status !== 404) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+      }
+
       let encryptedError = null;
 
       const encryptedResponse = await fetch(`/mock/enc/${url}.enc.json`);
@@ -199,21 +221,9 @@ export const mockLoad = async (url) => {
         const prefix = encryptedError ? `Encrypted load failed: ${encryptedError.message}. ` : '';
         throw new Error(`${prefix}Plaintext mock fallback is disabled (encrypted-only mode)`);
       }
-      
-      const response = await fetch(`/mock/${url}.iife.js`);
-      if (!response.ok) {
-        const prefix = encryptedError ? `Encrypted load failed: ${encryptedError.message}. ` : '';
-        throw new Error(`${prefix}HTTP ${response.status}: ${response.statusText}`);
-      }
-      
-      const fileContent = await response.text();
-      //console.log(["all"], `[MSW] Successfully fetched /mock/${url}.iife.js, content length: ${fileContent.length}`);
-      
-      // Execute the IIFE and return the result
-      const data = eval(fileContent);
-      
-      // console.log(["all"], `[MSW] Successfully loaded mock data for ${url} from browser`);
-      return data;
+
+      const prefix = encryptedError ? `Encrypted load failed: ${encryptedError.message}. ` : '';
+      throw new Error(`${prefix}Encrypted fallback not available for /mock/enc/${url}.enc.json`);
       
     } catch (error) {
       console.error(["all"], `[MSW] Error loading mock data for ${url} from browser:`, error.message);

@@ -18,7 +18,9 @@ const isGridSizeValue=(value:unknown):boolean=> {
   return typeof value === 'object' && value !== null && 'size' in value && isGridSizeValue(value.size);
 } 
 
-export const colProps = ({ size,xs,sm,md,lg,xl }: ColSizeProps): Record<string, any> => {
+export const colProps = ({ size, xs,sm,md,lg,xl }: ColSizeProps): Record<string, any> => {
+  if (isGridSizeValue(size)) return { size };
+
   const ret: Record<string, any> = {};
   if (isGridSizeValue(xs)) ret.xs = xs;
   if (isGridSizeValue(sm)) ret.sm = sm;

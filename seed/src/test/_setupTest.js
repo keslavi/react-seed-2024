@@ -14,6 +14,7 @@ import { setupServer } from 'msw/node';
 import { mswAll } from './msw/mswAll';
 import { vi } from 'vitest';
 import { createMswRequestSpy } from './msw/createMswRequestSpy';
+import { clearMockLoadCache } from './msw/mockLoad';
 
 // Load global extensions as mentioned in prompt.md
 import '../helpers/extensions/global-extensions.js';
@@ -178,6 +179,7 @@ afterAll(() => {
 
 afterEach(() => {
   server.resetHandlers();
+  clearMockLoadCache();
   ROUTER.reset();
   //console.log('[MSW] Handlers reset');
 });
